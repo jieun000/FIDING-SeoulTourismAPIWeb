@@ -1,0 +1,66 @@
+
+231108 진행과정
+
+
+[깃허브 연동 및 푸쉬 오류]
+
+파이참이나 주피터 노트북(파이썬)으로 작업한 자료들을 각자 팀 저장소에 업로드하려 했으나 계속 연동오류가 발생하여
+강사님께서 조언해주신 소스트리를 다운받아 깃허브 연동하여 내려받고 푸쉬하는걸로 오류를 수정하였음
+
+[기존 데이터 압축 이슈]
+전날 많은 데이터때문에 DB에 저장에러가 난 부분을 해결하고자 
+각 나라의 데이터를 1일 날짜를 기준으로 합하여서 DB에 저장되는지 확인하려함
+때문에 기존 나라별로 분류하여 액셀파일로 저장하는 파이썬 코드를 수정하여 1일날짜를 기준으로 확진자수,백신접종자수,사망자수를 합하여 액셀파일로 저장되게 함
+
+
+
+[기존 데이터 수정]
+기존 압축하는 코드에서 date_day 부분이 일자별까지말고 월까지만 표시되게 코드수정함 
+
+[파이썬 수정 코드]
+for loc, dp in data_dict2.items():
+            try:
+#                 data_dict[loc].append({'date':date,'loc':loc,'total_cases':dp['total_cases'].sum(),'total_deaths':dp['total_deaths'].sum(),'people_vaccinated':dp['people_vaccinated'].sum()})
+                data_dict[loc] = pd.concat([data_dict.get(loc, pd.DataFrame({})),
+                               pd.DataFrame({'date_day': [date[:7]], 'loc': [loc], 'total_cases': [dp['total_cases'].sum()], 'total_deaths': [dp['total_deaths'].sum()], 'people_vaccinated': [dp['people_vaccinated'].sum()]})])
+                filename = f'country/{loc}.csv'
+                data_dict[loc].to_csv(filename, index=False)
+            except:
+                pass
+
+
+[일별을 월별 누적 데이터로 코드 수정 ]
+
+기존 코드에서 1일 기준으로 합산되던 데이터가 20년 1월 1일 데이터가없어서 빠진것을 확인함
+그리고 확진자, 사망자, 접종자의 누적데이터에서 하루전 데이터를 빼면서 일별 데이터를 구하려하였으나 
+신규 확진자, 신규 사망자, 신규 접종자의 데이터를 합산하는것이 좋을것같다고 생각하여 코드를 수정함 (이부분은 지은님이 큰도움이 되었음) 
+
+
+[수정코드로 합산된 데이터가 확인중 이슈]
+수정코드로 합산된 데이터를 확인중에 확진자와 사망자는 맞게 확인되었으나 누적 접종자가 접종자의 데이터가 아니었음을 알게됨
+아마도 백신이 들어간 영어 칼럼이름때문에 헷갈린것으로 추정되어 이부분은 오늘 마무리하고 내일 다시 접종자의 정확한 데이터를 찾아보기로함 
+
+
+[데이터 웹사이트 출력 확인]
+DB에 넣었던 데이터가 ajax와 html,jquery를 이용하여 웹상에 간단한 테이블과 함께 제대로 출력되는지 확인함
+(지은님과 가영님이 코딩)
+
+
+[집에서 추가로 데이터 서치]
+잘못조사된 누적 접종자의 데이터를 추가로 찾아보고 세계 백신 데이터를 액셀파일로 저장해둠
+
+ 혹시 몰라서 나라별 백신 데이터를 받는 링크도 찾아두었음
+
+https://github.com/owid/covid-19-data/tree/d8eaaa16d12a5c1a9e997a882f5e629a031ea002/public/data/vaccinations/country_data
+
+자료가 올려진 곳에서 헷갈리지 않도록 영어로된 칼럼명 몇가지를 번역해둠
+
+Vaccine doses and confirmed deaths  - 백신접종량과 확인된 사망자
+Confirmed cases - 확진자
+Vaccine doses - 백신 접종량
+people vaccinated - 예방접종을 받은 사람들 ( 1회이상 접종한 사람)
+total_vaccinations - 총투여횟수
+people_vaccinated - 최소 1회 백신 접종을 받은 사람의 총 수( 사람이 2회 접종 백신의 첫번째 접종을 받으면 이 측정항목은 1만큼 올라감 두번째 접종을 받으면 측정항목은 동일하게 유지)
+
+
+
