@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        function regional_map_on(local){
+            document.getElementById('regional_map').style
+        }
+        function regional_map(){
+            document.getElementById("regional_map").src = "./img/guide_map_bg.gif";
+        }
+    </script>
+        
+    <img src="img/guide_map_bg.gif" width="390" height="310" usemap="#Map" border="0" id="regional_map"/>
+        <map name="Map" id="Map">
+        <area shape="poly" coords="230,108,222,130,239,165,252,166,258,142,259,129,252,105,246,96,233,100" href="#" alt="영덕" onmouseover="regional_map_on('yd');" onmouseout="regional_map();" />
+
+
+
+    <img src="pngwing.com.png" alt="" usemap="#Map" border="0" style="z-index: 50;" id="regional_map"/>
+    <map name="Map" id="Map">
+    <area onmouseover="highlightArea(this)" onmouseout="unhighlightArea(this)"
+    id="a" alt="error" title="" onmouseover="regional_map_on('yd');" onmouseout="regional_map();"
+    coords="542,443,513,460,515,489,503,517,497,538,506,575,531,607,559,628,566,646,566,694,566,740,579,780,584,812,603,844,630,858,642,858,628,779,646,750,663,729,683,701,686,678,715,667,727,643,729,616,741,591,755,577,748,556,734,544,690,522,670,507,663,492,646,479,630,476,617,461,595,446,572,442,556,435" shape="poly">
+</map>
+</body>
+</html>

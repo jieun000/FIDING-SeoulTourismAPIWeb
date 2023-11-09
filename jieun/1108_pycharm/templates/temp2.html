@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        img[usemap] {
+            border: none;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+        }
+        area:hover {
+            background-color: yellow;
+        }
+    </style>
+    <script src="/static/jquery.rwdImageMaps.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+
+    <img  src="pngwing.com.png" alt="" usemap="#Map" border="0" style="z-index: 50;" style="opacity: 0.2;"/>
+    <map name="Map" id="Map">
+        <area alt="error" title=""
+        coords="542,443,513,460,515,489,503,517,497,538,506,575,531,607,559,628,566,646,566,694,566,740,579,780,584,812,603,844,630,858,642,858,628,779,646,750,663,729,683,701,686,678,715,667,727,643,729,616,741,591,755,577,748,556,734,544,690,522,670,507,663,492,646,479,630,476,617,461,595,446,572,442,556,435" shape="poly">
+    </map>
+
+    <script>
+        $(document).ready(function(e) {
+            $('img[usemap]').rwdImageMaps();
+        });
+    </script>
+</script>
+</body>
+</html>
+
+
