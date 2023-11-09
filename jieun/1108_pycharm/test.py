@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, json
 import csv
 import MySQLdb
 import datetime
@@ -19,7 +19,7 @@ def hello():
     cursor.execute("select * from afr_tbl")
     data = cursor.fetchall()
     print(data)
-    return render_template('index.html', data=data)
+    return render_template('jieun.html', data=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)
