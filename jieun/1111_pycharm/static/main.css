@@ -94,7 +94,6 @@ body, h1, p {
 /* Styling for footer */
 .footer {
     text-align: center;
-    margin-top: 20px;
     padding: 10px;
     background-color: #4b0082;
     color: #fff;
@@ -108,3 +107,40 @@ body, h1, p {
     font-size: 9px;
     font-weight: 100;
 }
+
+
+/* Map */
+.highlight-box {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.7);
+    border: 1px solid #000;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#infoBox {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #000;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+    max-width: 300px; /* 최대 너비 설정 */
+}
+
+#graphImage {
+    max-width: 100%; /* 이미지가 infoBox를 넘어가지 않도록 최대 너비 설정 */
+}
+
+#moreButton {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
