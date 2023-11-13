@@ -149,11 +149,21 @@ body, h1, p {
     border-radius: 5px;
     cursor: pointer;
 }
-
+#left_side_btn{
+    padding-bottom: 300px
+}
 #left_side_btn button {
     display: block;
     margin-bottom: 10px; /* 버튼 사이의 간격 조절 */
-    margin-left: 200px;
+    margin-left: 150px;
 }
 
+.dateBoxContainer input[type="range"] {
+  width: 600px;
+  margin: 0 auto; /* 가로 방향으로 중앙 정렬 */
+  margin-bottom: 30px;
+  display: block; /* 블록 레벨 요소로 설정하여 너비 속성이 적용되도록 함 */
+  transform: translateX(-30%); /* 부모 컨테이너의 50%만큼 왼쪽으로 이동하여 가운데 정렬 */
 
+
+}

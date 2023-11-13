@@ -1,4 +1,5 @@
 {% include 'header.html' %}
+
 <div class="container-fluid">
   <div class="main-content">
     <div class="buttons-container" id="left_side_btn">
@@ -6,7 +7,6 @@
       <button type="button" class="btn btn-outline-danger">사망자</button>
       <button type="button" class="btn btn-outline-success">접종자</button>
     </div>
-
     <div class="section">
       <div id="imageContainer">
         <img
@@ -109,10 +109,45 @@
           />
         </map>
         <div class="dateBoxContainer">
-          <input type="range" id="lever" min="1" max="100" value="50"/>
+          <input
+            type="range"
+            id="lever"
+            min="202001"
+            max="202312"
+            size="400"
+            value="2020";
+          />
         </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  $(document).ready(function () {
+    $("button")
+      .eq(0)
+      .click(function () {
+        console.log("확진자 버튼이 눌렸어요");
+        $("#lever").change(function () {
+          console.log($(this).val());
+        });
+      });
+    $("button")
+      .eq(1)
+      .click(function () {
+        console.log("사망자 버튼이 눌렸어요");
+        $("#lever").change(function () {
+          console.log($(this).val());
+        });
+      });
+    $("button")
+      .eq(2)
+      .click(function () {
+        console.log("접종자 버튼이 눌렸어요");
+        $("#lever").change(function () {
+          console.log($(this).val());
+        });
+      });
+  });
+</script>
 {% include 'footer.html' %}
