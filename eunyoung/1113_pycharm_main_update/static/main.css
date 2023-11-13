@@ -108,6 +108,15 @@ body, h1, p {
     font-weight: 100;
 }
 
+/*png 이미지*/
+
+/*map 이미지 크기*/
+#imageContainer .map {
+    height: 70%; /* 높이(부모요소의 퍼센트) */
+    width: 60%;  /* 가로 크기 */
+}
+
+
 
 /* Map */
 .highlight-box {
@@ -143,6 +152,9 @@ body, h1, p {
     border-radius: 5px;
     cursor: pointer;
 }
+
+/*왼쪽 버튼*/
+
 #left_side_btn{
     padding-bottom: 300px
 }
@@ -156,10 +168,9 @@ body, h1, p {
 
 .dateBoxContainer input[type="range"] {
   width: 600px;
-  margin: 0 auto; /* 가로 방향으로 중앙 정렬 */
   margin-bottom: 30px;
   display: block; /* 블록 레벨 요소로 설정하여 너비 속성이 적용되도록 함 */
-  transform: translateX(-30%); /* 부모 컨테이너의 50%만큼 왼쪽으로 이동하여 가운데 정렬 */
+  margin-left: 230px; /* 왼쪽 여백을 줄여서 레버의 가로 위치변경 */
 }
 
 
