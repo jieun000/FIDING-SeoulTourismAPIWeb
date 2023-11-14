@@ -48,6 +48,15 @@ body, h1, p {
     font-size: 40px;
 }
 
+/* Styling for form buttons */
+.form-button {
+    padding: 8px 15px;
+    background-color: #fff;
+    color: #4b0082;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 /* Styling for search input */
 .search-container {
@@ -62,6 +71,15 @@ body, h1, p {
     border-radius: 5px;
     font-size: 14px;
     margin-right: 10px;
+}
+
+.search-button {
+    padding: 6px 12px;
+    background-color: #9370db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Styling for content section */
@@ -120,10 +138,22 @@ body, h1, p {
     position: fixed;
 }
 
+
 #graphImage {
     max-width: 100%; /* 이미지가 infoBox를 넘어가지 않도록 최대 너비 설정 */
 }
 
+#moreButton {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
 /*왼쪽 버튼*/
 
@@ -138,12 +168,23 @@ body, h1, p {
     height: 45px;
 }
 
-.dateBoxContainer input[type="range"] {
-  width: 600px;
-  margin-bottom: 30px;
-  display: block; /* 블록 레벨 요소로 설정하여 너비 속성이 적용되도록 함 */
-  margin-left: 230px; /* 왼쪽 여백을 줄여서 레버의 가로 위치변경 */
-}
+/* 슬라이드와 년도 부분 */
+.dateBoxContainer {
+    position: relative;
+  }
+
+  #lever {
+    width: 600px;
+    margin-bottom: 30px;
+    margin-left: 300px; /* 230px에서 50px 감소 */
+  }
+
+  #month-display {
+    position: absolute;
+    top: 0;
+    left: 200px; /* 조절이 필요한 만큼 왼쪽으로 이동시킵니다. */
+  }
+
 
 
 /* side_board */
@@ -265,5 +306,12 @@ box-sizing: border-box;
 .dd-item:hover {
 background: #fff;
 }
+
+#month-display {
+    color: rgb(255, 255, 255); /* 또는 다른 대조되는 색상 */
+    font-size: 16px; /* 원하는 크기로 조절 */
+    font-weight: normal; /* 원하는 스타일로 조절 */
+}
+
 
 

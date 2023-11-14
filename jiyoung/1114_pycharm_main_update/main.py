@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, json
 import mysql.connector
-import  pandas as pd
+import pandas as pd
 import datetime
 from sql_func import from_sql
 from init_data import loc_code_list
