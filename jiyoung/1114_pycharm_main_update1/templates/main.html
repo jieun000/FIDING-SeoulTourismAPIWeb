@@ -1,19 +1,24 @@
 {% include 'header.html' %}
-
+<style>
+  .board-container {
+    width: 500px;
+  }
+</style>
 <div class="container-fluid">
   <div class="main-content">
     <div class="buttons-container" id="left_side_btn">
       <button type="button" class="btn btn-outline-primary">확진자</button>
       <button type="button" class="btn btn-outline-danger">사망자</button>
       <button type="button" class="btn btn-outline-success">접종자</button>
+      <button type="button" class="btn btn-outline-warning">총 인구수</button>
     </div>
     <div class="section">
       <div id="imageContainer">
         <img
           class="map"
-          src="static/map.png"
+          src="static/map2.png"
           usemap="#Map"
-          width="80%"
+          width="50%"
           height="71%"
         />
         <map name="Map">
@@ -115,13 +120,53 @@
             min="202001"
             max="202312"
             size="400"
-            value="2020";
+            value="2020"
+            ;
           />
         </div>
       </div>
     </div>
+    <!--      오른쪽 사이드 게시판-->
+    <div class="board-container" id="right_side_board">
+      <div class="covid__title">
+          <h1><i class="material-icons"></i></h1>
+      </div>
+<div class="dd">
+    <ol class="covid news">
+        <div class="covid__title">
+            <h2><i>관련 뉴스</i></h2>
+        </div>
+        <li class="dd-item" data-id="1">
+            <a href="https://www.fnnews.com/news/202311131607489080" target="_blank" style="color: #800080">
+            <h3 class="title dd-handle"><strong>News 1</strong></h3>
+            <div class="text" contenteditable="true">
+            <p>65세 이상 고령층, 코로나19 신규백신 접종률 30% 돌파</p>
+        </div>
+    </a>
+</li>
+
+        <li class="dd-item" data-id="2">
+            <a href="https://news.heraldcorp.com/view.php?ud=20231109000557" target="_blank" style="color: #800080">
+                <h3 class="title dd-handle"><strong>News 2</strong></h3>
+            <div class="text" contenteditable="true">
+                <p>무서운 코로나19 감염 후유증”…퇴행성 뇌질환 발병 가능성↑</p>
+            </div>
+            </a>
+        </li>
+          <li class="dd-item" data-id="3">
+            <h3 class="title dd-handle" style="color: #800080"><strong>관련 데이터</strong></h3>
+            <div class="text">
+              <a href="https://ncov.kdca.go.kr/" target="_blank" style="color: #606060">질병관리청1</a><br>
+              <a href="https://ncv.kdca.go.kr/ncov;jsessionid=9D4940AB754D78B0216FD67598EE6977/" target="_blank" style="color: #606060">질병관리청2</a><br>
+              <a href="https://ourworldindata.org/covid-cases" target="_blank" style="color: #606060">WHO</a>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
   </div>
 </div>
+
 <script>
   $(document).ready(function () {
     $("button")
@@ -147,6 +192,14 @@
         $("#lever").change(function () {
           console.log($(this).val());
         });
+      });
+     $("button")
+      .eq(3)
+      .click(function () {
+        console.log("총 인구수 버튼이 눌렸어요");
+        $("#lever").change(function () {
+           console.log($(this).val());
+    });
       });
   });
 </script>
