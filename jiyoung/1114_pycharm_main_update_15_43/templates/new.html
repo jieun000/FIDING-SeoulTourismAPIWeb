@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Buttons</title>
+    <style>
+      /* 컬러 버튼 css임 */
+      .color-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      /* background 지정하기 :) */
+      .blue {
+        background-color: blue;
+        color: white;
+      }
+      .red {
+        background-color: red;
+        color: white;
+      }
+      .green {
+        background-color: green;
+        color: white;
+      }
+      .yellow {
+        background-color: yellow;
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 버튼 1234를 확진자 사망자 이런식으로 이름 바꾸셈 -->
+    <button class="color-button blue" onclick="changeColor(1)">지영누나</button>
+    <button class="color-button red" onclick="changeColor(2)">은영누나</button>
+    <button class="color-button green" onclick="changeColor(3)">갓승주</button>
+    <button class="color-button yellow" onclick="changeColor(4)">
+      가영누나
+    </button>
+
+    <script>
+      // 각 버튼의 색상을 저장하는 배열 (파 빨 녹 노)
+      document.addEventListener("DOMContentLoaded", function () {
+        const colors = ["blue", "red", "green", "yellow"]; // colors에 파 빨 녹 노를 추가해줌
+
+        document.querySelectorAll(".color-button").forEach((button, index) => {
+          button.classList.add(colors[index]); // 버튼에 색상 추가하기
+
+          button.addEventListener("click", function () {
+            // 현재 버튼의 클래스에 해당 색상 클래스가 있는지 확인
+            const sangjun = colors.some((color) =>
+              button.classList.contains(color)
+            );
+
+            // 조건문으로 현재 버튼이 이미 선택된 상태이면 색상 제거, 아니면 현재 색상 추가
+            if (sangjun) {
+              colors.forEach((color) => button.classList.remove(color)); // remove는 제거하는 메서드
+            } else {
+              colors.forEach((color) => button.classList.remove(color));
+              button.classList.add(colors[index]); // add는 추가하는 메서드
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
