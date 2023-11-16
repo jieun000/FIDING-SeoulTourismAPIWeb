@@ -222,7 +222,7 @@ $(document).ready(function () {
     "2020년 1월", "2020년 2월", "2020년 3월", "2020년 4월", "2020년 5월", "2020년 6월",
     "2020년 7월", "2020년 8월", "2020년 9월", "2020년 10월", "2020년 11월", "2020년 12월",
     "2021년 1월", "2021년 2월", "2021년 3월", "2021년 4월", "2021년 5월", "2021년 6월",
-    "2021년 7월", "2021년 8월", "2021년 9월", "2021년 10월", "2021년 11월 오미크론 발생", "2021년 12월",
+    "2021년 7월", "2021년 8월", "2021년 9월", "2021년 10월", "2021년 11월 , 오미크론 발생", "2021년 12월",
     "2022년 1월", "2022년 2월", "2022년 3월", "2022년 4월", "2022년 5월", "2022년 6월",
     "2022년 7월", "2022년 8월", "2022년 9월", "2022년 10월", "2022년 11월", "2022년 12월",
     "2023년 1월", "2023년 2월", "2023년 3월", "2023년 4월", "2023년 5월", "2023년 6월",
@@ -230,9 +230,25 @@ $(document).ready(function () {
   ];
 
   $("#lever").change(function () {
+    
     selectedMonthIndex = $(this).val();
-    selectedMonth = months[selectedMonthIndex];
-    $("#month-display").text(selectedMonth);
+    selectedMonth = months[selectedMonthIndex] 
+    var str=''
+    if(selectedMonth ==='2021년 11월 , 오미크론 발생'){
+      var array1_1 = selectedMonth.split(",")
+      //selectedMonth = months[selectedMonthIndex] ;
+      for(var i in array1_1){
+        if (i == 1) {
+          str += "<span style='color:red;'>" + array1_1[i]+  "</span><br>"
+        }
+        else {str+="<span>" + array1_1[i]+  "</span><br>"}
+      }
+      console.log(str)
+      $("#month-display").html(str)
+    }
+    
+    else $("#month-display").text(selectedMonth);
+   
     console.log("슬라이더 값 변경: " + selectedMonth);
   });
 
@@ -255,9 +271,7 @@ $(document).ready(function () {
       switch (buttonIndex) {
         case 0:
           
-          
           console.log("확진자 버튼이 눌렸어요");
-
           break;
         case 1:
           console.log("사망자 버튼이 눌렸어요");
@@ -315,9 +329,21 @@ $(document).ready(function () {
             y: {
               display: true,
               type: 'logarithmic',
-            }
-        }
-      }
+            },
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: label,
+            font: {
+              size: 18,
+            },
+          },
+          legend: {
+            display: false, // 레이블 박스 표시 비활성화
+      },
+    },
+    }
   })
 }
   $('area').click(function () {
