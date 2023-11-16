@@ -124,15 +124,15 @@
         />
       </map>
       <div class="areaBox" id="area1Box" style="top: 520px; left:440px"><canvas id="area1_chart" width="0.01"></canvas></div>
-      <div class="areaBox" id="area2Box" style="top: 338px; left:400px"><canvas id="area2_chart" width="0.01"></canvas></div>
-      <div class="areaBox" id="area3Box" style="top: 260px; left:600px"><canvas id="area3_chart" width="0.01"></canvas></div>
+      <div class="areaBox" id="area2Box" style="top: 338px; left:350px"><canvas id="area2_chart" width="0.01"></canvas></div>
+      <div class="areaBox" id="area3Box" style="top: 260px; left:580px"><canvas id="area3_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area4Box" style="top: 250px; left:800px"><canvas id="area4_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area5Box" style="top: 65px; left:965px"><canvas id="area5_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area6Box" style="top: 470px; left:800px"><canvas id="area6_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area7Box" style="top: 240px; left:1020px"><canvas id="area7_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area8Box" style="top: 70px; left:680px"><canvas id="area8_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area9Box" style="top: 20px; left:405px"><canvas id="area9_chart" width="0.01"></canvas></div>
-      <div class="areaBox" id="area10Box" style="top: 160px; left:360px"><canvas id="area10_chart" width="0.01"></canvas></div>
+      <div class="areaBox" id="area10Box" style="top: 170px; left:360px"><canvas id="area10_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area11Box" style="top: 40px; left:50px"><canvas id="area11_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area12Box" style="top: 210px; left:-30px"><canvas id="area12_chart" width="0.01"></canvas></div>
       <div class="areaBox" id="area13Box" style="top: 450px; left:100px"><canvas id="area13_chart" width="0.01"></canvas></div>
@@ -214,189 +214,177 @@
 <script>
 $(document).ready(function () {
 
-// <!--슬라이드 바의 value 값을 전역 변수로 설정-->
-var selectedMonthIndex = null;
-var selectedMonth = null;
-// 슬라이드,월별 부분
-var months = [
-  "2020년 1월", "2020년 2월", "2020년 3월", "2020년 4월", "2020년 5월", "2020년 6월",
-  "2020년 7월", "2020년 8월", "2020년 9월", "2020년 10월", "2020년 11월", "2020년 12월",
-  "2021년 1월", "2021년 2월", "2021년 3월", "2021년 4월", "2021년 5월", "2021년 6월",
-  "2021년 7월", "2021년 8월", "2021년 9월", "2021년 10월", "2021년 11월", "2021년 12월",
-  "2022년 1월", "2022년 2월", "2022년 3월", "2022년 4월", "2022년 5월", "2022년 6월",
-  "2022년 7월", "2022년 8월", "2022년 9월", "2022년 10월", "2022년 11월", "2022년 12월",
-  "2023년 1월", "2023년 2월", "2023년 3월", "2023년 4월", "2023년 5월", "2023년 6월",
-  "2023년 7월", "2023년 8월", "2023년 9월", "2023년 10월", "2023년 11월"
-];
+  // <!--슬라이드 바의 value 값을 전역 변수로 설정-->
+  var selectedMonthIndex = null;
+  var selectedMonth = null;
+  // 슬라이드,월별 부분
+  var months = [
+    "2020년 1월", "2020년 2월", "2020년 3월", "2020년 4월", "2020년 5월", "2020년 6월",
+    "2020년 7월", "2020년 8월", "2020년 9월", "2020년 10월", "2020년 11월", "2020년 12월",
+    "2021년 1월", "2021년 2월", "2021년 3월", "2021년 4월", "2021년 5월", "2021년 6월",
+    "2021년 7월", "2021년 8월", "2021년 9월", "2021년 10월", "2021년 11월 오미크론 발생", "2021년 12월",
+    "2022년 1월", "2022년 2월", "2022년 3월", "2022년 4월", "2022년 5월", "2022년 6월",
+    "2022년 7월", "2022년 8월", "2022년 9월", "2022년 10월", "2022년 11월", "2022년 12월",
+    "2023년 1월", "2023년 2월", "2023년 3월", "2023년 4월", "2023년 5월", "2023년 6월",
+    "2023년 7월", "2023년 8월", "2023년 9월", "2023년 10월", "2023년 11월"
+  ];
 
-
-
-$("#lever").change(function () {
-  console.log($(this).val());
-});
-
-// 버튼 부분
-var buttonIndex = null;
-var chk = [false, false, false, false]; // chk 배열을 전역 범위에서 정의
-
-$('#left_side_btn button').each(function (idx, data) {
-  $(this).click(function () {
-    buttonIndex = $(this).index();
-    // 클릭한 버튼에 'active' 클래스를 토글(누르면 추가되고, 다시누르면 제거됨)
-    $(this).toggleClass('active');
-
-    switch (buttonIndex) {
-      case 0:
-        $("#lever").change(function () {
-          selectedMonthIndex = $(this).val();
-          selectedMonth = months[selectedMonthIndex];
-          $("#month-display").text(selectedMonth);
-          console.log("슬라이더 값 변경: " + selectedMonth);
-        });
-        
-        console.log("확진자 버튼이 눌렸어요");
-
-        break;
-      case 1:
-        console.log("사망자 버튼이 눌렸어요");
-        break;
-      case 2:
-        console.log("접종자 버튼이 눌렸어요");
-        break;
-      case 3:
-        console.log("총 인구수 버튼이 눌렸어요");
-        break;
-    }//switch case 
-    chk[buttonIndex] = !chk[buttonIndex];
-    console.log("chk:"+chk);
+  $("#lever").change(function () {
+    selectedMonthIndex = $(this).val();
+    selectedMonth = months[selectedMonthIndex];
+    $("#month-display").text(selectedMonth);
+    console.log("슬라이더 값 변경: " + selectedMonth);
   });
-});
 
-// 데이터 부분
-function chked_data(data, chk, ) {
-  // console.log("chk array:", chk);
-  // console.log("data array:", data);
-  const filter_data = data.filter((_, i) => chk[i]);
-  console.log(filter_data)
-  return filter_data
+
+  $("#lever").change(function () {
+    console.log($(this).val());
+  });
+
+
+  // 버튼 부분
+  var buttonIndex = null;
+  var chk = [false, false, false, false]; // chk 배열을 전역 범위에서 정의
+
+  $('#left_side_btn button').each(function (idx, data) {
+    $(this).click(function () {
+      buttonIndex = $(this).index();
+      // 클릭한 버튼에 'active' 클래스를 토글(누르면 추가되고, 다시누르면 제거됨)
+      $(this).toggleClass('active');
+
+      switch (buttonIndex) {
+        case 0:
+          
+          
+          console.log("확진자 버튼이 눌렸어요");
+
+          break;
+        case 1:
+          console.log("사망자 버튼이 눌렸어요");
+          break;
+        case 2:
+          console.log("접종자 버튼이 눌렸어요");
+          break;
+        case 3:
+          console.log("총 인구수 버튼이 눌렸어요");
+          break;
+      }//switch case 
+      chk[buttonIndex] = !chk[buttonIndex];
+      console.log("chk:"+chk);
+    });
+  });
+
+  // 데이터 부분
+  function chked_data(data, chk, ) {
+    // console.log("chk array:", chk);
+    // console.log("data array:", data);
+    const filter_data = data.filter((_, i) => chk[i]);
+    console.log(filter_data)
+    return filter_data
+  }
+
+  function make_chart(myChart, labels, label, data) {
+    // Create the chart
+    const ctx = document.getElementById(myChart).getContext("2d");
+    console.log("차트 생성 코드 실행됨" + ctx);
+    console.log("Label:", label);
+    console.log("Labels:", labels);
+    console.log("Data:", data);
+    $('#' + myChart).css({ 'background-color': 'white', 'border-radius': '5%' });
+    // Check if the chart instance exists
+    
+
+    window.myChartInstance = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels, // x-axis labels (dates)
+        datasets: chked_data([
+          {
+            label: label,
+            data: chk[3]? [data[0]/data[3],data[1]/data[3],data[2]/data[3]]:data.slice(0,3),
+            backgroundColor: ["rgba(0, 0, 255,0.5 )","rgba(255, 0, 0,0.5)","rgba(0, 128, 0,0.5)"],
+            borderColor: "rgba(0, 0, 0, 1)",
+            borderWidth: 1,
+          },
+        ],chk.slice(0,3))},
+        options: {
+          scales: {
+            x: {
+              display: true,
+            },
+            y: {
+              display: true,
+              type: 'logarithmic',
+            }
+        }
+      }
+  })
 }
+  $('area').click(function () {
+    console.log("클릭 이벤트 발생");
+    console.log("selectedMonthIndex 값:", selectedMonthIndex);
+    var areaId = $(this).attr('id');
+    var $areaBox = $('#' + areaId + 'Box');
+    $.ajax({
+      type: "get", // 타입 (get, post, put 등등)
+      url: "/ajax", // 요청할 서버 url    async : true, // 비동기화 여부 (default : true)
+      data: { month: selectedMonthIndex },
+      dataType: "json",
+      success: function (data) {
+        console.log("요청 성공", data);
+        // Prepare the data for the chart
+        const labels = chked_data([
+          "total_cases",
+          "total_deaths",
+          "people_vaccinated",
+          "population",
+        ], chk);
 
-function make_chart(myChart, labels, label, data) {
-  // Create the chart
-  const ctx = document.getElementById(myChart).getContext("2d");
-  console.log("차트 생성 코드 실행됨" + ctx);
-  console.log("Label:", label);
-  console.log("Labels:", labels);
-  console.log("Data:", data);
-  $('#' + myChart).css({ 'background-color': 'white', 'border-radius': '5%' });
-  // Check if the chart instance exists
+        const SAF = chked_data(Object.values(data["SAF"]), chk);
+        const AFR = chked_data(Object.values(data["AFR"]), chk);
+        const ASIA = chked_data(Object.values(data["ASIA"]), chk);
+        const CHN = chked_data(Object.values(data["CHN"]), chk);
+        const KOR = chked_data(Object.values(data["KOR"]), chk);
+        const AUS = chked_data(Object.values(data["AUS"]), chk);
+        const JPN = chked_data(Object.values(data["JPN"]), chk);
+        const RSI = chked_data(Object.values(data["RSI"]), chk);
+        const EEU = chked_data(Object.values(data["EEU"]), chk);
+        const WEU = chked_data(Object.values(data["WEU"]), chk);
+        const NAM = chked_data(Object.values(data["NAM"]), chk);
+        const USA = chked_data(Object.values(data["USA"]), chk);
+        const SAM = chked_data(Object.values(data["SAM"]), chk);
+
+        const loc_name_list = ['남아프리카공화국', '아프리카', '아시아', '중국', '한국', '오세아니아', '일본', '러시아', '동유럽', '서유럽', '북아메리카', '미국', '남아메리카']
+        const loc_data_list = [SAF, AFR, ASIA, CHN, KOR, AUS, JPN, RSI, EEU, WEU, NAM, USA, SAM]
+        const chart_id_list = [
+          'area1_chart', 'area2_chart', 'area3_chart', 'area4_chart', 'area5_chart', 'area6_chart', 'area7_chart',
+          'area8_chart', 'area9_chart', 'area10_chart', 'area11_chart', 'area12_chart', 'area13_chart'
+        ];
+  
+        if (window.myChartInstance) {
+          window.myChartInstance.destroy();
+        }
+        for (let i = 0; i < loc_data_list.length; i++) {
+          const chart_name = chart_id_list[i];
+          const loc_code = loc_name_list[i];
+          const loc_data = loc_data_list[i];
   
 
-  window.myChartInstance = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: labels, // x-axis labels (dates)
-      datasets: chked_data([
-        {
-          label: label[0],
-          data: data[0],
-          backgroundColor: color,//"rgba(255, 0, 235, 0.2)",
-          borderColor: "rgba(0, 255, 235, 1)",
-          borderWidth: 1,
-        },
-        {
-          label: label[1],
-          data: data[1],
-          backgroundColor: color,//"rgba(255, 0, 235, 0.2)",
-          borderColor: "rgba(0, 255, 235, 1)",
-          borderWidth: 1,
-        },
-        {
-          label: label[2],
-          data: data[2],
-          backgroundColor: color,//"rgba(255, 0, 235, 0.2)",
-          borderColor: "rgba(0, 255, 235, 1)",
-          borderWidth: 1,
+          make_chart(chart_name, labels, loc_code, loc_data);
         }
-
-      ],chk.slice(0,3)),
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
+      }, //success callback 
+      error: function (error) {
+        console.log("에러 발생", error);
       },
-    },
+    }); //ajax 
+    $areaBox.toggle();
+  }); //click 
+
+  $('.areaBox').click(function () {
+    $(this).hide();
   });
-}
 
-$('area').click(function () {
-  console.log("클릭 이벤트 발생");
-  console.log("selectedMonthIndex 값:", selectedMonthIndex);
-  var areaId = $(this).attr('id');
-  var $areaBox = $('#' + areaId + 'Box');
-  $.ajax({
-    type: "get", // 타입 (get, post, put 등등)
-    url: "/ajax", // 요청할 서버 url    async : true, // 비동기화 여부 (default : true)
-    data: { month: selectedMonthIndex },
-    dataType: "json",
-    success: function (data) {
-      console.log("요청 성공", data);
-      // Prepare the data for the chart
-      const labels = chked_data([
-        "total_cases",
-        "total_deaths",
-        "people_vaccinated",
-        "population",
-      ], chk);
-
-      
-
-      const SAF = chked_data(Object.values(data["SAF"]), chk);
-      const AFR = chked_data(Object.values(data["AFR"]), chk);
-      const ASIA = chked_data(Object.values(data["ASIA"]), chk);
-      const CHN = chked_data(Object.values(data["CHN"]), chk);
-      const KOR = chked_data(Object.values(data["KOR"]), chk);
-      const AUS = chked_data(Object.values(data["AUS"]), chk);
-      const JPN = chked_data(Object.values(data["JPN"]), chk);
-      const RSI = chked_data(Object.values(data["RSI"]), chk);
-      const EEU = chked_data(Object.values(data["EEU"]), chk);
-      const WEU = chked_data(Object.values(data["WEU"]), chk);
-      const NAM = chked_data(Object.values(data["NAM"]), chk);
-      const USA = chked_data(Object.values(data["USA"]), chk);
-      const SAM = chked_data(Object.values(data["SAM"]), chk);
-
-      const loc_name_list = ['남아프리카공화국', '아프리카', '아시아', '중국', '한국', '오세아니아', '일본', '러시아', '동유럽', '서유럽', '남아메리카', '미국', '서아메리카']
-      const loc_data_list = [SAF, AFR, ASIA, CHN, KOR, AUS, JPN, RSI, EEU, WEU, NAM, USA, SAM]
-      const chart_id_list = [
-        'area1_chart', 'area2_chart', 'area3_chart', 'area4_chart', 'area5_chart', 'area6_chart', 'area7_chart',
-        'area8_chart', 'area9_chart', 'area10_chart', 'area11_chart', 'area12_chart', 'area13_chart'
-      ];
- 
-      if (window.myChartInstance) {
-    window.myChartInstance.destroy();
-  }
-      for (let i = 0; i < loc_data_list.length; i++) {
-        const chart_name = chart_id_list[i];
-        const loc_code = loc_name_list[i];
-        const loc_data = loc_data_list[i];
- 
-
-        make_chart(chart_name, labels, loc_code, loc_data);
-      }
-    },
-    error: function (error) {
-      console.log("에러 발생", error);
-    },
-  });
-  $areaBox.toggle();
-});
-
-$('.areaBox').click(function () {
-  $(this).hide();
-});
-});
+}) //ready 
 
 
 
