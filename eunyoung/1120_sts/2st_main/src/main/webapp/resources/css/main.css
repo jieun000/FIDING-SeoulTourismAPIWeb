@@ -472,3 +472,16 @@ iframe {
     padding-right: 15px;
   }
 } 
+
+
+ /* Flexbox를 사용하여 자식 요소를 세로로 배열 */
+ .flex-c-m {
+   display: flex;
+   flex-direction: column;
+   align-items: center; /* 가운데 정렬 */
+ }
+
+ /* 선택적으로 간격을 주기 위한 스타일 */
+ .flex-c-m ul {
+   margin-bottom: 10px;
+ }
