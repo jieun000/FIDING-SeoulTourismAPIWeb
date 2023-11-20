@@ -335,11 +335,9 @@ iframe {
   z-index: -1;
   width: 300%;
   height: 100%;
-  background: #a64bf4;
-  background: -webkit-linear-gradient(right, #00dbde, #fc00ff, #00dbde, #fc00ff);
-  background: -o-linear-gradient(right, #00dbde, #fc00ff, #00dbde, #fc00ff);
-  background: -moz-linear-gradient(right, #00dbde, #fc00ff, #00dbde, #fc00ff);
-  background: linear-gradient(right, #00dbde, #fc00ff, #00dbde, #fc00ff);
+  background: #6c9dc6; 
+  background: -webkit-linear-gradient(right, #dae7f0, #b7ceee, #90d6d3, #6c9dc6); /* 로그인버튼 호버색상 */
+
   top: 0;
   left: -100%;
 

@@ -32,7 +32,7 @@
 <body>
 	
 	<div class="limiter">
-		<div class="container-login100" style="background-image: url('resources/images/bg-01.jpg');">
+		<div class="container-login100" style="background-color: #DAE7F0;">
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 				<form class="login100-form validate-form">
 					<span class="login100-form-title p-b-49">
@@ -69,18 +69,18 @@
 						</span>
 					</div>
 
+					<!-- 카카오 로그인 연동 --> 
 					<div class="flex-c-m">
-						<a href="#" class="login100-social-item bg1">
-							<i class="fa fa-facebook"></i>
-						</a>
+						<ul>
+							<li onclick="kakaoLogin();">
+						      <a href="javascript:void(0)">
+						          <img src="resources/static/images/kakao_login_small.png">
+						      </a>
+							</li>
+						</ul>
 
-						<a href="#" class="login100-social-item bg2">
-							<i class="fa fa-twitter"></i>
-						</a>
 
-						<a href="#" class="login100-social-item bg3">
-							<i class="fa fa-google"></i>
-						</a>
+
 					</div>
 
 					<div class="flex-col-c p-t-155">
@@ -112,6 +112,31 @@
 	<script src="resources/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="js/main.js"></script>
+	
+	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+	<script>
+	Kakao.init('08bfe2f1b64cea0cb49c83f0c8780228'); //발급받은 키 중 javascript키를 사용해준다.
+	console.log(Kakao.isInitialized()); // sdk초기화여부판단
+	//카카오로그인
+	function kakaoLogin() {
+	    Kakao.Auth.login({
+	      success: function (response) {
+	        Kakao.API.request({
+	          url: '/v2/user/me',
+	          success: function (response) {
+	        	  console.log(response)
+	          },
+	          fail: function (error) {
+	            console.log(error)
+	          },
+	        })
+	      },
+	      fail: function (error) {
+	        console.log(error)
+	      },
+	    })
+	  }
+	</script>
 
 </body>
 </html>
