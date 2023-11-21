@@ -6,28 +6,28 @@
 	<title>로그인</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="resources/css/main.css"> <!-- 스타일 파일 링크 추가 -->
+	<link rel="stylesheet" href="/resources/css/main.css"> <!-- 스타일 파일 링크 추가 -->
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="resources/images/icons/favicon.ico"/>
+	<link rel="icon" type="image/png" href="/resources/images/icons/favicon.ico"/>
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/fonts/iconic/css/material-design-iconic-font.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/animate/animate.css">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="resources/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/css-hamburgers/hamburgers.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/animsition/css/animsition.min.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/select2/select2.min.css">
 <!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="resources/vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/daterangepicker/daterangepicker.css">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="resources/css/util.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/main.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
 <!--===============================================================================================-->
 </head>
 <body>
@@ -75,7 +75,7 @@
 						<ul>
 							<li onclick="kakaoLogin();">
 						      <a href="javascript:void(0)">
-						          <img src="resources/images/kakao_medium.png" alt="카카오 로그인">
+						          <img src="/resources/images/kakao_medium.png" alt="카카오 로그인">
 						      </a>
 							</li>
 						</ul>
@@ -88,7 +88,7 @@
 						      <a id="naverIdLogin_loginButton" href="javascript:void(0)">
 						          <span>
 						            <!-- 네이버 로고 이미지 추가 -->
-						            <img src="resources/images/naver_medium.png" alt="네이버 로그인">
+						            <img src="/resources/images/naver_medium.png" alt="네이버 로그인">
 						        </span>
 						      </a>
 							</li>
@@ -110,21 +110,21 @@
 	<div id="dropDownSelect1"></div>
 	
 <!--===============================================================================================-->
-	<script src="resources/vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/resources/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="resources/vendor/animsition/js/animsition.min.js"></script>
+	<script src="/resources/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="resources/vendor/bootstrap/js/popper.js"></script>
-	<script src="resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/resources/vendor/bootstrap/js/popper.js"></script>
+	<script src="/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="resources/vendor/select2/select2.min.js"></script>
+	<script src="/resources/vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
-	<script src="resources/vendor/daterangepicker/moment.min.js"></script>
-	<script src="resources/vendor/daterangepicker/daterangepicker.js"></script>
+	<script src="/resources/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/resources/vendor/daterangepicker/daterangepicker.js"></script>
 <!--===============================================================================================-->
-	<script src="resources/vendor/countdowntime/countdowntime.js"></script>
+	<script src="/resources/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-	<script src="resources/js/main.js"></script>
+	<script src="/resources/js/main.js"></script>
 	
 	<!-- 카카오 스크립트 -->
 	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
@@ -138,7 +138,17 @@
 	        Kakao.API.request({
 	          url: '/v2/user/me',
 	          success: function (response) {
+	        	  //카카오 로그인 성공시 함수코드작성부분
 	        	  console.log(response)
+	        	  var {email, profile} = response.kakao_account
+	        	  var {nickname} = profile
+	        	  console.log(email, nickname)
+				  
+	        	  $("#form input").eq(0).val(email)
+	        	  $("#form input").eq(1).val(nickname)
+	        	  $("#form input").eq(2).val("kakao")
+	        	  $('#tr').trigger('click');  
+	        	  
 	          },
 	          fail: function (error) {
 	            console.log(error)
@@ -157,9 +167,9 @@
 	<script>
 	var naverLogin = new naver.LoginWithNaverId(
 			{
-				clientId: "b3JYZU9Q3HXPIMUwMuGI", //내 애플리케이션 정보에 cliendId를 입력해줍니다.
-				callbackUrl: "http://localhost:8080/naverLogin", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
-				isPopup: false,
+				clientId: "eWhMrerax5OL1_29UdAs", //내 애플리케이션 정보에 cliendId를 입력해줍니다.
+				callbackUrl: "http://localhost:8080/", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
+				isPopup: true,
 				callbackHandle: true
 			}
 		);	
@@ -170,39 +180,42 @@
 		naverLogin.getLoginStatus(function (status) {
 			if (status) {
 				var email = naverLogin.user.getEmail(); // 필수로 설정할것을 받아와 아래처럼 조건문을 줍니다.
-	    		
 				console.log(naverLogin.user); 
-	    		
+				var name = naverLogin.user.getName();
+	        	console.log(email, name)	  
+   				//네이버 로그인 성공시 함수코드작성부분
+	       	    $("#form input").eq(0).val(email)
+	       	    $("#form input").eq(1).val(name)
+	       	    $("#form input").eq(2).val("naver")
+	       	    // 팝업 창 닫기 (jQuery 사용)
+	            window.close();
+	       	    $('#tr').trigger('click');  
+
+	        	  
 	            if( email == undefined || email == null) {
 					alert("이메일은 필수정보입니다. 정보제공을 동의해주세요.");
 					naverLogin.reprompt();
 					return;
-				
-				} else {
-					console.log("callback 처리에 실패하였습니다.");
-				}
+	            }
+			} else {
+				console.log("callback 처리에 실패하였습니다.");
 			}
-			});
 		});
-	
-	
-	var testPopUp;
-	function openPopUp() {
-	    testPopUp= window.open("https://nid.naver.com/nidlogin.logout", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,width=1,height=1");
-	}
-	function closePopUp(){
-	    testPopUp.close();
-	}
-	
-	function naverLogout() {
-		openPopUp();
-		setTimeout(function() {
-			closePopUp();
-			}, 1000);
-		
-		
-	}
+	});
 	</script>
-
+	
+	<script>
+		$(document).ready(function(){
+			$('#form').css("visibility", "hidden");
+				
+		})
+	
+	</script>
+	<form action='/member/register' id="form">
+		<input type='text' name='email'/>
+		<input type='text' name='nickname'/>
+		<input type='text' name='from'/>
+		<input type='submit' id='tr'/>
+	</form>
 </body>
 </html>
