@@ -212,11 +212,10 @@
 	<script>
 		$(document).ready(function(){
 			$('#form').css("visibility", "hidden");
-				
 		})
 	
 	</script>
-	<form action='/member/login1' id="form">
+	<form action='/member/naverLogin' id="form">
 		<input type='text' name='email'/>
 		<input type='text' name='nickname'/>
 		<input type='text' name='from'/>

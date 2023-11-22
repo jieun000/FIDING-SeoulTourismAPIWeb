@@ -22,11 +22,13 @@ public class MemberController {
 	@Setter(onMethod_=@Autowired)
 	private MemberService service;
 	
+	// 회원가입 페이지로
 	@GetMapping("/signup")
 	public String register_get() {
-		return "signup/signup";
+		return "member/signup";
 	}
 	
+	// 회원가입 DB연동
 	@PostMapping("/signup")
 	public String register_post(MemberVO vo) {
 		System.out.println(vo);
@@ -34,15 +36,18 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	@GetMapping("/login1")
-	public String login_get(String email , String nickname, String from, Model model) {
-		System.out.println("email: "+ email +", nickname: " +nickname+" from: "+from);
-		return "redirect:/";
-	}
-	
+	// 로그인 페이지
 	@GetMapping("/login")
 	public String login() {
-		System.out.println("login jsp 를 열어라 ");
-		return "/login/login";
+		System.out.println("login jsp를 열어라 ");
+		return "/member/login";
 	}
+	
+	// 네이버 로그인
+	@GetMapping("/naverLogin")
+	public String login_get(String email , String nickname, String from, Model model) {
+		System.out.println("email: "+ email +", nickname: " +nickname+" from: "+from);
+		return "/main";
+	}
+
 }
