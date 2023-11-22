@@ -168,8 +168,8 @@
 	var naverLogin = new naver.LoginWithNaverId(
 			{
 				clientId: "eWhMrerax5OL1_29UdAs", //내 애플리케이션 정보에 cliendId를 입력해줍니다.
-				callbackUrl: "http://localhost:8080/", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
-				isPopup: true,
+				callbackUrl: "http://localhost:8080/member/login", // 내 애플리케이션 API설정의 Callback URL 을 입력해줍니다.
+				isPopup: false,
 				callbackHandle: true
 			}
 		);	
@@ -177,31 +177,35 @@
 	naverLogin.init();
 	
 	window.addEventListener('load', function () {
-		naverLogin.getLoginStatus(function (status) {
-			if (status) {
-				var email = naverLogin.user.getEmail(); // 필수로 설정할것을 받아와 아래처럼 조건문을 줍니다.
-				console.log(naverLogin.user); 
-				var name = naverLogin.user.getName();
-	        	console.log(email, name)	  
-   				//네이버 로그인 성공시 함수코드작성부분
-	       	    $("#form input").eq(0).val(email)
-	       	    $("#form input").eq(1).val(name)
-	       	    $("#form input").eq(2).val("naver")
-	       	    // 팝업 창 닫기 (jQuery 사용)
-	            window.close();
-	       	    $('#tr').trigger('click');  
+	    naverLogin.getLoginStatus(function (status) {
 
-	        	  
-	            if( email == undefined || email == null) {
-					alert("이메일은 필수정보입니다. 정보제공을 동의해주세요.");
-					naverLogin.reprompt();
-					return;
+	        if (status) {
+	            var email = naverLogin.user.getEmail();
+	            var name = naverLogin.user.getName(); // 새로 추가된 부분
+
+	            console.log("네이버 로그인 성공");
+	            console.log("이메일:", email);
+	            console.log("이름:", name); // 새로 추가된 부분
+
+	            // 나머지 코드는 동일
+	            $("#form input").eq(0).val(email);
+	            $("#form input").eq(1).val(name);
+	            $("#form input").eq(2).val("naver");
+	            $('#tr').trigger('click');
+
+	            if (email == undefined || email == null) {
+	                alert("이메일은 필수정보입니다. 정보제공을 동의해주세요.");
+	                naverLogin.reprompt();
+	                return;
 	            }
-			} else {
-				console.log("callback 처리에 실패하였습니다.");
-			}
-		});
+	        } else {
+	            console.log("네이버 로그인 실패 또는 사용자가 로그인하지 않음");
+	            // 여기에 더 자세한 실패 이유를 확인할 수 있는 코드 추가
+	        }
+	    });
 	});
+
+
 	</script>
 	
 	<script>
