@@ -16,7 +16,7 @@
         </div>
         	<div class="menu-list">
 		        <ul>
-		            <li >내 게시물</li>
+		            <li>내 게시물</li>
 		        <!-- 추가적인 메뉴 항목들 -->
 		            <li>즐겨찾기</li>
 		            <li>게시판</li>
@@ -25,6 +25,9 @@
 		        </ul>
 	        </div>
     </div>
+    
+    <!-- 구분 선 -->
+    <div class="line"></div>
     
     <div class="main-content" id="main-content">
         <!-- 메인 컨텐츠 내용 -->
