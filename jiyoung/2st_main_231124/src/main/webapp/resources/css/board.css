@@ -1,0 +1,30 @@
+@charset "UTF-8";
+	
+#destinations2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-center;
+
+.boardimages2 {
+	width: calc(30% - 20px);
+    margin: 30px; /* 좌우 간격을 늘려서 간격을 늘립니다. */
+    text-align: center;
+}
+
+.boardimages2 img {
+	margin: 0 -15px; /* 사진 상에만 좌우 여백을 줄임 */
+    width: 60%;
+    height: 330px;
+    border-radius: 10px;
+}
+
+h2 {
+    font-size: 1.0em;
+    margin: 0.25em 0;
+}
+
+p {
+    color: #555;
+    font-size: 0.5em;
+    margin: -0.25em 0;
+}
