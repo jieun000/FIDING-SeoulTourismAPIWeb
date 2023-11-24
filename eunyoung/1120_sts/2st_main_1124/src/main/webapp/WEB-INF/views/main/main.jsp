@@ -13,14 +13,14 @@
         	</ul>
         </div>
         	<div class="menu-list">
-		        <ul>
-		            <li >내 게시물</li>
-		        <!-- 추가적인 메뉴 항목들 -->
-		            <li>즐겨찾기</li>
-		            <li>게시판</li>
-		            <li>맛집 목록</li>
-		            <li>유적지 목록</li>
-		        </ul>
+	            <ul>
+                  <li >💗 내 게시물</li>
+              <!-- 추가적인 메뉴 항목들 -->
+                  <li>💛 즐겨찾기</li>
+                  <li>💚 게시판</li>
+                  <li>💙 맛집 목록</li>
+                  <li>💜 유적지 목록</li>
+              </ul>
      		</div>
      		<div class="parent-container">
 			  <form action='/member/logout'>
@@ -37,9 +37,7 @@
         <div class="wrap" onmouseover="pauseBanner()" onmouseout="resumeBanner()"> <!-- 배너표시영역 -->
         	<div class="rolling-list"> <!-- 원본배너 -->
 	            <ul>
-	            	<div class="video-wrap">
-	            	<iframe width="1217" height="685" src="https://www.youtube.com/embed/lF1P-nH2oTw" title="방구석 힐링 투어! 서울도보해설관광 체험영상_경복궁편" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-	                </div>
+	            		<!--유튜브 <iframe width="500" height="300" src="https://www.youtube.com/embed/lF1P-nH2oTw" title="방구석 힐링 투어! 서울도보해설관광 체험영상_경복궁편" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
 	                <li>
 	                    <div class="image-wrap"><img src="/resources/images/main1.jpg" alt=""></div>
 	                </li>
@@ -71,7 +69,7 @@
     	<main>
 		    <section id="destinations">
 			    <article class="destination">
-			        <img src="/resources/images/box1.jpg" alt="box1.jpg">
+			        <img id="img1" src="/resources/images/box1.jpg" alt="box1.jpg">
 			        <h2>강아지1</h2>
 			        <p>Some description</p>
 			    </article>
@@ -135,6 +133,25 @@
             document.querySelector('.clone').style.animationPlayState = 'running';
         }
     </script>
+    <script type="text/javascript">
+    	$(function(){
+    		$.ajax({
+    		      type: "get", // 타입 (get, post, put 등등)
+    		      url: "https://apis.data.go.kr/B551011/KorService1/searchKeyword1?numOfRows=1&pageNo="+"1"+"&MobileOS=WIN&MobileApp=seoultrip&_type=json&keyword="
+    		    	  +"%EA%B4%91%ED%99%94%EB%AC%B8"+"&contentTypeId=12&areaCode=1&serviceKey=DE4NA2l9i2XDo2GEmrAOONhVxeolPbxNBMC12h%2BQAiQh%2Bsq0X1DIXbC6KuT6AD9jFCqQ3xT8Y%2BkVNpXWHSibyA%3D%3D", // 요청할 서버 url    async : true, // 비동기화 여부 (default : true)
+    		      data: {},
+    		      dataType: "json",
+    		      success: function (data) {
+    		        console.log("요청 성공", data.response.body.items.item[0]);
+    		       var img=data.response.body.items.item[0].firstimage
+    		       $("#img1").attr("src", img);
+    		      }, //success callback
+    		      error: function (error) {
+    		        console.log("에러 발생", error);
+    		      },
+    		    }); 
+    	});
+	</script>
     <!-- 서치바 -->
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
     <script type="text/javascript">
