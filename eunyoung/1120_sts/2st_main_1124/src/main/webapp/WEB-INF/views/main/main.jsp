@@ -1,36 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
-
-	<div class="menu-bar">
-        <!-- 메뉴바 내용 -->
-        <div class="my-box">
-        	<ul>
-        		<li>이름</li>
-        		<li>닉네임</li>
-        		<li>작성한 게시물 수</li>
-        		
-        	</ul>
-        </div>
-        	<div class="menu-list">
-	            <ul>
-                  <li >💗 내 게시물</li>
-              <!-- 추가적인 메뉴 항목들 -->
-                  <li>💛 즐겨찾기</li>
-                  <li>💚 게시판</li>
-                  <li>💙 맛집 목록</li>
-                  <li>💜 유적지 목록</li>
-              </ul>
-     		</div>
-     		<div class="parent-container">
-			  <form action='/member/logout'>
-			    <input type='submit' value='logout'>
-			  </form>
-			</div>
-    </div>
-    
-    <!-- 구분 선 -->
-    <div class="line"></div>
     
     <div class="main-content" id="main-content">
         <!-- 메인 컨텐츠 내용 -->
@@ -134,23 +104,54 @@
         }
     </script>
     <script type="text/javascript">
-    	$(function(){
-    		$.ajax({
-    		      type: "get", // 타입 (get, post, put 등등)
-    		      url: "https://apis.data.go.kr/B551011/KorService1/searchKeyword1?numOfRows=1&pageNo="+"1"+"&MobileOS=WIN&MobileApp=seoultrip&_type=json&keyword="
-    		    	  +"%EA%B4%91%ED%99%94%EB%AC%B8"+"&contentTypeId=12&areaCode=1&serviceKey=DE4NA2l9i2XDo2GEmrAOONhVxeolPbxNBMC12h%2BQAiQh%2Bsq0X1DIXbC6KuT6AD9jFCqQ3xT8Y%2BkVNpXWHSibyA%3D%3D", // 요청할 서버 url    async : true, // 비동기화 여부 (default : true)
-    		      data: {},
-    		      dataType: "json",
-    		      success: function (data) {
-    		        console.log("요청 성공", data.response.body.items.item[0]);
-    		       var img=data.response.body.items.item[0].firstimage
-    		       $("#img1").attr("src", img);
-    		      }, //success callback
-    		      error: function (error) {
-    		        console.log("에러 발생", error);
-    		      },
-    		    }); 
+    var selectedValue = ""
+    var searchdValue = ""
+    // 셀렉트 박스의 값이 변경되었을 때
+    $("#categorySelect").change(function(){
+      // 선택된 값 가져오기
+   	 selectedValue = $("#categorySelect").val();
+    });
+    $("#searchIcon").click(function(){
+    	search_data()
     	});
+    
+    function api_search_data(){
+          searchdValue = $("#searchInput").val();
+          var data={
+                  numOfRows: "3",
+                  pageNo: "1",
+                  MobileOS: "WIN",
+                  MobileApp: "seoultrip",
+                  _type: "json",
+                  keyword: searchdValue,
+
+                  areaCode: "1",
+                  serviceKey: "DE4NA2l9i2XDo2GEmrAOONhVxeolPbxNBMC12h+QAiQh+sq0X1DIXbC6KuT6AD9jFCqQ3xT8Y+kVNpXWHSibyA==",
+                  // 여기에 선택된 값 추가
+                  // 예: cat1=A02&cat2=A0201
+                  // 이 부분을 동적으로 설정하려면 서버에 맞게 값을 가공해야 합니다.
+                  cat1: selectedValue.split("&")[0],
+                  
+                };
+         	if (selectedValue.length>3){
+         		data["cat2"]=selectedValue.split("&")[1]
+         	}
+          // AJAX 요청 보내기
+          $.ajax({
+            type: "get",
+            url: "https://apis.data.go.kr/B551011/KorService1/searchKeyword1",
+            data: data,
+            dataType: "json",
+            success: function (data) {
+              console.log("요청 성공", data);
+            },
+            error: function (error) {
+              console.log("에러 발생", error);
+            },
+          });
+        };
+     
+
 	</script>
     <!-- 서치바 -->
     <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>

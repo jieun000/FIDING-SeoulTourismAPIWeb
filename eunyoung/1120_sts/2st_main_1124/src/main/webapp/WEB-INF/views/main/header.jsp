@@ -19,18 +19,18 @@
          <div class="wrapper">
 		    <div class="search_box">
 		        <div class="dropdown">
-		            <select class="select-box">
+		            <select id="categorySelect" class="select-box">
 		                <option value="" disabled selected>카테고리</option>
-		                <option value="자연">자연</option>
-		                <option value="역사">역사</option>
-		                <option value="관광">관광</option>
-		                <option value="축제">축제</option>
-		                <option value="음식">음식</option>
+		                <option value="A01">자연</option>
+		                <option value="A02&A0201">역사</option>
+		                <option value="A02&A0202">관광</option>
+		                <option value="A02&A0207">축제</option>
+		                <option value="A05">음식</option>
 		            </select>
 		        </div>
 		        <div class="search_field">
-		            <input type="text" class="input" placeholder="검색어를 입력하세요">
-		            <i class="fas fa-search"></i>
+		            <input id="searchInput" type="text" class="input" value="" placeholder="검색어를 입력하세요">
+		            <i id="searchIcon" class="fas fa-search"></i>
 		        </div>
 		    </div>
 		</div>
