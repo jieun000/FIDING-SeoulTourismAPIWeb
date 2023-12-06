@@ -15,7 +15,7 @@ const Main = () => {
         // 데이터를 가져오는 동안 로딩 상태를 true로 설정
         setIsLoading(true);
         // API 엔드포인트에서 데이터를 가져옵니다 (실제 API 엔드포인트로 교체)
-        const response = await fetch('http://localhost:8080/main');
+        const response = await fetch('http://localhost:8080/');
         console.log(response);
         const result = await response.json();
         // 상태에 데이터를 설정

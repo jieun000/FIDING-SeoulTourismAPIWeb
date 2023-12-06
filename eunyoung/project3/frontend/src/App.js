@@ -1,20 +1,27 @@
-import React from 'react'
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-//import Signup from './components/Signup'; // Main 컴포넌트의 실제 경로를 참조해야 합니다.
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Login from './components/Login';
-import Signup1 from './components/Signup1';
+import Signup from './components/Signup';
 import Main from './components/Main';
+import Menu1 from './components/Menu1';
 
 const App = () => {
-    return (
-
+  return (
+    <div>
+      <Header />
+      
       <Routes>
-      <Route path="/signup" element={<Signup1 />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/main" element={<Main />} />
-    </Routes>
-    
-      );
-}
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Main />} />
+        <Route component={Menu1} path="/menu1" exact />
+        
+      </Routes>
+      <Footer />
+    </div>
+  );
+};
 
-export default App
+export default App;

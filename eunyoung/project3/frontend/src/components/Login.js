@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import './util.css';
-import './login.css';
-import './signup.css';
 import axios from 'axios'; 
 
 function Login() {
@@ -35,7 +32,7 @@ const kakaoLogin=()=>{}
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
           <form className="login100-form validate-form" action="/trip/login" method="post" onSubmit={handleSubmit}>
             <span className="login100-form-title p-b-49">
-              Seoul Trip
+              미 세 한
             </span>
 
             <div className="wrap-input100 validate-input m-b-23" data-validate="Username is required">
@@ -45,6 +42,7 @@ const kakaoLogin=()=>{}
                 type="text"
                 name="id"
                 placeholder="아이디를 입력하세요"
+                autoComplete="current-password"
                 value={username}
                 onChange={handleUsernameChange}
               />
@@ -58,6 +56,7 @@ const kakaoLogin=()=>{}
                 type="password"
                 name="password"
                 placeholder="패스워드를 입력하세요"
+                autoComplete="current-password"
                 value={password}
                 onChange={handlePasswordChange}
               />
@@ -76,34 +75,15 @@ const kakaoLogin=()=>{}
               </div>
             </div>
 
-            <div className="txt1 text-center p-t-54 p-b-20">
-              <span>
-                간편 로그인
-              </span>
-            </div>
-
-            <div className="flex-c-m">
-              <ul>
-                <li onClick={() => kakaoLogin()}>
-                  <a href="javascript:void(0)">
-                    <img src="/resources/images/kakao_medium.png" alt="카카오 로그인" />
-                  </a>
-                </li>
-              </ul>
-              <div style={{ width: '10px' }}></div>
-              <ul>
-                <li>
-                  <a id="naverIdLogin_loginButton" href="javascript:void(0)">
-                    <span>
-                      <img src="/resources/images/naver_medium.png" alt="네이버 로그인" />
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
             <div className="flex-col-c p-t-50">
-              <a href="signup" className="txt2">
+              <a href="" className="txt2" style={{textDecoration: "none"}}>
+                😀 얼굴인식 로그인
+              </a>
+            </div>
+
+            
+            <div className="flex-col-c p-t-50">
+              <a href="signup" className="txt2" style={{textDecoration: "none", fontWeight: "bold"}}>
                 회원가입
               </a>
             </div>
