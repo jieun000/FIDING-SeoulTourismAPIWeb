@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './util.css';
-import './main.css';
 import axios from 'axios'; 
 
-function Main() {
+function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,7 +12,7 @@ function Main() {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-
+const kakaoLogin=()=>{}
   const handleSubmit = async (e) => {
     try {
       const response = await axios.post('/trip/login', {
@@ -34,7 +32,7 @@ function Main() {
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
           <form className="login100-form validate-form" action="/trip/login" method="post" onSubmit={handleSubmit}>
             <span className="login100-form-title p-b-49">
-              Seoul Trip
+              미 세 한
             </span>
 
             <div className="wrap-input100 validate-input m-b-23" data-validate="Username is required">
@@ -44,6 +42,7 @@ function Main() {
                 type="text"
                 name="id"
                 placeholder="아이디를 입력하세요"
+                autoComplete="current-password"
                 value={username}
                 onChange={handleUsernameChange}
               />
@@ -57,6 +56,7 @@ function Main() {
                 type="password"
                 name="password"
                 placeholder="패스워드를 입력하세요"
+                autoComplete="current-password"
                 value={password}
                 onChange={handlePasswordChange}
               />
@@ -84,17 +84,17 @@ function Main() {
             <div className="flex-c-m">
               <ul>
                 <li onClick={() => kakaoLogin()}>
-                  <a href="javascript:void(0)">
-                    <img src="/resources/images/kakao_medium.png" alt="카카오 로그인" />
+                  <a href="#">
+                    <img src="kakao_medium.png" alt="카카오 로그인" />
                   </a>
                 </li>
               </ul>
               <div style={{ width: '10px' }}></div>
               <ul>
                 <li>
-                  <a id="naverIdLogin_loginButton" href="javascript:void(0)">
+                  <a id="naverIdLogin_loginButton" href="#">
                     <span>
-                      <img src="/resources/images/naver_medium.png" alt="네이버 로그인" />
+                      <img src="naver_medium.png" alt="네이버 로그인" />
                     </span>
                   </a>
                 </li>
@@ -114,4 +114,4 @@ function Main() {
   
 }
 
-export default Main;
+export default Login;

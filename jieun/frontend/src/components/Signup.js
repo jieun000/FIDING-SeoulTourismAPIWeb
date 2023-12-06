@@ -1,23 +1,15 @@
 import React from 'react';
 
-const Signup1 = () => {
+const Signup = () => {
   const formatPhoneNumber = (input) => {
     // Your formatPhoneNumber logic here
   };
 
-  const handleSubmit = async (e) => {
-    try {
-      const response = await axios.post('/trip/signup', {
-        username,
-        password,
-      });
-
-      console.log(response.data); 
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add your form submission logic here
   };
-
+  
   return (
     <>
     <div className="limiter">
@@ -82,4 +74,4 @@ const Signup1 = () => {
   );
 };
 
-export default Signup1;
+export default Signup;
