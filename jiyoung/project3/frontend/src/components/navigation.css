@@ -61,6 +61,7 @@ img :hover{
     top: 76px;
     background-color: white;
     box-shadow: 2px 0px 1px rgba(44, 44, 44, 0.137);
+    transition: top 0.5s ease;
   }
 
   .menu__box__hidden {
