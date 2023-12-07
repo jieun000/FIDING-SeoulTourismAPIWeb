@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import Main from './components/Main';
 import Menu1 from './components/Menu1';
 
+
 const App = () => {
   return (
     <div>
@@ -17,7 +18,6 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Main />} />
         <Route component={Menu1} path="/menu1" exact />
-        
       </Routes>
       <Footer />
     </div>

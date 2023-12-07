@@ -28,11 +28,11 @@ const kakaoLogin=()=>{}
 
   return (
     <div className="limiter">
-      <div className="container-login100" style={{ backgroundColor: '#DAE7F0' }}>
+      <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
           <form className="login100-form validate-form" action="/trip/login" method="post" onSubmit={handleSubmit}>
             <span className="login100-form-title p-b-49">
-              미 세 한
+              <img src="./logo.png" width="170"></img>
             </span>
 
             <div className="wrap-input100 validate-input m-b-23" data-validate="Username is required">

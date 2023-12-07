@@ -7,7 +7,7 @@ export default function NavItem({ data, offNav }) {
 
   return (
     <Link to={`${address}`} className="menu__item" onClick={() => offNav()}>
-      {src?<img src={src}/>: <span>{name}</span>}
+      {src?<img src={src} width="80" style={{margin:"10px"}}/>: <span>{name}</span>}
     </Link>
   );
 }

@@ -28,11 +28,11 @@ const Signup1 = () => {
   return (
     <>
     <div className="limiter">
-        <div className="container-login100" style={{ backgroundColor: '#DAE7F0' }}>
+        <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
           <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
             <form className="was-validated login100-form validate-form" action="/trip/signup" method="post" onSubmit={handleSubmit}>
               <span className="login100-form-title p-b-49">
-                미 세 한
+                <img src="./logo.png" width="170"></img>
               </span>
 
               <div className="wrap-input100 validate-input m-b-23" data-validate="id is required">
@@ -70,7 +70,7 @@ const Signup1 = () => {
               <input className="input100" type="text" name="email" placeholder="이메일을 입력하세요"/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
-               
+               <br/>
                
           <div className="container-login100-form-btn">
                 <div className="wrap-login100-form-btn">

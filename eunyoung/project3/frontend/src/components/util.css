@@ -1,3 +1,24 @@
+/* footer css */
+
+.footer {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+}
+#copyright {
+    font-size: 17px;
+    font-weight: 100;
+}
+#nickname {
+    font-size: 9px;
+    font-weight: 100;
+    white-space: pre;
+}
+
 /*[ FONT SIZE ]
 ///////////////////////////////////////////////////////////
 */
