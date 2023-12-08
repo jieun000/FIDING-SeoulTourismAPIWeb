@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Chatbot from './Chatbot';
 
 const Main = () => {
   // 데이터를 저장하는 상태
@@ -46,11 +47,14 @@ const Main = () => {
 
   // 실제로 렌더링될 컴포넌트 내용 및 가져온 데이터를 렌더링
   return (
+    <>
     <div>
       <h1>데이터가 성공적으로 가져와졌습니다!</h1>
       {/* 여기에 데이터를 렌더링하세요 */}
       <pre>{data.result}</pre>
     </div>
+
+      </>
   );
 };
 

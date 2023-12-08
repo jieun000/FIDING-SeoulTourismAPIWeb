@@ -15,7 +15,7 @@ function Login() {
 const kakaoLogin=()=>{}
   const handleSubmit = async (e) => {
     try {
-      const response = await axios.post('/trip/login', {
+      const response = await axios.post('/login', {
         username,
         password,
       });
