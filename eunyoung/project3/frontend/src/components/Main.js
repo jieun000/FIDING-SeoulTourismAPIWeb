@@ -53,10 +53,7 @@ const Main = () => {
       {/* 여기에 데이터를 렌더링하세요 */}
       <pre>{data.result}</pre>
     </div>
-    <div>
-      {/* ChatBot 컴포넌트 추가 */}
-      <Chatbot />
-      </div>
+
       </>
   );
 };

@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Main from './components/Main';
 import Menu1 from './components/Menu1';
+import Chatbot from './components/Chatbot';
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/" element={<Main />} />
         <Route component={Menu1} path="/menu1" exact />
       </Routes>
+      <Chatbot/>
       <Footer />
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; 
+import './login.css'
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -12,12 +13,12 @@ function Login() {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-const kakaoLogin=()=>{}
+
   const handleSubmit = async (e) => {
     try {
-      const response = await axios.post('/trip/login', {
-        username,
-        password,
+      const response = await axios.post('/login', {
+        id:username,
+        pw:password,
       });
 
       console.log(response.data); 
@@ -30,7 +31,7 @@ const kakaoLogin=()=>{}
     <div className="limiter">
       <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-          <form className="login100-form validate-form" action="/trip/login" method="post" onSubmit={handleSubmit}>
+          <form className="login100-form validate-form" action="/login" method="post" onSubmit={handleSubmit}>
             <span className="login100-form-title p-b-49">
               <img src="./logo.png" width="170"></img>
             </span>
@@ -54,7 +55,7 @@ const kakaoLogin=()=>{}
               <input
                 className="input100"
                 type="password"
-                name="password"
+                name="pw"
                 placeholder="패스워드를 입력하세요"
                 autoComplete="current-password"
                 value={password}

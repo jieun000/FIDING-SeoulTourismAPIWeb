@@ -60,10 +60,11 @@ function Navigation() {
         ].join(" ")}
       >
         <div className="menu__list">
-          {menu.map((data) => (
+          {menu.map((data ,idx) => (
             <NavItem
               data={data}
-              key={data.address}
+              address={data.address}
+              key={idx}
               src={data.src}
               offNav={() => setMenuToggle(false)}
             />
