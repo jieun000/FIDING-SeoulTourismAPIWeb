@@ -7,7 +7,7 @@ import Signup from './components/Signup';
 import Main from './components/Main';
 import Menu1 from './components/Menu1';
 import Chatbot from './components/Chatbot';
-
+import LoginMain from './components/LoginMain'
 
 const App = () => {
   return (
@@ -15,9 +15,11 @@ const App = () => {
       <Header />
       
       <Routes>
+      <Route path="/" element={<Main />} /> 
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Main />} />
+        <Route path="/logout" element={<Main />} />
+        <Route path="/LoginMain" element={<LoginMain />} />
         <Route component={Menu1} path="/menu1" exact />
       </Routes>
       <Chatbot/>

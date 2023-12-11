@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const Main = () => {
+
+const LoginMain = () => {
   // 데이터를 저장하는 상태
   const [data, setData] = useState(null);
   // 로딩 상태를 추적하는 상태
@@ -48,7 +49,7 @@ const Main = () => {
   return (
     <>
     <div>
-      <h1>여기는 로그인 전 메인페이지</h1>
+      <h1>로그인성공! 여기는 로그인 된 메인페이지</h1>
       {/* 여기에 데이터를 렌더링하세요 */}
       <pre>{data.result}</pre>
     </div>
@@ -57,4 +58,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default LoginMain;

@@ -95,6 +95,16 @@ button {
 	background: transparent;
 }
 
+.login100-form-btn2 {
+  border: 1px solid #90d6d3; 
+  background-color: #90d6d3;
+  font-size: 14px; 
+  color: #fff; 
+  padding: 8px 16px; /* 텍스트와 선 사이의 간격을 조절합니다. */
+  display: inline-block; /* 여러 속성을 지정하려면 인라인 블록으로 설정합니다. */
+}
+
+
 button:hover {
 	cursor: pointer;
 }
