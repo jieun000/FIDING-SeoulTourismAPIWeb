@@ -73,7 +73,7 @@ class MultiPartMessage extends Component {
         } else if (step.id === '6단계') {
           message = (
             <div>
-              <p><strong>대응요령 5단계 경보 발령!</strong></p>
+              <p><strong>대응요령 6단계 주의보, 경보 해제!</strong></p>
               <p>1. 외출 후 깨끗이 씻기</p>
               <p>2. 물과 비타민C가 풍부한 과일-야채 섭취하기 </p>
               <p>3. 실내 공기질 관리하기</p>

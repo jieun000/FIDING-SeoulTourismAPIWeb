@@ -1,15 +1,15 @@
 import React from 'react';
 import './util.css';
 import './login.css';
-import Navigation from './Navigration';
-// import Navigation from './Navigation';
+import Navigation from './Navigation';
 
-function Header() {
+
+function Header({isLoggedIn,setIsLoggedIn}) {
   return (
     <div>
         <header>
           <nav>
-            <Navigation/>
+            <Navigation isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           </nav>
         </header>
     </div>
