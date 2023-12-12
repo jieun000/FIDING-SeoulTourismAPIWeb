@@ -1,40 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from "axios";
 import { hangjungdong } from './hangjungdong';
-import './signup.css';
+import './signup.css'
 
 const Mypage = () => {
-  
-  const [id, setId] = useState('');
-  const [pw, setPw] = useState('');
-  const [sessionData, setSessionData] = useState();
-  const [username, setUsername] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [address1, setAddress1] = useState('');
-  const [address2, setAddress2] = useState('');
-  const [workPlace1, setWorkPlace1] = useState('');
-  const [workPlace2, setWorkPlace2] = useState('');
-  const [workPlaceYN, setWorkPlaceYN] = useState('');
-  const [checkid, setCheckid] = useState('');
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [checkid, setCheckid] = useState();
 
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
   const { gu: sigugun } = hangjungdong; 
 
-  useEffect(() => {
-    // 세션 정보를 가져오기 위한 API 요청
-    axios.get('/LoginMain')
-      .then(response => {
-        console.log("서버로 온 데이터 ", response.data);
-        setSessionData(response.data);
-      })
-      .catch(error => {
-        console.error('세션 정보 가져오기 실패:', error);
-      });
-  }, []); // 빈 배열은 컴포넌트가 처음 로드될 때만 실행하도록 함
-  
   const formatPhoneNumber = (value) => {
     var phoneNumber = value.replace(/\D/g, '');
     phoneNumber = phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
@@ -46,16 +23,8 @@ const Mypage = () => {
   const handleUpdate = async () => {
     try {
       const response = await axios.put('/mypage', {
-        pw,
-        username,
-        nickname,
-        phone,
-        email,
-        address1,
-        address2,
-        workPlace1,
-        workPlace2,
-        workPlaceYN
+        id: username,
+        newPassword: password,
       });
   
       console.log('Update successful:', response.data);
@@ -78,52 +47,41 @@ const Mypage = () => {
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">아이디</span>
-                <input
-                  className="input100"
-                  type="text"
-                  name="id"
-                  autoComplete="current-id"
-                  value={sessionData?.id || ''}
-                  readOnly={true}
-                />
+                <input className="input100" type="text" name="id" placeholder="아이디를 입력하세요" 
+                autoComplete="current-id" value={username} onChange={(e) => setUsername(e.target.value)} readOnly={true}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
-
-    
+              
 
 
             <div className="wrap-input100 validate-input m-b-23" >
-              <span className="label-input100">비밀번호</span>
-              <input className="input100" type="password" name="pw" 
-              autoComplete="current-password" value={sessionData?.pw || ''}/>
+              <span className="label-input100">새로운 비밀번호</span>
+              <input className="input100" type="password" name="newPassword" placeholder="새로운 비밀번호를 입력하세요" 
+              autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)}/>
               <span className="focus-input100" data-symbol="&#xf190;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">이름</span>
-              <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
-              onChange={(e) => setUsername(e.target.value)} readOnly={true}/>
+              <input className="input100" type="text" name="username" placeholder="이름을 입력하세요" readOnly={true}/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23">
               <span className="label-input100">닉네임</span>
-              <input className="input100" type="text" name="nickname" placeholder={sessionData?.nickname || ''} 
-              onChange={(e) => setNickname(e.target.value)}/>
+              <input className="input100" type="text" name="nickname" placeholder="닉네임을 입력하세요"/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">휴대폰 번호</span>
-                <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} 
-                onChange={(e) => setPhone(e.target.value)} onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
+                <input className="input100" type="text" name="phone" placeholder="010-0000-0000" onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">이메일</span>
-              <input className="input100" type="text" name="email" placeholder={sessionData?.email || ''}
-              onChange={(e) => setEmail(e.target.value)}/>
+              <input className="input100" type="text" name="email" placeholder="이메일을 입력하세요"/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                <br/>
@@ -132,7 +90,7 @@ const Mypage = () => {
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div style={{ marginRight: '50px' }}>
                 <span className="label-input100">거주지</span>
-                <select className="input100" type="text" name="address1" placeholder={sessionData?.address1 || ''} onChange={(e) => setVal1(e.target.value)}>
+                <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
                   <option value="">선택</option>
                   {sigugun.map((el) => (
                     <option key={el.gu} value={el.codeNm}>
@@ -145,7 +103,7 @@ const Mypage = () => {
 
               <div>
                 <span className="label-input100"></span>
-                <select className="input100" type="text" name="address2" placeholder={sessionData?.address2 || ''} onChange={(e) => setVal2(e.target.value)}>
+                <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
                   <option value="" >선택</option>
                   {sigugun.map((el) => (
                     <option key={el.gu} value={el.codeNm}>
@@ -164,7 +122,7 @@ const Mypage = () => {
             <div style={{ display: 'flex', flexDirection: 'row'}}>
               <div style={{ marginRight: '50px'}}>
                 <span className="label-input100">출근지</span>
-                <select className="input100" type="text" name="workPlace1" placeholder={sessionData?.workPlace1 || ''} onChange={(e) => setVal1(e.target.value)}>
+                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal1(e.target.value)}>
                   <option value="" >선택</option>
                   {sigugun.map((el) => (
                     <option key={el.gu} value={el.codeNm}>
@@ -177,7 +135,7 @@ const Mypage = () => {
 
               <div>
                 <span className="label-input100" ></span>
-                <select className="input100" type="text" name="workPlace2" placeholder={sessionData?.workPlace2 || ''} onChange={(e) => setVal2(e.target.value)}>
+                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal2(e.target.value)}>
                   <option value="">선택</option>
                   {sigugun.map((el) => (
                     <option key={el.gu} value={el.codeNm}>

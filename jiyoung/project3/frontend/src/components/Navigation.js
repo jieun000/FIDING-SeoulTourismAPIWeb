@@ -12,7 +12,7 @@ function Navigation({isLoggedIn}) {
   //const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   const menu = [
-    { address: "/", src:"logo.png" },
+    { address: isLoggedIn ? "/LoginMain" : "/", src:"logo.png" },
     { name: isLoggedIn ? "로그아웃" : "로그인", address: isLoggedIn ? "/logout" : "/login" },
     { name: isLoggedIn ? "마이페이지" : "회원가입", address: isLoggedIn ? "/mypage" : "/signup" },
     <br/>
