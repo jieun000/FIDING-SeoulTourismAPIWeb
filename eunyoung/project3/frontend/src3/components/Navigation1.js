@@ -4,17 +4,13 @@ import { useState, useEffect } from "react";
 import NavItem from "./NavItem";
 import { useNavigate } from 'react-router-dom';
 
-function Navigation({isLoggedIn}) {
-  console.log('Navigation:',isLoggedIn)
+function Navigation() {
   const [menuToggle, setMenuToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  //const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
   const menu = [
-    { address: isLoggedIn ? "/LoginMain" : "/", src:"logo.png" },
-    { name: isLoggedIn ? "로그아웃" : "로그인", address: isLoggedIn ? "/logout" : "/login" },
-    { name: isLoggedIn ? "마이페이지" : "회원가입", address: isLoggedIn ? "/mypage" : "/signup" },
+    { address: "/", src:"logo.png" },
+    { name: "로그인", address: "/login" },
+    { name: "회원가입", address: "/signup" }, 
     <br/>
   ];
 
@@ -38,7 +34,6 @@ function Navigation({isLoggedIn}) {
         }
       }
     };
-    //setIsLoggedIn(!isLoggedIn)
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);

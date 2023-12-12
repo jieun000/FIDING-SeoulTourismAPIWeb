@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import {
-  useNavigate
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import './login.css'
-import { useLocation } from 'react-router-dom';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [data, setData] = useState({})
-  const [isLogin, setIsLogin] = useState(false);
+  //const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
-
 
 
   const handleUsernameChange = (e) => {
@@ -24,43 +19,36 @@ function Login() {
   };
 
   const handleSubmit = async (e) => {
-    console.log("몇번 호출")
     try {
       const response = await axios.post('/login', {
         id: username,
         pw: password,
       });
-      setData(response.data)
       e.preventDefault()
-      var {id} = data
-      console.log(id)
       console.log('login 여부 :',response.data.isLogin)
-      setIsLogin(response.data.isLogin)
-      navigate(`/LoginMain?id=${id}`, { replace: true }); 
-      // '/LoginMain'으로 리다이렉트 하면서 현재 히스토리 엔트리 교체
-       
-     // console.log("Login successful", response.data);
+      // Assuming the response has a property 'isLogin'
+      if (true) {
+        console.log("여기 안들어오잖아")
+        // Redirect to the loginMain URL
+        navigate('/LoginMain');
+      }
+      else{
+        navigate('/LoginMain');
+      }
+
+      console.log("Login successful", response.data);
     } catch (error) {
       console.error('Login failed:', error);
     }
     e.preventDefault();
   };
-// useEffect를 사용하여 컴포넌트 렌더링 이후에 리다이렉트를 수행
-// useEffect(() => {
-//   if(isLogin)
-//   navigate('/LoginMain'); // '/LoginMain'으로 리다이렉트
-// else
-// {
-
-// }
-// }, [isLogin]);
 
 
   return (
     <div className="limiter">
       <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
         <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-          <form className="login100-form validate-form"  method="post" onSubmit={handleSubmit}>
+          <form className="login100-form validate-form" action="/login" method="post" onSubmit={handleSubmit}>
             <span className="login100-form-title p-b-49">
               <img src="./logo.png" width="170"></img>
             </span>

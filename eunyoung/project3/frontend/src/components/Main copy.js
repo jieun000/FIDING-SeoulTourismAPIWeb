@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Main = ({ logout }) => {
+const Main = ({logout}) => {
   // 데이터를 저장하는 상태
   const [data, setData] = useState(null);
   // 로딩 상태를 추적하는 상태
@@ -21,23 +21,20 @@ const Main = ({ logout }) => {
         // 상태에 데이터를 설정
         console.log(result);
         setData(result);
-
-        // logout 함수가 정의되어 있는 경우에만 호출합니다.
-        if (typeof logout === 'function') {
-          logout(false);
-        }
+        logout(false)
       } catch (error) {
         // 오류가 발생하면 오류 상태를 설정
         setError(error);
       } finally {
         // 성공 또는 실패에 관계없이 로딩 상태를 false로 설정
         setIsLoading(false);
+        
       }
     };
 
     // fetchData 함수 호출
     fetchData();
-  }, [logout]); // logout이 바뀔 때마다 useEffect를 다시 실행
+  }, []); // 빈 종속성 배열은 이 효과가 컴포넌트가 마운트될 때 한 번만 실행됨을 의미
 
   // 데이터를 아직 가져오고 있는 경우 로딩 상태를 렌더링
   if (isLoading) {
@@ -52,12 +49,13 @@ const Main = ({ logout }) => {
   // 실제로 렌더링될 컴포넌트 내용 및 가져온 데이터를 렌더링
   return (
     <>
-      <div>
-        <h1>여기는 로그인 전 메인페이지</h1>
-        {/* 여기에 데이터를 렌더링하세요 */}
-        <pre>{data.result}</pre>
-      </div>
-    </>
+    <div>
+      <h1>여기는 로그인 전 메인페이지</h1>
+      {/* 여기에 데이터를 렌더링하세요 */}
+      <pre>{data.result}</pre>
+    </div>
+
+      </>
   );
 };
 

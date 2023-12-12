@@ -71,7 +71,7 @@ const Mypage = () => {
     <div className="limiter">
         <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
           <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-            <form className="was-validated login100-form validate-form" action="/mypage" method="post" onSubmit={handleUpdate}>
+            <form className="was-validated login100-form validate-form" action="/signup" method="post" onSubmit={handleUpdate}>
               <span className="login100-form-title p-b-49">
                 <img src="./logo.png" width="170"></img>
               </span>
