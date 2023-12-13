@@ -7,21 +7,29 @@ const Mypage = () => {
   
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
-  const [sessionData, setSessionData] = useState();
   const [username, setUsername] = useState('');
   const [nickname, setNickname] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [vGroups, setvGroups] = useState('');
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
+  const [address3, setAddress3] = useState('');
   const [workPlace1, setWorkPlace1] = useState('');
   const [workPlace2, setWorkPlace2] = useState('');
+  const [workPlace3, setWorkPlace3] = useState('');
   const [workPlaceYN, setWorkPlaceYN] = useState('');
-  const [checkid, setCheckid] = useState('');
+
+  const [checkid, setCheckid] = useState();
+  const [sessionData, setSessionData] = useState();
 
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
-  const { gu: sigugun } = hangjungdong; 
+  const [val3, setVal3] = useState("");
+  const [val4, setVal4] = useState("");
+  const [val5, setVal5] = useState("");
+  const [val6, setVal6] = useState("");
+  const { gu, ro, da } = hangjungdong;
 
   useEffect(() => {
     // 세션 정보를 가져오기 위한 API 요청
@@ -51,10 +59,13 @@ const Mypage = () => {
         nickname,
         phone,
         email,
+        vGroups,
         address1,
         address2,
+        address3,
         workPlace1,
         workPlace2,
+        workPlace3,
         workPlaceYN
       });
   
@@ -71,7 +82,7 @@ const Mypage = () => {
     <div className="limiter">
         <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
           <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-            <form className="was-validated login100-form validate-form" action="/signup" method="post" onSubmit={handleUpdate}>
+            <form className="was-validated login100-form validate-form" action="/mypage" method="post" onSubmit={handleUpdate}>
               <span className="login100-form-title p-b-49">
                 <img src="./logo.png" width="170"></img>
               </span>
@@ -128,16 +139,16 @@ const Mypage = () => {
             </div>
                <br/>
                
-            <div className="wrap-input100 validate-input m-b-23" >
+               <div className="wrap-input100 validate-input m-b-23" >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <div style={{ marginRight: '50px' }}>
+              <div>
                 <span className="label-input100">거주지</span>
-                <select className="input100" type="text" name="address1" placeholder={sessionData?.address1 || ''} onChange={(e) => setVal1(e.target.value)}>
+                <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
                   <option value="">선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                  {gu.map((el) => (
+                  <option key={el.codeNm} value={el.gu}>
+                    {el.gu}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -145,12 +156,28 @@ const Mypage = () => {
 
               <div>
                 <span className="label-input100"></span>
-                <select className="input100" type="text" name="address2" placeholder={sessionData?.address2 || ''} onChange={(e) => setVal2(e.target.value)}>
-                  <option value="" >선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
+                <option value="">선택</option>
+                {ro
+                .filter((el) => el.gu === val1)
+                .map((el) => (
+                  <option key={el.codeNm} value={el.ro}>
+                    {el.ro}
+                  </option>
+                  ))}
+                </select>
+                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+              <div>
+                <span className="label-input100"></span>
+                <select className="input100" type="text" name="address3" onChange={(e) => setVal3(e.target.value)}>
+                <option value="">선택</option>
+                {da
+                .filter((el) => el.gu === val1 && el.ro === val2)
+                .map((el) => (
+                  <option key={el.codeNm} value={el.da}>
+                    {el.da}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -162,14 +189,14 @@ const Mypage = () => {
 
             <div className="wrap-input100 validate-input m-b-23" >
             <div style={{ display: 'flex', flexDirection: 'row'}}>
-              <div style={{ marginRight: '50px'}}>
+              <div>
                 <span className="label-input100">출근지</span>
-                <select className="input100" type="text" name="workPlace1" placeholder={sessionData?.workPlace1 || ''} onChange={(e) => setVal1(e.target.value)}>
-                  <option value="" >선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal4(e.target.value)}>
+                <option value="">선택</option>
+                  {gu.map((el) => (
+                  <option key={el.codeNm} value={el.gu}>
+                    {el.gu}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -177,12 +204,28 @@ const Mypage = () => {
 
               <div>
                 <span className="label-input100" ></span>
-                <select className="input100" type="text" name="workPlace2" placeholder={sessionData?.workPlace2 || ''} onChange={(e) => setVal2(e.target.value)}>
-                  <option value="">선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal5(e.target.value)}>
+                <option value="">선택</option>
+                {ro
+                .filter((el) => el.gu === val4)
+                .map((el) => (
+                  <option key={el.codeNm} value={el.ro}>
+                    {el.ro}
+                  </option>
+                  ))}
+                </select>
+                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+              <div>
+                <span className="label-input100"></span>
+                <select className="input100" type="text" name="workPlace3" onChange={(e) => setVal6(e.target.value)}>
+                <option value="">선택</option>
+                {da
+                .filter((el) => el.gu === val4 && el.ro === val5)
+                .map((el) => (
+                  <option key={el.codeNm} value={el.da}>
+                    {el.da}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>

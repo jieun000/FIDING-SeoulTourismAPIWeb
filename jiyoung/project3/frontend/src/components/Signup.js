@@ -4,9 +4,23 @@ import { hangjungdong } from './hangjungdong';
 import './signup.css'
 
 const Signup = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [id, setId] = useState('');
+  const [pw, setPw] = useState('');
+  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [vGroups, setvGroups] = useState('');
+  const [address1, setAddress1] = useState('');
+  const [address2, setAddress2] = useState('');
+  const [address3, setAddress3] = useState('');
+  const [workPlace1, setWorkPlace1] = useState('');
+  const [workPlace2, setWorkPlace2] = useState('');
+  const [workPlace3, setWorkPlace3] = useState('');
+  const [workPlaceYN, setWorkPlaceYN] = useState('');
+
   const [checkid, setCheckid] = useState();
+  const [sessionData, setSessionData] = useState();
 
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
@@ -45,7 +59,19 @@ const Signup = () => {
     try {
       const response = await axios.post('/signup', {
         id:username,
-        pw:password,
+        pw,
+        username,
+        nickname,
+        phone,
+        email,
+        vGroups,
+        address1,
+        address2,
+        address3,
+        workPlace1,
+        workPlace2,
+        workPlace3,
+        workPlaceYN,
       });
 
       console.log(response.data); 
@@ -71,7 +97,7 @@ const Signup = () => {
                 <button type="button" className='login100-form-btn2' onClick={() => checkDuplicateId()}  style={{ marginLeft: "250px" }}>
                   <strong>중복 확인</strong>
                 </button>
-                <input className="input100" type="text" name="id" placeholder="아이디를 입력하세요" autoComplete="current-password" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                <input className="input100" type="text" name="id" placeholder="아이디를 입력하세요" autoComplete="current-id" value={username} onChange={(e) => setUsername(e.target.value)}/>
                 {(checkid === true || checkid === false ) && (
                   <p style={{ color: checkid ? 'red' : 'green' }}>
                     {checkid ? '이미 사용 중인 아이디입니다.' : '사용 가능한 아이디입니다.'}
