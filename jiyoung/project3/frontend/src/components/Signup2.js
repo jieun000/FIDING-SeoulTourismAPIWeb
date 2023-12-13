@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import axios from "axios";
-import { hangjungdong } from './hangjungdong';
+import { hangjungdong } from './hangjungdong1';
 import './signup.css'
 
 const Signup = () => {
@@ -10,11 +10,7 @@ const Signup = () => {
 
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
-  const [val3, setVal3] = useState("");
-  const [val4, setVal4] = useState("");
-  const [val5, setVal5] = useState("");
-  const [val6, setVal6] = useState("");
-  const { gu, ro, da } = hangjungdong;
+  const { gu: sigugun } = hangjungdong; 
 
   const formatPhoneNumber = (value) => {
     var phoneNumber = value.replace(/\D/g, '');
@@ -120,9 +116,9 @@ const Signup = () => {
                 <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
                   <option value="">선택</option>
                   {gu.map((el) => (
-                  <option key={el.codeNm} value={el.gu}>
-                    {el.gu}
-                  </option>
+                    <option key={el.gu} value={el.codeNm}>
+                      {el.codeNm}
+                    </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -131,28 +127,29 @@ const Signup = () => {
               <div>
                 <span className="label-input100"></span>
                 <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
-                <option value="">선택</option>
-                {ro
-                .filter((el) => el.gu === val1)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.ro}>
-                    {el.ro}
-                  </option>
+                  <option value="" >선택</option>
+                  {ro
+                  .filter((el) => el.gu === val1)
+                  .map((el) => (
+                      <option key={el.ro} value={el.ro}>
+                        {el.codeNm}
+                      </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
+
               <div>
-                <span className="label-input100"></span>
+                <span className="label-input100" ></span>
                 <select className="input100" type="text" name="address3" onChange={(e) => setVal3(e.target.value)}>
-                <option value="">선택</option>
-                {da
-                .filter((el) => el.gu === val1 && el.ro === val2)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.da}>
-                    {el.da}
-                  </option>
-                  ))}
+                  <option value="">선택</option>
+                  {da
+                  .filter((el) => el.gu === val1 && el.ro === val2)
+                  .map((el) => (
+                      <option key={el.da} value={el.da}>
+                        {el.codeNm}
+                      </option>
+                            ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -165,12 +162,12 @@ const Signup = () => {
             <div style={{ display: 'flex', flexDirection: 'row'}}>
               <div>
                 <span className="label-input100">출근지</span>
-                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal4(e.target.value)}>
+                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal1(e.target.value)}>
                 <option value="">선택</option>
                   {gu.map((el) => (
-                  <option key={el.codeNm} value={el.gu}>
-                    {el.gu}
-                  </option>
+                    <option key={el.gu} value={el.gu}>
+                      {el.codeNm}
+                    </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -178,32 +175,35 @@ const Signup = () => {
 
               <div>
                 <span className="label-input100" ></span>
-                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal5(e.target.value)}>
-                <option value="">선택</option>
-                {ro
-                .filter((el) => el.gu === val4)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.ro}>
-                    {el.ro}
-                  </option>
-                  ))}
+                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal2(e.target.value)}>
+                  <option value="">선택</option>
+                  {ro
+                  .filter((el) => el.gu === val1)
+                  .map((el) => (
+                      <option key={el.ro} value={el.ro}>
+                        {el.codeNm}
+                      </option>
+                    ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
+
               <div>
-                <span className="label-input100"></span>
-                <select className="input100" type="text" name="workPlace3" onChange={(e) => setVal6(e.target.value)}>
-                <option value="">선택</option>
-                {da
-                .filter((el) => el.gu === val4 && el.ro === val5)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.da}>
-                    {el.da}
-                  </option>
-                  ))}
+                <span className="label-input100" ></span>
+                <select className="input100" type="text" name="workPlace3" onChange={(e) => setVal2(e.target.value)}>
+                  <option value="">선택</option>
+                  {da
+                  .filter((el) => el.gu === val1 && el.ro === val2)
+                  .map((el) => (
+                      <option key={el.da} value={el.da}>
+                        {el.codeNm}
+                      </option>
+                    ))}
+              
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
+
             </div>
           </div>
               <br/>
