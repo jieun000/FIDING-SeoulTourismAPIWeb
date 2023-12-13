@@ -17,8 +17,9 @@ const LoginMain = ({login}) => {
     axios.get('/LoginMain')
       .then(response => {
         // 세션 데이터를 React state에 저장
+        console.log("전체 응답 데이터:", response);
         console.log("서버로 온 데이터 ",response.data)
-        if(response!=null) login(true)
+        if(response && response.data) login(true)
         setSessionData(response.data);
       })
       .catch(error => {

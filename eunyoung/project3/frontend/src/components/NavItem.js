@@ -2,8 +2,7 @@ import React from 'react';
 import "./navigation.css";
 import { Link } from "react-router-dom";
 
-export default function NavItem({ data, offNav }) {
-  const { name, address, src } = data;
+export default function NavItem({ name, address,src, offNav }) {
 
   return (
     <Link to={`${address}`} className="menu__item" onClick={() => offNav()}>

@@ -10,7 +10,12 @@ const Signup = () => {
 
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
-  const { gu: sigugun } = hangjungdong; 
+  const [val3, setVal3] = useState("");
+  const [val4, setVal4] = useState("");
+  const [val5, setVal5] = useState("");
+  const [val6, setVal6] = useState("");
+  const { sido, sigugun, dong } = hangjungdong;
+  // const { gu, ro, da } = hangjungdong;
 
   const formatPhoneNumber = (value) => {
     var phoneNumber = value.replace(/\D/g, '');
@@ -111,14 +116,14 @@ const Signup = () => {
                
             <div className="wrap-input100 validate-input m-b-23" >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <div style={{ marginRight: '50px' }}>
+              <div>
                 <span className="label-input100">거주지</span>
                 <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
                   <option value="">선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                  {sido.map((el) => (
+                  <option key={el.sido} value={el.sido}>
+                    {el.codeNm}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -127,11 +132,27 @@ const Signup = () => {
               <div>
                 <span className="label-input100"></span>
                 <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
-                  <option value="" >선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                <option value="">선택</option>
+                {sigugun
+                .filter((el) => el.sido === val1)
+                .map((el) => (
+                  <option key={el.sigugun} value={el.sigugun}>
+                    {el.codeNm}
+                  </option>
+                  ))}
+                </select>
+                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+              <div>
+                <span className="label-input100"></span>
+                <select className="input100" type="text" name="address3" onChange={(e) => setVal3(e.target.value)}>
+                <option value="">선택</option>
+                {dong
+                .filter((el) => el.sido === val1 && el.sigugun === val2)
+                .map((el) => (
+                  <option key={el.dong} value={el.dong}>
+                    {el.codeNm}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -143,14 +164,14 @@ const Signup = () => {
 
             <div className="wrap-input100 validate-input m-b-23" >
             <div style={{ display: 'flex', flexDirection: 'row'}}>
-              <div style={{ marginRight: '50px'}}>
+              <div>
                 <span className="label-input100">출근지</span>
-                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal1(e.target.value)}>
-                  <option value="" >선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal4(e.target.value)}>
+                <option value="">선택</option>
+                  {sido.map((el) => (
+                  <option key={el.sido} value={el.sido}>
+                    {el.codeNm}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
@@ -158,12 +179,28 @@ const Signup = () => {
 
               <div>
                 <span className="label-input100" ></span>
-                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal2(e.target.value)}>
-                  <option value="">선택</option>
-                  {sigugun.map((el) => (
-                    <option key={el.gu} value={el.codeNm}>
-                      {el.codeNm}
-                    </option>
+                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal5(e.target.value)}>
+                <option value="">선택</option>
+                {sigugun
+                .filter((el) => el.sido === val4)
+                .map((el) => (
+                  <option key={el.sigugun} value={el.sigugun}>
+                    {el.codeNm}
+                  </option>
+                  ))}
+                </select>
+                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+              <div>
+                <span className="label-input100"></span>
+                <select className="input100" type="text" name="workPlace3" onChange={(e) => setVal6(e.target.value)}>
+                <option value="">선택</option>
+                {dong
+                .filter((el) => el.sido === val4 && el.sigugun === val5)
+                .map((el) => (
+                  <option key={el.dong} value={el.dong}>
+                    {el.codeNm}
+                  </option>
                   ))}
                 </select>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
