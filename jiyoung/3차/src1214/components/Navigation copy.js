@@ -1,17 +1,25 @@
 import React from 'react';
 import "./navigation.css";
 import { useState, useEffect } from "react";
+import NavItem from "./NavItem";
 import { useNavigate } from 'react-router-dom';
-import { NavItemLogin, NavItemLogout } from './NavItem';
 
-function Navigation({isLoggedIn}) {
-  console.log('Navigation:',isLoggedIn)
+function Navigation() {
   const [menuToggle, setMenuToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
- 
+  const menu = [
+    { address: "/", src:"logo.png" },
+    { name: "로그인", address: "/login" },
+    { name: "회원가입", address: "/signup" }, 
+    <br/>
+  ];
 
   const navigate = useNavigate();
   
+  const redirectToMain = () => {
+    // React Router의 navigate 함수를 사용하여 이동
+    navigate('/');
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +34,6 @@ function Navigation({isLoggedIn}) {
         }
       }
     };
-    //setIsLoggedIn(!isLoggedIn)
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -53,13 +60,15 @@ function Navigation({isLoggedIn}) {
         ].join(" ")}
       >
         <div className="menu__list">
-        <nav>
-          {isLoggedIn ?   <NavItemLogout isLoggedIn={false} />
-             : (
-              <NavItemLogin isLoggedIn={true}  />
-            )
-           }
-        </nav>
+          {menu.map((data ,idx) => (
+            <NavItem
+              data={data}
+              address={data.address}
+              key={idx}
+              src={data.src}
+              offNav={() => setMenuToggle(false)}
+            />
+          ))}
         </div>
       </div>
     </nav>
