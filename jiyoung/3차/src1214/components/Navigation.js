@@ -4,13 +4,26 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { NavItemLogin, NavItemLogout } from './NavItem';
 
+
 function Navigation({isLoggedIn}) {
   console.log('Navigation:',isLoggedIn)
   const [menuToggle, setMenuToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  
+  const menu = [
+    { address: isLoggedIn ? "/LoginMain" : "/", src:"logo.png" },
+    { name: isLoggedIn ? "로그아웃" : "로그인", address: isLoggedIn ? "/logout" : "/login" },
+    { name: isLoggedIn ? "마이페이지" : "회원가입", address: isLoggedIn ? "/mypage" : "/signup" },
+    <br/>
+  ];
  
 
   const navigate = useNavigate();
+
+  const redirectToMain = () => {
+    // React Router의 navigate 함수를 사용하여 이동
+    navigate('/');
+  }
   
 
   useEffect(() => {

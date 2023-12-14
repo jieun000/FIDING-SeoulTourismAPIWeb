@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from "axios";
 import { hangjungdong } from './hangjungdong';
-import './signup.css';
+import './signup.css'
 
-const Mypage = ({login}) => {
-  
+const Signup = () => {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [username, setUsername] = useState('');
@@ -31,30 +30,35 @@ const Mypage = ({login}) => {
   const [val6, setVal6] = useState("");
   const { gu, ro, da } = hangjungdong;
 
-  useEffect(() => {
-    // 세션 정보를 가져오기 위한 API 요청
-    axios.get('/LoginMain')
-      .then(response => {
-        console.log("서버로 온 데이터 ", response.data);
-        if(response!=null) login(true)
-        setSessionData(response.data);
-      })
-      .catch(error => {
-        console.error('세션 정보 가져오기 실패:', error);
-      });
-  }, []); // 빈 배열은 컴포넌트가 처음 로드될 때만 실행하도록 함
-  
   const formatPhoneNumber = (value) => {
     var phoneNumber = value.replace(/\D/g, '');
     phoneNumber = phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
     return phoneNumber;
   };
 
+  // 아이디 중복확인
+  const checkDuplicateId = async () => {
+    if (username.trim() === '') {
+      setCheckid(true); // 중복으로 처리
+      return "아이디를 작성해주세요";
+    }
+    try {
+      const response = await axios.post('/checkDuplicateId', { id: username });
+      const checkid = response.data; // 서버에서 true/false로 응답하는 경우
+
+      console.log('아이디 중복확인:', checkid); // 결과를 확인하기 위한 로그 추가
+      setCheckid(checkid);
+    } catch (error) {
+      console.error('Error checking duplicate ID:', error);
+    }
+  };
   
 
-  const handleUpdate = async () => {
+  const handleSubmit = async (e) => {
+    
     try {
-      const response = await axios.put('/mypage', {
+      const response = await axios.post('/signup', {
+        id:username,
         pw,
         username,
         nickname,
@@ -67,12 +71,12 @@ const Mypage = ({login}) => {
         workPlace1,
         workPlace2,
         workPlace3,
-        workPlaceYN
+        workPlaceYN,
       });
-  
-      console.log('Update successful:', response.data);
+
+      console.log(response.data); 
     } catch (error) {
-      console.error('Update failed:', error);
+      console.error('Login failed:', error);
     }
   };
 
@@ -83,68 +87,59 @@ const Mypage = ({login}) => {
     <div className="limiter">
         <div className="container-login100" style={{ backgroundColor: '#e8f5e9' }}>
           <div className="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-            <form className="was-validated login100-form validate-form" action="/mypage" method="post" onSubmit={handleUpdate}>
+            <form className="was-validated login100-form validate-form" action="/signup" method="post" onSubmit={handleSubmit}>
               <span className="login100-form-title p-b-49">
                 <img src="./logo.png" width="170"></img>
               </span>
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">아이디</span>
-                <input
-                  className="input100"
-                  type="text"
-                  name="id"
-                  autoComplete="current-id"
-                  value={sessionData?.id || ''}
-                  readOnly={true}
-                />
+                <button type="button" className='login100-form-btn2' onClick={() => checkDuplicateId()}  style={{ marginLeft: "250px" }}>
+                  <strong>중복 확인</strong>
+                </button>
+                <input className="input100" type="text" name="id" placeholder="아이디를 입력하세요" autoComplete="current-id" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                {(checkid === true || checkid === false ) && (
+                  <p style={{ color: checkid ? 'red' : 'green' }}>
+                    {checkid ? '이미 사용 중인 아이디입니다.' : '사용 가능한 아이디입니다.'}
+                  </p>
+                )}
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
+              
+
 
             <div className="wrap-input100 validate-input m-b-23" >
-              <span className="label-input100">비밀번호</span>
-              <input className="input100" type="password" name="pw" 
-              autoComplete="current-password" value={sessionData?.pw || ''}/>
+              <span className="label-input100">패스워드</span>
+              <input className="input100" type="password" name="pw" placeholder="비밀번호는 입력해주세요" autoComplete="current-password"/>
               <span className="focus-input100" data-symbol="&#xf190;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">이름</span>
-              <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
-              onChange={(e) => setUsername(e.target.value)} />
+              <input className="input100" type="text" name="username" placeholder="이름을 입력하세요"/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23">
               <span className="label-input100">닉네임</span>
-              <input
-                className="input100"
-                type="text"
-                name="nickname"
-                placeholder={sessionData?.nickname || ''}
-                defaultValue={sessionData?.nickname || ''} //수정 원하지 않을때 기존의 정보 두어도 컨트롤러에 빈칸이 아닌 기존 데이터 들어감
-                onChange={(e) => setNickname(e.target.value)} // 사용자가 입력할 때마다 호출되는 이벤트 핸들러
-              />
+              <input className="input100" type="text" name="nickname" placeholder="닉네임을 입력하세요"/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
-
                
             <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">휴대폰 번호</span>
-                <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} 
-                onChange={(e) => setPhone(e.target.value)} onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
+                <input className="input100" type="text" name="phone" placeholder="010-0000-0000" onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">이메일</span>
-              <input className="input100" type="text" name="email" placeholder={sessionData?.email || ''} defaultValue={sessionData?.email || ''}
-              onChange={(e) => setEmail(e.target.value)}/>
+              <input className="input100" type="text" name="email" placeholder="이메일을 입력하세요"/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                <br/>
                
-               <div className="wrap-input100 validate-input m-b-23" >
+            <div className="wrap-input100 validate-input m-b-23" >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div>
                 <span className="label-input100">거주지</span>
@@ -284,7 +279,7 @@ const Mypage = ({login}) => {
                 <div className="wrap-login100-form-btn">
                   <div className="login100-form-bgbtn"></div>
                   <button type="submit" className="login100-form-btn">
-                    회원정보 수정하기
+                    가입하기
                   </button>
                 </div>
               </div>
@@ -297,4 +292,4 @@ const Mypage = ({login}) => {
   );
 };
 
-export default Mypage;
+export default Signup;

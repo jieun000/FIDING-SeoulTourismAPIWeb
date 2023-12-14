@@ -101,6 +101,9 @@ const Mypage = ({login}) => {
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
 
+    
+
+
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">비밀번호</span>
               <input className="input100" type="password" name="pw" 
@@ -111,23 +114,16 @@ const Mypage = ({login}) => {
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">이름</span>
               <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
-              onChange={(e) => setUsername(e.target.value)} />
+              onChange={(e) => setUsername(e.target.value)} readOnly={true}/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
                
             <div className="wrap-input100 validate-input m-b-23">
               <span className="label-input100">닉네임</span>
-              <input
-                className="input100"
-                type="text"
-                name="nickname"
-                placeholder={sessionData?.nickname || ''}
-                defaultValue={sessionData?.nickname || ''} //수정 원하지 않을때 기존의 정보 두어도 컨트롤러에 빈칸이 아닌 기존 데이터 들어감
-                onChange={(e) => setNickname(e.target.value)} // 사용자가 입력할 때마다 호출되는 이벤트 핸들러
-              />
+              <input className="input100" type="text" name="nickname" placeholder={sessionData?.nickname || ''} 
+              onChange={(e) => setNickname(e.target.value)}/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
-
                
             <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">휴대폰 번호</span>
@@ -138,7 +134,7 @@ const Mypage = ({login}) => {
                
             <div className="wrap-input100 validate-input m-b-23" >
               <span className="label-input100">이메일</span>
-              <input className="input100" type="text" name="email" placeholder={sessionData?.email || ''} defaultValue={sessionData?.email || ''}
+              <input className="input100" type="text" name="email" placeholder={sessionData?.email || ''}
               onChange={(e) => setEmail(e.target.value)}/>
               <span className="focus-input100" data-symbol="&#xf206;"></span>
             </div>
