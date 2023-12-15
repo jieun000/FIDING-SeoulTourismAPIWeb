@@ -52,15 +52,13 @@ function Navigation({isLoggedIn}) {
           !menuToggle ? "menu__box__hidden" : "menu__box__visible",
         ].join(" ")}
       >
-        <div className="menu__list">
-        <nav>
-          {isLoggedIn ?   <NavItemLogout isLoggedIn={false} />
-             : (
-              <NavItemLogin isLoggedIn={true}  />
-            )
-           }
-        </nav>
-        </div>
+      <div className="menu__list">
+        {isLoggedIn ? <NavItemLogout isLoggedIn={false} />
+          : (
+            <NavItemLogin isLoggedIn={true}  />
+          )
+        }
+      </div>
       </div>
     </nav>
   );
