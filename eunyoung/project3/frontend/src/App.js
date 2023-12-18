@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/logout" element={<Main logout={logout} />} />
         <Route path="/LoginMain" element={<LoginMain login={login} />} />
         {/* <Route path='/logout' element={<Logout/>}/> */}
-        <Route path='/mypage' element={<Mypage/>}/>
+        <Route path='/mypage' element={<Mypage login={login} />}/>
         <Route component={Menu1} path="/menu1" />
       </Routes>
       <Chatbot/>

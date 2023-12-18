@@ -1,61 +1,61 @@
 @charset "UTF-8";
 
 * {
-   margin: 0px; 
-   padding: 0px; 
-   box-sizing: border-box;
+	margin: 0px; 
+	padding: 0px; 
+	box-sizing: border-box;
 }
 
 body, html {
-   height: 100%;
-   font-family: NanumSquareRoundOTFB;
+	height: 100%;
+	font-family: NanumSquareRoundOTFB;
 }
 
 /*---------------------------------------------*/
 /* a {
-   font-family: NanumSquareRoundOTFB;
-   font-size: 14px;
-   line-height: 1.7;
-   color: #666666;
-   margin: 0px;
-   transition: all 0.4s;
-   -webkit-transition: all 0.4s;
+	font-family: NanumSquareRoundOTFB;
+	font-size: 14px;
+	line-height: 1.7;
+	color: #666666;
+	margin: 0px;
+	transition: all 0.4s;
+	-webkit-transition: all 0.4s;
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
 } */
 
 a:focus {
-   outline: none !important;
+	outline: none !important;
 }
 
 a:hover {
-   text-decoration: none;
+	text-decoration: none;
   color: #a64bf4;
 }
 
 /*---------------------------------------------*/
 h1,h2,h3,h4,h5,h6 {
-   margin: 0px;
+	margin: 0px;
 }
 
 p {
-   font-family: NanumSquareRoundOTFB;
-   font-size: 14px;
-   line-height: 1.7;
-   color: #666666;
-   margin: 0px;
+	font-family: NanumSquareRoundOTFB;
+	font-size: 14px;
+	line-height: 1.7;
+	color: #666666;
+	margin: 0px;
 }
 
 ul, li {
-   margin: 0px;
-   list-style-type: none;
+	margin: 0px;
+	list-style-type: none;
 }
 
 
 /*---------------------------------------------*/
 input {
-   outline: none;
-   border: none;
+	outline: none;
+	border: none;
   margin-right: 2px;
 }
 
@@ -90,9 +90,9 @@ textarea:-ms-input-placeholder { color: #adadad;}
 
 /*---------------------------------------------*/
 button {
-   outline: none !important;
-   border: none;
-   background: transparent;
+	outline: none !important;
+	border: none;
+	background: transparent;
 }
 
 .login100-form-btn2 {
@@ -106,11 +106,11 @@ button {
 
 
 button:hover {
-   cursor: pointer;
+	cursor: pointer;
 }
 
 iframe {
-   border: none !important;
+	border: none !important;
 }
 
 /*//////////////////////////////////////////////////////////////////
@@ -315,7 +315,7 @@ iframe {
   width: 300%;
   height: 100%;
   background: #6c9dc6; 
-  background: -webkit-linear-gradient(right, #dae7f0, #b7ceee, #90d6d3, #6c9dc6); /* 로그인버튼 호버색상 */
+  background: -webkit-linear-gradient(right, #dae7f0, #ffdcdc, #ff8c8c, #fabcbc); /* 로그인버튼 호버색상 */
   top: 0;
   left: -100%;
   -webkit-transition: all 0.4s;
