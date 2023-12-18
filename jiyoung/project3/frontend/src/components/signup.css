@@ -315,7 +315,7 @@ iframe {
   width: 300%;
   height: 100%;
   background: #6c9dc6; 
-  background: -webkit-linear-gradient(right, #dae7f0, #b7ceee, #90d6d3, #6c9dc6); /* 로그인버튼 호버색상 */
+  background: -webkit-linear-gradient(right, #dae7f0, #ffdcdc, #ff8c8c, #fabcbc); /* 로그인버튼 호버색상 */
   top: 0;
   left: -100%;
   -webkit-transition: all 0.4s;

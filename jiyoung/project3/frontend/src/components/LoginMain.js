@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'; 
 import './login.css'
+import Chart from './Chart';
+import Map from './Map';
+import SeoulMap from './SeoulMap';
+import { weather } from './Weather';
 
 const getFormattedDate = () => {
   const nowTime = Date.now();
@@ -21,7 +25,6 @@ const LoginMain = ({login}) => {
   const [isLoading, setIsLoading] = useState(true);
   // 오류를 추적하는 상태
   const [error, setError] = useState(null);
-
   const [sessionData, setSessionData] = useState();
 
   const [selectedDistrict, setSelectedDistrict] = useState('Gangdong-gu');
@@ -32,50 +35,31 @@ const LoginMain = ({login}) => {
     axios.get('/LoginMain')
       .then(response => {
         // 세션 데이터를 React state에 저장
-        console.log("서버로 온 데이터 ",response.data)
-        if(response!=null) login(true)
+        console.log("서버로 온 데이터 ", response.data);
+        if (response.data != null) {
+          login(true);
+          sessionAddress = response.data.address1;
+          sessionLocCode = response.data.addLoccode;
+          console.log('DB 주소: ', sessionAddress, 'DB locCode: ', sessionLocCode);
+        }
         setSessionData(response.data);
       })
       .catch(error => {
         console.error('세션 정보 가져오기 실패:', error);
       });
   }, []);
-
   
-  var temp = '강동구'; // 임시 (db에서 가져올 예정)
-  var weather = {'종로구': [60, 127],
- '중구': [60, 127],
- '용산구': [60, 126],
- '성동구': [61, 127],
- '광진구': [62, 126],
- '동대문구': [61, 127],
- '중랑구': [62, 128],
- '성북구': [61, 127],
- '강북구': [61, 128],
- '도봉구': [61, 129],
- '노원구': [61, 129],
- '은평구': [59, 127],
- '서대문구': [59, 127],
- '마포구': [59, 127],
- '양천구': [58, 126],
- '강서구': [58, 126],
- '구로구': [58, 125],
- '금천구': [59, 124],
- '영등포구': [58, 126],
- '동작구': [59, 125],
- '관악구': [59, 125],
- '서초구': [61, 125],
- '강남구': [61, 126],
- '송파구': [62, 126],
- '강동구': [62, 126]
-  };
-  var [weatherX, weatherY] = weather[temp];
+  var sessionLocCode = '1080012200'; // 기본 locCode (세션 조회하며 DB addLoccode로 바뀜)
+  var sessionAddress = '강동구'; // 기본 주소 (세션 조회하며 DB address1로 바뀜)
+  var [weatherX, weatherY] = weather[sessionAddress];
   console.log(`weatherX: ${weatherX}, weatherY: ${weatherY}`);
   const fetchData = async () => {
     try {
-      // PTY: 강수형태, REH: 습도(%), RN1: 1시간 강수량(mm), T1H: 기온(℃),  UUU: 동서바람성분(m/s): , VEC: 풍향(deg), VVV: 남북바람성분(m/s), 
-      // WSD: 풍속(m/s), PM10: 미세먼지(㎍/㎥), PM25: 초미세먼지(㎍/㎥) , spdValue: 교통 속도 , momentDateValue: localTime
-      
+      // PTY: 강수형태, REH: 습도(%), RN1: 1시간 강수량(mm), T1H: 기온(℃),  
+      // UUU: 동서바람성분(m/s): , VEC: 풍향(deg), VVV: 남북바람성분(m/s), WSD: 풍속(m/s),
+      // NO2: 이산화질소농도(ppm), O3: 오존농도(ppm), CO	일산화탄소농도(ppm), SO2: 아황산가스(ppm), PM10: 미세먼지(㎍/㎥), PM25: 초미세먼지(㎍/㎥)
+      // spdValue: 교통 속도 , momentDateValue: localTime
+
       const currentDateTime = new Date(); // 현재 날짜를 사용
       const year = currentDateTime.getFullYear();
       const month = (currentDateTime.getMonth() + 1).toString().padStart(2, '0');
@@ -100,33 +84,36 @@ const LoginMain = ({login}) => {
         });
       }
 
-      // 서울시 시간 평균 대기오염도 정보(구별 미세먼지, 초미세먼지)
+      // 서울시 시간 평균 대기오염도 정보(구별 미세먼지, 초미세먼지, 오존, 무슨 공기 등)
       const airQualityResponse = await axios.get(
-        `http://openAPI.seoul.go.kr:8088/7262614b76776c64363379726a594b/json/TimeAverageAirQuality/1/5/${formattedCurrentDate}/${temp}`
+        `http://openAPI.seoul.go.kr:8088/7262614b76776c64363379726a594b/json/TimeAverageAirQuality/1/5/${formattedCurrentDate}/${sessionAddress}`
       );
       const airQualityData = airQualityResponse.data.TimeAverageAirQuality.row[0];
-      newWeatherData.PM10 = airQualityData.PM10;
-      newWeatherData.PM25 = airQualityData.PM25;
+      const newAirQualityData = {};
+      for (const key in airQualityData) {
+        newAirQualityData[key] = airQualityData[key];
+      }
 
       // 서울시 실시간 도로 소통 정보(교통 속도)
       const trafficResponse = await axios.get(
-        `http://openapi.seoul.go.kr:8088/7262614b76776c64363379726a594b/xml/TrafficInfo/1/10/1080012200`
+        `http://openapi.seoul.go.kr:8088/7262614b76776c64363379726a594b/xml/TrafficInfo/1/10/${sessionLocCode}`
       );
+      console.log('!!! 조회한 locCode !!!: ', sessionLocCode);
       const trafficData = trafficResponse.data;
       const xmlString = trafficData;
       const match = xmlString.match(/<prcs_spd>([\d.]+)<\/prcs_spd>/);
       const spdValue = match ? match[1] : null;
 
-      // local time 가져오기
+      // getFormattedDate 함수로 local time 가져오기
       const momentDateValue = getFormattedDate();
 
       setDataPost({ ...newWeatherData, spdValue, momentDateValue });
+      console.log('Server로 보낼 데이터: ', { ...newWeatherData, ...newAirQualityData, spdValue, momentDateValue });
 
       console.log('기상 정보:', newWeatherData);
-      console.log('대기 오염도:', airQualityData);
+      console.log('대기 오염도:', newAirQualityData);
       console.log('교통 속도:', spdValue);
       console.log('local time:', momentDateValue);
-
       // const response2 = await axios.post('/server', dataPost);
       // const responseData = response2.data;
     } catch (error) {
@@ -142,26 +129,32 @@ const LoginMain = ({login}) => {
     setSelectedDistrict(event.target.value);
   };
     
-      return (
-        <div>
+    return (
+      <>
+        <div className='gridContainer' style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', margin: '30px 50px' }}>
+          <div style={{gridColumn: '1 / 2', border: '5px solid pink',  borderRadius: '15px'}}>1번째 영역을 잡아준 div
+                {sessionData ? (
+                  <div> 
+                    <p>{sessionData.id} {sessionData.pw} {sessionData.username} {sessionData.nickname} {sessionData.phone} {sessionData.email} {sessionData.address1} {sessionData.address2} {sessionData.workPlace1} {sessionData.workPlace2} {sessionData.workPlaceYN} {sessionData.addLoccode} {sessionData.workLoccode}</p> 
+                  </div>
+                ) : (
+                  <p>로딩 중...</p>
+                )}
+            <SeoulMap />
+          </div>
+          <div style={{gridColumn: '2 / 3', border: '5px solid green',  borderRadius: '15px'}}>2번째 영역을 잡아준 div
           {sessionData ? (
-           <div> <p>{sessionData.id}</p>
-            <p>{sessionData.pw}</p>
-            <p>{sessionData.username}</p>
-            <p>{sessionData.nickname}</p>
-            <p>{sessionData.phone}</p>
-            <p>{sessionData.email}</p>
-            <p>{sessionData.address1}</p>
-            <p>{sessionData.address2}</p>
-            <p>{sessionData.workPlace1}</p>
-            <p>{sessionData.workPlace2}</p>
-            <p>{sessionData.workPlaceYN}</p> </div>
-          ) : (
-            <p>로딩 중...</p>
-          )}
+                  <div> 
+                    <p>{sessionData.id} {sessionData.pw} {sessionData.username} {sessionData.nickname} {sessionData.phone} {sessionData.email} {sessionData.address1} {sessionData.address2} {sessionData.workPlace1} {sessionData.workPlace2} {sessionData.workPlaceYN} {sessionData.addLoccode} {sessionData.workLoccode}</p> 
+                  </div>
+                ) : (
+                  <p>로딩 중...</p>
+                )}
+            <Chart />
+          </div>
         </div>
-       
-      );
+      </>
+    );
     }
 
 

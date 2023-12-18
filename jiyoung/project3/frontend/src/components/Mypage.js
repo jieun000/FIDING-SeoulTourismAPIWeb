@@ -50,7 +50,51 @@ const Mypage = ({login}) => {
     return phoneNumber;
   };
 
-  
+  var addList = []
+  var third = da.filter((el) => el.gu === val1 && el.ro === val2)
+  .map((el) => {addList.push(el)
+    return el
+  })
+  .map((el,idx) => (
+    <option key={idx} value={el.da}>
+      {el.da}
+    </option>
+  ))
+  var six = da.filter((el) => el.gu === val4 && el.ro === val5)
+  .map((el) => {addList.push(el)
+    return el
+  })
+  .map((el,idx) => (
+    <option key={idx} value={el.da}>
+      {el.da}
+    </option>
+  ))
+
+  const setAdd1 = (e) => {
+    var data__ = e.target.value;
+    console.log('d: 1) ', data__);
+    setVal3(data__);
+    console.log('val3', val3);
+    console.log('addlist: ', addList);
+  };
+  const setAdd2 = (e) => {
+    var data__ = e.target.value;
+    console.log('d: 1) ', data__);
+    setVal6(data__);
+    console.log('val6', val6);
+    console.log('addlist: ', addList);
+  };
+
+  useEffect(() => {
+    for (let element of addList) {
+      if (element.da === val3) {
+        console.log('element:', element.locCode);
+        document.getElementById('addLoccode').value = element.locCode;
+      } else if (element.da === val6) {
+        document.getElementById('workLoccode').value = element.locCode;
+      }
+    }
+  }, [val3, val6, addList]); 
 
   const handleUpdate = async () => {
     try {
@@ -69,14 +113,11 @@ const Mypage = ({login}) => {
         workPlace3,
         workPlaceYN
       });
-  
       console.log('Update successful:', response.data);
     } catch (error) {
       console.error('Update failed:', error);
     }
   };
-
-  
 
   return (
     <>
@@ -101,142 +142,128 @@ const Mypage = ({login}) => {
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
 
-            <div className="wrap-input100 validate-input m-b-23" >
-              <span className="label-input100">비밀번호</span>
-              <input className="input100" type="password" name="pw" 
-              autoComplete="current-password" value={sessionData?.pw || ''}/>
-              <span className="focus-input100" data-symbol="&#xf190;"></span>
-            </div>
-               
-            <div className="wrap-input100 validate-input m-b-23" >
-              <span className="label-input100">이름</span>
-              <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
-              onChange={(e) => setUsername(e.target.value)} />
-              <span className="focus-input100" data-symbol="&#xf206;"></span>
-            </div>
-               
-            <div className="wrap-input100 validate-input m-b-23">
-              <span className="label-input100">닉네임</span>
-              <input
-                className="input100"
-                type="text"
-                name="nickname"
-                placeholder={sessionData?.nickname || ''}
-                defaultValue={sessionData?.nickname || ''} //수정 원하지 않을때 기존의 정보 두어도 컨트롤러에 빈칸이 아닌 기존 데이터 들어감
-                onChange={(e) => setNickname(e.target.value)} // 사용자가 입력할 때마다 호출되는 이벤트 핸들러
-              />
-              <span className="focus-input100" data-symbol="&#xf206;"></span>
-            </div>
+              <div className="wrap-input100 validate-input m-b-23" >
+                <span className="label-input100">비밀번호</span>
+                <input className="input100" type="password" name="pw" 
+                autoComplete="current-password" value={sessionData?.pw || ''}/>
+                <span className="focus-input100" data-symbol="&#xf190;"></span>
+              </div>
 
-               
-            <div className="wrap-input100 validate-input m-b-23" >
+              <div className="wrap-input100 validate-input m-b-23" >
+                <span className="label-input100">이름</span>
+                <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
+                onChange={(e) => setUsername(e.target.value)} />
+                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+
+              <div className="wrap-input100 validate-input m-b-23">
+                <span className="label-input100">닉네임</span>
+                <input
+                  className="input100"
+                  type="text"
+                  name="nickname"
+                  placeholder={sessionData?.nickname || ''}
+                  defaultValue={sessionData?.nickname || ''} //수정 원하지 않을때 기존의 정보 두어도 컨트롤러에 빈칸이 아닌 기존 데이터 들어감
+                  onChange={(e) => setNickname(e.target.value)} // 사용자가 입력할 때마다 호출되는 이벤트 핸들러
+                />
+                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              </div>
+
+              <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">휴대폰 번호</span>
                 <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} 
                 onChange={(e) => setPhone(e.target.value)} onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
-            </div>
-               
-            <div className="wrap-input100 validate-input m-b-23" >
-              <span className="label-input100">이메일</span>
-              <input className="input100" type="text" name="email" placeholder={sessionData?.email || ''} defaultValue={sessionData?.email || ''}
-              onChange={(e) => setEmail(e.target.value)}/>
-              <span className="focus-input100" data-symbol="&#xf206;"></span>
-            </div>
-               <br/>
-               
-               <div className="wrap-input100 validate-input m-b-23" >
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <div>
-                <span className="label-input100">거주지</span>
-                <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
-                  <option value="">선택</option>
-                  {gu.map((el) => (
-                  <option key={el.codeNm} value={el.gu}>
-                    {el.gu}
-                  </option>
-                  ))}
-                </select>
-                <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
 
-              <div>
-                <span className="label-input100"></span>
-                <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
-                <option value="">선택</option>
-                {ro
-                .filter((el) => el.gu === val1)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.ro}>
-                    {el.ro}
-                  </option>
-                  ))}
-                </select>
+              <div className="wrap-input100 validate-input m-b-23" >
+                <span className="label-input100">이메일</span>
+                <input className="input100" type="text" name="email" placeholder={sessionData?.email || ''} defaultValue={sessionData?.email || ''}
+                onChange={(e) => setEmail(e.target.value)}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
-              <div>
-                <span className="label-input100"></span>
-                <select className="input100" type="text" name="address3" onChange={(e) => setVal3(e.target.value)}>
-                <option value="">선택</option>
-                {da
-                .filter((el) => el.gu === val1 && el.ro === val2)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.da}>
-                    {el.da}
-                  </option>
-                  ))}
-                </select>
-                <span className="focus-input100" data-symbol="&#xf206;"></span>
-              </div>
-            </div>
-          </div>
               <br/>
-          
 
-            <div className="wrap-input100 validate-input m-b-23" >
-            <div style={{ display: 'flex', flexDirection: 'row'}}>
-              <div>
-                <span className="label-input100">출근지</span>
-                <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal4(e.target.value)}>
-                <option value="">선택</option>
-                  {gu.map((el) => (
-                  <option key={el.codeNm} value={el.gu}>
-                    {el.gu}
-                  </option>
-                  ))}
-                </select>
-                <span className="focus-input100" data-symbol="&#xf206;"></span>
-              </div>
+              <div className="wrap-input100 validate-input m-b-23" >
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <div>
+                    <span className="label-input100">거주지</span>
+                    <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
+                      <option value="">선택</option>
+                      {gu.map((el) => (
+                      <option key={el.codeNm} value={el.gu}>
+                        {el.gu}
+                      </option>
+                      ))}
+                    </select>
+                    <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  </div>
 
-              <div>
-                <span className="label-input100" ></span>
-                <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal5(e.target.value)}>
-                <option value="">선택</option>
-                {ro
-                .filter((el) => el.gu === val4)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.ro}>
-                    {el.ro}
-                  </option>
-                  ))}
-                </select>
-                <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  <div>
+                    <span className="label-input100"></span>
+                    <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
+                    <option value="">선택</option>
+                    {ro
+                    .filter((el) => el.gu === val1)
+                    .map((el) => (
+                      <option key={el.codeNm} value={el.ro}>
+                        {el.ro}
+                      </option>
+                      ))}
+                    </select>
+                    <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  </div>
+                  <div>
+                    <span className="label-input100"></span>
+                    <select className="input100" type="text" name="address3" onChange={(e) =>setAdd1(e)}>
+                  <option value="">선택</option>
+                    {third}
+                  </select>
+                  <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  </div>
+                </div>
               </div>
-              <div>
-                <span className="label-input100"></span>
-                <select className="input100" type="text" name="workPlace3" onChange={(e) => setVal6(e.target.value)}>
-                <option value="">선택</option>
-                {da
-                .filter((el) => el.gu === val4 && el.ro === val5)
-                .map((el) => (
-                  <option key={el.codeNm} value={el.da}>
-                    {el.da}
-                  </option>
-                  ))}
-                </select>
-                <span className="focus-input100" data-symbol="&#xf206;"></span>
+              <br/>
+
+              <div className="wrap-input100 validate-input m-b-23" >
+                <div style={{ display: 'flex', flexDirection: 'row'}}>
+                  <div>
+                    <span className="label-input100">출근지</span>
+                    <select className="input100" type="text" name="workPlace1" onChange={(e) => setVal4(e.target.value)}>
+                    <option value="">선택</option>
+                      {gu.map((el) => (
+                      <option key={el.codeNm} value={el.gu}>
+                        {el.gu}
+                      </option>
+                      ))}
+                    </select>
+                    <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  </div>
+
+                  <div>
+                    <span className="label-input100" ></span>
+                    <select className="input100" type="text" name="workPlace2" onChange={(e) => setVal5(e.target.value)}>
+                    <option value="">선택</option>
+                    {ro
+                    .filter((el) => el.gu === val4)
+                    .map((el) => (
+                      <option key={el.codeNm} value={el.ro}>
+                        {el.ro}
+                      </option>
+                      ))}
+                    </select>
+                    <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  </div>
+                  <div>
+                    <span className="label-input100"></span>
+                    <select className="input100" type="text" name="workPlace3" onChange={(e) =>setAdd2(e)}>
+                  <option value="">선택</option>
+                    {six}
+                  </select>
+                  <span className="focus-input100" data-symbol="&#xf206;"></span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
               <br/>
 
               <div className="wrap-input100 validate-input m-b-23" >
@@ -244,57 +271,59 @@ const Mypage = ({login}) => {
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
                 <br/>
                 <div style={{ marginLeft: '40px', fontSize: '14px', paddingBottom: '10px'}}>
-                <label>
-                    <input type="radio" name="vGroups" value="어린이"/> 어린이
-                </label>  
-                <label>
-                    <input type="radio" name="vGroups" value="노인" style={{ marginLeft: '10px'}}/> 노인 
-                </label>
-                <label>
-                    <input type="radio" name="vGroups" value="임산부" style={{ marginLeft: '10px'}}/> 임산부 
-                </label>
-                <label>
-                    <input type="radio" name="vGroups" value="기저질환자" style={{ marginLeft: '10px'}}/> 기저질환자 
-                </label>
-                <label>
-                    <input type="radio" name="vGroups" value="해당없음" style={{ marginLeft: '10px'}} /> 해당없음 
-                </label> 
-            </div>
-            </div>
+                  <label>
+                      <input type="radio" name="vGroups" value="어린이"/> 어린이
+                  </label>  
+                  <label>
+                      <input type="radio" name="vGroups" value="노인" style={{ marginLeft: '10px'}}/> 노인 
+                  </label>
+                  <label>
+                      <input type="radio" name="vGroups" value="임산부" style={{ marginLeft: '10px'}}/> 임산부 
+                  </label>
+                  <label>
+                      <input type="radio" name="vGroups" value="기저질환자" style={{ marginLeft: '10px'}}/> 기저질환자 
+                  </label>
+                  <label>
+                      <input type="radio" name="vGroups" value="해당없음" style={{ marginLeft: '10px'}} /> 해당없음 
+                  </label> 
+                </div>
+              </div>
               <br/>
 
 
               <div className="wrap-input100 validate-input m-b-23" >
-          <span className="label-input100">근무지가 취약환경이십니까? 
-            <br/> (공장, 지하, 사막, 화재현장, 탄광구, 서울역)
-          </span><br/> 
-          <span className="focus-input100" style={{ marginTop: '10px' }} data-symbol="&#xf206;"></span>
-          <br/>
-          <div style={{ marginLeft: '40px', paddingBottom: '10px' }}>
-            <label>
-              <input type="radio" name="workPlaceYN" value="1" /> 예
-            </label>  
-            <label>
-              <input type="radio" name="workPlaceYN" value="0" style={{ marginLeft: '10px'}}/> 아니오
-            </label>
-          </div>
-        </div>
-               
-          <div className="container-login100-form-btn">
-                <div className="wrap-login100-form-btn">
-                  <div className="login100-form-bgbtn"></div>
-                  <button type="submit" className="login100-form-btn">
-                    회원정보 수정하기
-                  </button>
+                <span className="label-input100">근무지가 취약환경이십니까? 
+                  <br/> (공장, 지하, 사막, 화재현장, 탄광구, 서울역)
+                </span><br/> 
+                <span className="focus-input100" style={{ marginTop: '10px' }} data-symbol="&#xf206;"></span>
+                <br/>
+                <div style={{ marginLeft: '40px', paddingBottom: '10px' }}>
+                  <label>
+                    <input type="radio" name="workPlaceYN" value="1" /> 예
+                  </label>  
+                  <label>
+                    <input type="radio" name="workPlaceYN" value="0" style={{ marginLeft: '10px'}}/> 아니오
+                  </label>
                 </div>
+              </div>
+              <input className="input100" type="hidden" id ="addLoccode" name="addLoccode" />
+              <input className="input100" type="hidden" id ="workLoccode" name="workLoccode" />
+
+              <div className="container-login100-form-btn">
+                    <div className="wrap-login100-form-btn">
+                      <div className="login100-form-bgbtn"></div>
+                      <button type="submit" className="login100-form-btn">
+                        회원정보 수정하기
+                      </button>
+                    </div>
               </div>
 
             </form>
           </div>
         </div>
       </div>
-    </>
-  );
-};
+      </>
+      );
+    };
 
 export default Mypage;
