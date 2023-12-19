@@ -30,6 +30,10 @@ const LoginMain = ({login}) => {
   const [selectedDistrict, setSelectedDistrict] = useState('Gangdong-gu');
   const [dataPost, setDataPost] = useState({});
 
+  const [AllAirQualityData, setAllAirQualityData] = useState({});
+  const [newAirQualityData, setNewAirQualityData] = useState({});
+  const [districtKey, setDistrictKey] = useState(null);
+  console.log("districtKey다~~~~~~~~",districtKey);
   useEffect(() => {
     // 세션 정보를 가져오기 위한 API 요청
     axios.get('/LoginMain')
@@ -43,6 +47,7 @@ const LoginMain = ({login}) => {
           console.log('DB 주소: ', sessionAddress, 'DB locCode: ', sessionLocCode);
         }
         setSessionData(response.data);
+        
       })
       .catch(error => {
         console.error('세션 정보 가져오기 실패:', error);
@@ -85,14 +90,39 @@ const LoginMain = ({login}) => {
       }
 
       // 서울시 시간 평균 대기오염도 정보(구별 미세먼지, 초미세먼지, 오존, 무슨 공기 등)
-      const airQualityResponse = await axios.get(
-        `http://openAPI.seoul.go.kr:8088/7262614b76776c64363379726a594b/json/TimeAverageAirQuality/1/5/${formattedCurrentDate}/${sessionAddress}`
+     const airQualityResponse = await axios.get(
+        `http://openAPI.seoul.go.kr:8088/7262614b76776c64363379726a594b/json/TimeAverageAirQuality/1/25/${formattedCurrentDate}/`
       );
-      const airQualityData = airQualityResponse.data.TimeAverageAirQuality.row[0];
-      const newAirQualityData = {};
+      const airQualityData = airQualityResponse.data.TimeAverageAirQuality.row;
+      const AllAirQualityData = {}; // 서울시 전체 대기오염도
+      const newAirQualityData = {}; // 사용자 맞춤 주소 대기오염도
       for (const key in airQualityData) {
-        newAirQualityData[key] = airQualityData[key];
+        AllAirQualityData[key] = airQualityData[key];
+        if(airQualityData[key].MSRSTE_NM == sessionAddress) {
+          setNewAirQualityData(airQualityData[key])
+        }
       }
+      setAllAirQualityData({...AllAirQualityData});
+      console.log('서울시 전체 대기 오염도:', AllAirQualityData);
+      const getDistrictKey = (districtKey, airQualityData) =>{
+        console.log(districtKey, airQualityData)
+        var result=null
+        Object.keys(airQualityData).forEach((key)=>{
+           if(airQualityData[key]['MSRSTE_NM']===districtKey){
+              result= key
+           } 
+           
+        })
+        return result
+     }
+     
+    const handleDistrictClick = (districtKey) => {
+        console.log("함수",getDistrictKey(districtKey, airQualityData))
+      const selectedData = airQualityData[getDistrictKey(districtKey,airQualityData)].PM10;
+      setNewAirQualityData({ district: districtKey, data: selectedData });
+      console.log("차트",newAirQualityData)
+    };
+    
 
       // 서울시 실시간 도로 소통 정보(교통 속도)
       const trafficResponse = await axios.get(
@@ -114,8 +144,28 @@ const LoginMain = ({login}) => {
       console.log('대기 오염도:', newAirQualityData);
       console.log('교통 속도:', spdValue);
       console.log('local time:', momentDateValue);
-      // const response2 = await axios.post('/server', dataPost);
-      // const responseData = response2.data;
+      // const fetchData2 = async () => {
+      //   try {
+      //     const response2 = await fetch('http://localhost:5000/api/data', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //       body: JSON.stringify({ ...newWeatherData, spdValue, momentDateValue }),
+      //     });
+      
+      //     if (!response2.ok) {
+      //       throw new Error(`HTTP error! Status: ${response2.status}`);
+      //     }
+      
+      //     const result = await response2.json();
+      //     console.log(result);
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // };
+      // fetchData2();
+
     } catch (error) {
       console.error(error);
     }
@@ -128,35 +178,38 @@ const LoginMain = ({login}) => {
   const onDistrictChange = (event) => {
     setSelectedDistrict(event.target.value);
   };
+
+  const checkWorkPlace = (workPlaceYN) => {
+    return workPlaceYN === 1 ? '예' : '아니오';
+  };
     
     return (
       <>
-        <div className='gridContainer' style={{display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', margin: '30px 50px' }}>
-          <div style={{gridColumn: '1 / 2', border: '5px solid pink',  borderRadius: '15px'}}>1번째 영역을 잡아준 div
+<div className='gridContainer' style={{ margin: '30px 50px' }}>
+          <div id='gridItem1' style={{ border: '5px solid rgba(100, 149, 237, 0.7)',  borderRadius: '15px', textAlign:'center'}}><p style={{fontSize: '48px', textAlign:'center',color:'black'}}>서울시 전체 미세먼지 현황</p>
                 {sessionData ? (
-                  <div> 
-                    <p>{sessionData.id} {sessionData.pw} {sessionData.username} {sessionData.nickname} {sessionData.phone} {sessionData.email} {sessionData.address1} {sessionData.address2} {sessionData.workPlace1} {sessionData.workPlace2} {sessionData.workPlaceYN} {sessionData.addLoccode} {sessionData.workLoccode}</p> 
+                  <div style={{fontSize: '20px'}}> 
+                    <span style={{color: 'blue'}}> 좋음 😍 </span> <span style={{color: 'green'}}> 보통 😀 </span> <span style={{color: 'orange'}}> 나쁨 😒 </span> <span style={{color: 'red'}}> 아주 나쁨 😫</span>
                   </div>
                 ) : (
                   <p>로딩 중...</p>
                 )}
-            <SeoulMap />
+            <SeoulMap airQualityData={AllAirQualityData} setDistrictKey={setDistrictKey} />
           </div>
-          <div style={{gridColumn: '2 / 3', border: '5px solid green',  borderRadius: '15px'}}>2번째 영역을 잡아준 div
+          <div id='gridItem2' style={{ border: '5px solid rgba(167, 212, 131, 0.7)',  borderRadius: '15px' , fontSize: '48px', textAlign:'center'}}><p style={{fontSize: '48px', textAlign:'center',color:'black'}}>나의 동네 대기 정보</p>
           {sessionData ? (
                   <div> 
-                    <p>{sessionData.id} {sessionData.pw} {sessionData.username} {sessionData.nickname} {sessionData.phone} {sessionData.email} {sessionData.address1} {sessionData.address2} {sessionData.workPlace1} {sessionData.workPlace2} {sessionData.workPlaceYN} {sessionData.addLoccode} {sessionData.workLoccode}</p> 
+                    <p style={{fontSize:'24px'}}> 🖐️ {sessionData.username}님</p><p style={{fontSize:'16px'}}>거주지 : {sessionData.address1} {sessionData.address2} / 출근지 : {sessionData.workPlace1} {sessionData.workPlace2} <br></br> 취약계층 : {sessionData.vgroups} / 취약환경여부 : {checkWorkPlace(sessionData.workPlaceYN)}</p> 
                   </div>
                 ) : (
                   <p>로딩 중...</p>
                 )}
-            <Chart />
+            <Chart airQualityData2={newAirQualityData} />
+            <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}>여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br> 여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br>  여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다</p></div>
           </div>
         </div>
       </>
     );
     }
-
-
 
 export default LoginMain;

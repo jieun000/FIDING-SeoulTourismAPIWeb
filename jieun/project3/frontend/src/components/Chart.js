@@ -1,55 +1,77 @@
-/* eslint-disable */ 
+/* eslint-disable */
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-import {Doughnut} from 'react-chartjs-2'
+import { Doughnut } from 'react-chartjs-2';
 
-const MyChart = () => {
+const MyChart = ({ airQualityData2 }) => {
   const chartRef = useRef(null);
-
+  console.log("111",airQualityData2);
   useEffect(() => {
-    const context = chartRef.current.getContext('2d');
+    
+    var districtData=airQualityData2
+    var districtName = districtData.MSRSTE_NM;
+    var pm10Value = districtData.PM10;
+    var pm25Value = districtData.PM25;
+    var o3Value = districtData.O3;
+    console.log(pm10Value, pm25Value, o3Value);
+
+    var context = chartRef.current.getContext('2d');
     const myChart = new Chart(context, {
-      type: 'pie',
+      type: 'bar',
       data: {
-        labels: ['1', '2', '3', '4', '5', '6', '7'],
+        labels: ['미세먼지', '초미세먼지', '오존'],
         datasets: [
           {
-            label: 'test1',
-            data: [21, 19, 25, 20, 23, 26, 25],
+            label: '구',
+            data: [pm10Value, pm25Value, o3Value],
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 99, 132, 0.2)'
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
+              'rgba(255, 99, 132, 1)'
+            ],
+            borderWidth: 1,
+          },
+          {
+            label: '도로',
+            data: [21, 19, 25],
+            backgroundColor: [
+              'rgba(54, 162, 235, 0.2)',
+            ],
+            borderColor: [
+              'rgba(54, 162, 235, 1)'
             ],
             borderWidth: 1,
           },
         ],
       },
       options: {
+        scales: {
+          x: {
+            display: true
+          },
+          y: {
+            display: true,
+            type: "logarithmic"
+          },
+        },
         responsive: false,
         maintainAspectRatio: false, 
       },
     });
 
     return () => {
-      myChart.destroy(); // 컴포넌트가 언마운트될 때 차트 정리
+      myChart.destroy();
     };
-  }, []); // 빈 종속성 배열은 useEffect가 초기 렌더링 후 한 번 실행되도록합니다.
+  }, [airQualityData2]);
 
   return (
     <div>
-      <canvas id='myChart' ref={chartRef} style={{ padding: '80px 100px 0px', width: '80vh', display: 'block' }}></canvas>
+      <canvas
+        id='myChart'
+        ref={chartRef}
+        style={{ padding: '15px 20px 15px', width: '80vh', display: 'block' }}
+      ></canvas>
     </div>
   );
 };
