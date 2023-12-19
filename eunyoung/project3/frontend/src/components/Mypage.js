@@ -31,6 +31,8 @@ const Mypage = ({login}) => {
   const [val6, setVal6] = useState("");
   const { gu, ro, da } = hangjungdong;
 
+  const [profileImage, setProfileImage] = useState(null);
+
   useEffect(() => {
     // 세션 정보를 가져오기 위한 API 요청
     axios.get('/LoginMain')
@@ -99,6 +101,7 @@ const Mypage = ({login}) => {
   const handleUpdate = async () => {
     try {
       const response = await axios.put('/mypage', {
+        id,
         pw,
         username,
         nickname,
@@ -111,13 +114,54 @@ const Mypage = ({login}) => {
         workPlace1,
         workPlace2,
         workPlace3,
-        workPlaceYN
+        workPlaceYN,
       });
       console.log('Update successful:', response.data);
     } catch (error) {
       console.error('Update failed:', error);
     }
   };
+
+  const handleImageChange = (e) => {
+    const Id = sessionData?.id || '';
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(URL.createObjectURL(file));
+      console.log('업로드된 이미지 정보:', {
+        name: file.name,
+        size: file.size,
+        type: file.type
+      });
+  
+      // Assume you have an API endpoint for image upload
+      const apiUrl = 'http://localhost:8080/api/upload';
+  
+      // Create a FormData object and append the file to it
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('id' , Id);
+  
+      // Make a fetch request to the API endpoint
+      fetch(apiUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          // You may need to set additional headers depending on your server requirements
+          // 'Authorization': 'Bearer ' + YOUR_ACCESS_TOKEN,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response from the server
+        console.log('서버 응답:', data);
+      })
+      .catch(error => {
+        // Handle any errors that occurred during the fetch
+        console.error('오류 발생:', error);
+      });
+    }
+  };
+  
 
   return (
     <>
@@ -128,6 +172,30 @@ const Mypage = ({login}) => {
               <span className="login100-form-title p-b-49">
                 <img src="./logo.png" width="170"></img>
               </span>
+          
+              {/* 선택한 이미지의 미리보기를 표시 */}
+              {profileImage && (
+              <div className="profile-image-preview-container">
+                <div className="profile-image-preview">
+                  <img src={profileImage} alt="Profile Preview" />
+                </div>
+              </div>
+            )}
+
+              {/* 프로필 사진을 위한 파일 입력 추가 */}
+              <div className="wrap-input100 validate-input m-b-23" style={{ textAlign: 'center' }}>
+                <span className="label-input100">프로필 사진</span>
+                <div className="custom-file-upload" style={{ margin: '10px', marginLeft: '55px'}}>
+                  
+                  {/* 파일 선택 창 스타일링 */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    id="profileImageInput"
+                  />
+                </div>
+              </div>
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">아이디</span>
@@ -310,20 +378,19 @@ const Mypage = ({login}) => {
               <input className="input100" type="hidden" id ="workLoccode" name="workLoccode" />
 
               <div className="container-login100-form-btn">
-                    <div className="wrap-login100-form-btn">
-                      <div className="login100-form-bgbtn"></div>
-                      <button type="submit" className="login100-form-btn">
-                        회원정보 수정하기
-                      </button>
-                    </div>
+                <div className="wrap-login100-form-btn">
+                  <div className="login100-form-bgbtn"></div>
+                  <button type="submit" className="login100-form-btn">
+                    회원정보 수정하기
+                  </button>
+                </div>
               </div>
-
             </form>
           </div>
         </div>
       </div>
-      </>
-      );
-    };
+    </>
+  );
+};
 
 export default Mypage;

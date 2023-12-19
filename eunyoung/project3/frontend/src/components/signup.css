@@ -274,11 +274,11 @@ iframe {
 }
 
 .input100:focus + .focus-input100::after {
-  color: #a64bf4;
+  color: #ffaaaa;
 }
 
 .has-val.input100 + .focus-input100::after {
-  color: #a64bf4;
+  color: #ffaaaa;
 }
 
 

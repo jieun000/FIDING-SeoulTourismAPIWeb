@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 
 const getFillColor = (pm10Value) => {
@@ -7,14 +7,35 @@ const getFillColor = (pm10Value) => {
 	} else if (pm10Value <= 18) {
 	   return 'rgba(167, 212, 131, 0.7)'; 
 	} else if (pm10Value <= 25) {
-	  return 'rgba(75, 148, 125, 0.7)';
+	  return 'rgb(255,219,88)';
 	} else {
 	   return 'rgba(255, 99, 71, 0.7)';
 	}
-   };
+	};
  
-
+const getDistrictKey = (districtKey,airQualityData) =>{
+	console.log(districtKey,airQualityData)
+	var result=null
+	Object.keys(airQualityData).forEach((key)=>{
+		if(airQualityData[key]['MSRSTE_NM']===districtKey){
+			result= key
+			console.log('result 1',  result)
+		} 
+		console.log('result 2',result)
+		
+	})
+	return result
+}
    const SeoulMap = ({ airQualityData }) => {
+
+	const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+	const handleDistrictClick = (districtKey) => {
+		console.log("함수",getDistrictKey(districtKey,airQualityData))
+	  const selectedData = airQualityData[getDistrictKey(districtKey,airQualityData)].PM10;
+	  setSelectedDistrict({ district: districtKey, data: selectedData });
+	  console.log("차트",selectedDistrict)
+	};
 	
 	const data = {};
 	if (airQualityData && typeof airQualityData === 'object') {
@@ -22,6 +43,7 @@ const getFillColor = (pm10Value) => {
 		  const { MSRSTE_NM, PM10 } = airQualityData[districtKey];
 		  const fillColor = getFillColor(PM10);
 		  data[MSRSTE_NM] = fillColor;
+		//   console.log("차트",airQualityData[districtKey])
 		});
 	  }
 	
@@ -38,7 +60,8 @@ const getFillColor = (pm10Value) => {
    c-1.914-13.504,2.932-25.383,2.502-37.009c-0.459-12.384-5.236-23.798-6.002-36.508c11.756-1.325,7.563-21.182,9.002-35.508
    c0.838-8.333,5.449-13.907,6.502-19.504c9.998-4.506,22.598-6.408,38.008-5.501c2.178-0.323,5.654,0.652,7.002-0.5
    c3.451,0.612,7.951-0.803,10.502,0c9.178,2.887,3.551,20.857,10.002,25.005c4.402,2.831,14.043,1.217,20.506,1.5
-   c7.441,0.328,14.299,0.634,21.004,1C944.035,158.024,948.826,166.568,964.064,164.667z"/>
+   c7.441,0.328,14.299,0.634,21.004,1C944.035,158.024,948.826,166.568,964.064,164.667z" onClick={() => handleDistrictClick('도봉구')}
+   style={{ cursor: 'pointer' }}/>
    <text x="850" y="270" font-size="28" fill="black">도봉구</text>
    <path id="Dongdaemun-gu" fillRule="evenodd" clipRule="evenodd" fill={data['구로구'] || '#C8C8C8'} d="M943.059,562.258
    c17.314-12.86,45.85-14.498,69.016-21.505c4.727,50.787,10.273,100.752,15.504,151.034c-6.555,14.951-12.34,30.67-19.004,45.511

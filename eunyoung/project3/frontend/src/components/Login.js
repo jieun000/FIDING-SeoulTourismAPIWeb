@@ -5,6 +5,8 @@ import {
 import axios from 'axios'; 
 import './login.css'
 import { useLocation } from 'react-router-dom';
+import io from 'socket.io-client';
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -12,9 +14,30 @@ function Login() {
   const [data, setData] = useState({})
   const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
+  const [socket, setSocket] = useState(null);
 
+  const handleWebcamLogin = () => {
+    const isConfirmed = window.confirm('컴퓨터에 웹 캠이 있으신가요?');
 
-
+    if (isConfirmed) {
+      // 사용자가 확인을 눌렀을 때의 동작
+      console.log('사용자가 확인을 선택했습니다.');
+       // 페이지 이동
+       navigate('/webcamStream');
+    } else {
+      // 사용자가 취소를 눌렀을 때의 동작
+      const isConfirmed2 = window.confirm('외장 카메라로 인증 하시겠습니까?');
+      console.log('사용자가 취소를 선택했습니다.');
+      if (isConfirmed2) {
+        // 사용자가 확인을 눌렀을 때의 동작
+        console.log('사용자가 확인을 선택했습니다.');
+         // 페이지 이동
+      } else {
+        console.log('사용자가 취소를 선택했습니다.');
+    }
+  }
+  };
+  
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -106,7 +129,7 @@ function Login() {
             </div>
 
             <div className="flex-col-c p-t-50">
-              <a href="" className="txt2" style={{textDecoration: "none"}}>
+              <a onClick={handleWebcamLogin} className="txt2" style={{textDecoration: "none",cursor: 'pointer'}}>
                 😀 얼굴인식 로그인
               </a>
             </div>

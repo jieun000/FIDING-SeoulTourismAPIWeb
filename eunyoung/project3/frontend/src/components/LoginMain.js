@@ -26,6 +26,7 @@ const LoginMain = ({login}) => {
   // 오류를 추적하는 상태
   const [error, setError] = useState(null);
   const [sessionData, setSessionData] = useState();
+  const [red, setRed] = useState('')
 
   const [selectedDistrict, setSelectedDistrict] = useState('Gangdong-gu');
   const [dataPost, setDataPost] = useState({});
@@ -165,11 +166,11 @@ const LoginMain = ({login}) => {
     
     return (
       <>
-        <div className='gridContainer' style={{ margin: '30px 50px' }}>
+      <div className='gridContainer' style={{ margin: '30px 50px' }}>
           <div id='gridItem1' style={{ border: '5px solid rgba(100, 149, 237, 0.7)',  borderRadius: '15px', textAlign:'center'}}><p style={{fontSize: '48px', textAlign:'center',color:'black'}}>서울시 전체 미세먼지 현황</p>
                 {sessionData ? (
-                  <div> 
-                    {/* <p>{sessionData.username}님, 거주지 : {sessionData.address1} {sessionData.address2} 출근지 : {sessionData.workPlace1} {sessionData.workPlace2} 취약계층 : {sessionData.vgroups} 취약환경여부 : {checkWorkPlace(sessionData.workPlaceYN)}</p>  */}
+                  <div style={{fontSize: '20px'}}> 
+                    <span style={{color: 'blue'}}> 좋음 😍 </span> <span style={{color: 'green'}}> 보통 😀 </span> <span style={{color: 'orange'}}> 나쁨 😒 </span> <span style={{color: 'red'}}> 아주 나쁨 😫</span>
                   </div>
                 ) : (
                   <p>로딩 중...</p>
@@ -184,7 +185,7 @@ const LoginMain = ({login}) => {
                 ) : (
                   <p>로딩 중...</p>
                 )}
-            <Chart />
+            <Chart f={(i)=>setRed(i)} />
             <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}>여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br> 여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br>  여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다</p></div>
           </div>
         </div>
