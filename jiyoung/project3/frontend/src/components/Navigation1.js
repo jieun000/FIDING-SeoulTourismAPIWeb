@@ -1,18 +1,25 @@
 import React from 'react';
 import "./navigation.css";
 import { useState, useEffect } from "react";
+import NavItem from "./NavItem";
 import { useNavigate } from 'react-router-dom';
-import { NavItemLogin, NavItemLogout } from './NavItem';
 
-function Navigation({isLoggedIn, setIsLoggedIn}) {
-  console.log('Navigation:',isLoggedIn)
+function Navigation() {
   const [menuToggle, setMenuToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  //const [loginToggle, setLoginToggle] = useState(isLoggedIn)
- 
+  const menu = [
+    { address: "/", src:"logo.png" },
+    { name: "로그인", address: "/login" },
+    { name: "회원가입", address: "/signup" }, 
+    <br/>
+  ];
 
   const navigate = useNavigate();
   
+  const redirectToMain = () => {
+    // React Router의 navigate 함수를 사용하여 이동
+    navigate('/');
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,7 +34,6 @@ function Navigation({isLoggedIn, setIsLoggedIn}) {
         }
       }
     };
-    //setIsLoggedIn(!isLoggedIn)
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -42,9 +48,9 @@ function Navigation({isLoggedIn, setIsLoggedIn}) {
           menuToggle ? setMenuToggle(false) : setMenuToggle(true)
         }
       >
-        <div className="burger_line1" ></div>
+        <div className="burger_line1"></div>
         <div className="burger_line2"></div>
-        <div className="burger_line3" ></div>
+        <div className="burger_line3"></div>
       </div>
 
       <div
@@ -53,13 +59,17 @@ function Navigation({isLoggedIn, setIsLoggedIn}) {
           !menuToggle ? "menu__box__hidden" : "menu__box__visible",
         ].join(" ")}
       >
-      <div className="menu__list">
-      {isLoggedIn ? <NavItemLogout setIsLoggedIn={setIsLoggedIn} />
-            : (
-              <NavItemLogin setIsLoggedIn={setIsLoggedIn}  />
-            )
-        }
-      </div>
+        <div className="menu__list">
+          {menu.map((data ,idx) => (
+            <NavItem
+              data={data}
+              address={data.address}
+              key={idx}
+              src={data.src}
+              offNav={() => setMenuToggle(false)}
+            />
+          ))}
+        </div>
       </div>
     </nav>
   );
