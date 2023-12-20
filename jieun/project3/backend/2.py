@@ -1,25 +1,21 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS ,cross_origin # CORS 추가
+from flask import Flask, jsonify, render_template,request
 import tensorflow as tf
 from tensorflow import keras
-import os
 import cv2
 import face_recognition
 import pickle
 import requests
-import face_recognition_knn
-# PTY: 강수형태, REH: 습도( %), RN1: 1시간 강수량(mm), T1H: 기온(℃), UUU: 동서바람성분(m / s):, VEC: 풍향(deg), VVV: 남북바람성분(m / s), WSD: 풍속(m / s),
-# MSRSTE_NM: 조회하는 구,
-# NO2: 이산화질소농도(ppm), O3: 오존농도(ppm), CO: 일산화탄소농도(ppm), SO2: 아황산가스(ppm), PM10: 미세먼지(㎍ / ㎥), PM25: 초미세먼지(㎍ / ㎥)
-# spdValue: 교통 속도, momentDateValue: localTime(현재 날짜와 시간)
-
 app = Flask(__name__)
-CORS(app)  # 모든 엔드포인트에 대한 CORS 활성화
-# 더미 데이터
+
+# CORS 설정 - 실제 환경에서는 정확한 도메인을 설정해야 합니다.
+from flask_cors import CORS
+CORS(app)
+m_list = [ 'PM10', 'PM2.5']
 loaded_models = {}
 
 #####################################deep 부분
-
+with open("trained_knn_model.clf", 'rb') as f:
+    knn_clf = pickle.load(f)
 
 # ESP32 URL
 URL = "http://192.168.0.122"
@@ -34,6 +30,7 @@ def set_face_detect(url: str, face_detect: int=1):
         print("SET_FACE_DETECT: something went wrong")
     return face_detect
 ######################################
+
 def pearson_correlation_coefficient(y_true, y_pred):
     mx = tf.reduce_mean(y_true)
     my = tf.reduce_mean(y_pred)
@@ -42,52 +39,44 @@ def pearson_correlation_coefficient(y_true, y_pred):
     r_den = tf.sqrt(tf.reduce_sum(tf.square(xm)) * tf.reduce_sum(tf.square(ym)))
     r = r_num / (r_den + tf.keras.backend.epsilon())
     return tf.reduce_mean(r)
-def create_model(shape):
+
+
+def create_model():
     model = tf.keras.Sequential([
-        keras.layers.Dense(32, activation='sigmoid', input_shape=(shape,)),
+        keras.layers.Dense(20, activation='sigmoid', input_shape=(4,)),
         keras.layers.Dropout(0.5),
-        keras.layers.Dense(64, activation='sigmoid'),
+        keras.layers.Dense(40, activation='sigmoid'),
         keras.layers.Dense(1)  # Output layer for regression task
     ])
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
     model.compile(optimizer=optimizer,
                   loss=tf.keras.losses.MSE,
                   metrics=[pearson_correlation_coefficient])
+
     return model
 
-@app.route('/api/data', methods=['POST','GET'])
-@cross_origin()
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/data')
 def get_data():
-    api_data = request.get_json()
-    print("받아온 데이터:",api_data)
-
-
-    result = {}
+    data = request.json
+    result={}
     m_list = ['아황산가스', '일산화탄소', '오존', '이산화질소', 'PM10', 'PM2.5']
-    m_code_list = ["SO2", "CO", 'O3', 'NO2', 'PM10', 'PM25']  # 바꿔도 됨 react에서 요청하는 자료 형태로
+    m_code_list=["a","c",'o','n','10','2.5']#바꿔도 됨 react에서 요청하는 자료 형태로
+    for m,code in zip(m_list,m_code_list):
+        model = create_model()
+        model_path = f'C:/prj3/{m}_model_weights.h5'
+        model.load_weights(model_path)
+        result[code] = model.predict([[756, 31.47267, 0, 0.021]])#이부분 data로
+        print(result[code])
 
-    try:
-        api_data = request.get_json()
-        print("받은 데이터:", api_data['spdValue'])
-        for m, code in zip(m_list, m_code_list):
-            if m in ['아황산가스', '일산화탄소', '오존', '이산화질소']:
-                shape = 7
-            else:
-                shape = 4
-            model = create_model(shape)
-            model_path = f'C:/jieun/project3/backend/{m}_model_weights.h5'
-            model.load_weights(model_path)
-            if m in ['아황산가스', '일산화탄소', '오존', '이산화질소']:
-                result[code] = float(model.predict([[1,float(api_data['spdValue']),float(api_data['T1H']),float(api_data['WSD']),float(api_data['RN1']),float(api_data['REH']),float(api_data[code])]])[0][0]) # 이부분 data로
-            else:result[code] = float(model.predict([[1,float(api_data['spdValue']),float(api_data['T1H']),float(api_data[code])]])[0][0])  # 이부분 data로
-        return jsonify(result)
-    except Exception as e:
-        return jsonify({'error': str(e)})
-@app.route('/api/data2') #강사님께서 주신 카메라로 얼굴을 인식하여 로그인 정보를 전달하는 함수
+    return jsonify(result)
+@app.route('/api/data2')
 def get_data2():
     data = request.json
-    with open("trained_knn_model.clf", 'rb') as f:
-        knn_clf = pickle.load(f)
+    user_id=data.id
     result={}
     set_face_detect(URL, 1)
     while True:
@@ -127,25 +116,11 @@ def get_data2():
                 # Break the loop when 'q' key is pressed
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
-    #frame이 한 화면이다 사용자에게 전달해서 본인이 맞는지 확인한다면 좋을 것
-    #name 아이디가 될 것 자료가 없는 얼굴이라면 unknown
     # Release the video capture object and close all OpenCV windows
     cv2.destroyAllWindows()
     cap.release()
 
-    return jsonify({'user_id':name,'frame':frame})
-@app.route('/api/data3', methods=['POST','GET'])
-@cross_origin()
-def get_data3(): #유저 사진을 받고 트레이닝하는 함수
-    data = request.get_json()#유저 아이디를 받아오면 그 이름으로 trainfolder 만든다
-    #data={url,id}가 있어야 한다
-    os.makedirs('user_face_tests', exist_ok=True)
-    #유저의 사진 url이 있다면 같이 받아와서 다운 후 user_face_tests에 저장
-
-    #user_face_tests 폴더 안에 사용자의 아이디 이름의 폴더에 사진이 저장되어야 한다.
-    classifier = face_recognition_knn.train("user_face_tests", model_save_path="trained_knn_model.clf", n_neighbors=2)
-    #classifier knn 모델인데 안쓰인다 이미 trained_knn_model로 저장됨
+    return jsonify(result)
 
 if __name__ == '__main__':
-
     app.run(debug=True)
