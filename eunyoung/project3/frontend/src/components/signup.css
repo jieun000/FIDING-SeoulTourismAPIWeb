@@ -457,3 +457,15 @@ iframe {
  .flex-c-m ul {
    margin-bottom: 10px;
  }
+ /* 프로필 이미지 가운데로 조정 */
+ .profile-image-preview-container {
+  text-align: center;
+}
+ 
+ /* 프로필 이미지 가운데로 조정 */
+ .profile-image-preview img {
+  max-width: 100%; /* 이미지가 부모 너비를 넘지 않도록 최대 너비 설정 */
+  max-height: 300px; /* 이미지가 너무 크게 나오지 않도록 최대 높이 설정 (원하는 크기로 조절) */
+  margin-top: 10px; /* 이미지와 상단 간격 설정 */
+  
+}
