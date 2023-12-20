@@ -11,6 +11,9 @@ const { gu, ro, da } = hangjungdong;
 const getFormattedDate = () => {
   const nowTime = Date.now();
   const date = new Date(nowTime);
+  const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+  const dayOfWeek = daysOfWeek[date.getDay()]; // 실시간 요일
+  console.log('오늘은 무슨 요일?', dayOfWeek + '요일')
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
@@ -29,19 +32,22 @@ const LoginMain = ({login}) => {
   const [error, setError] = useState(null);
   const [sessionData, setSessionData] = useState();
 
-  const [selectedDistrict, setSelectedDistrict] = useState('Gangdong-gu');
   const [dataPost, setDataPost] = useState({});
 
+  const [newWeatherData, setNewWeatherData] = useState();
   const [AllAirQualityData, setAllAirQualityData] = useState({});
   const [newAirQualityData, setNewAirQualityData] = useState({});
   const [pyCharmData, setPyCharmData] = useState(null);
   const [districtKey, setDistrictKey] = useState(null);
   const [loadData, setLoadData] = useState(null);
-  const [loadKey, setLoadKey] = useState(null);
+  const [loadKey, setLoadKey] = useState({});
 
   const [val1, setVal1] = useState("");
   const [val2, setVal2] = useState("");
   const [val3, setVal3] = useState("");
+
+  const [temperature, setTemperature] = useState(null);
+  const [humidity, setHumidity] = useState(null);
   
   useEffect(() => {
     // 세션 정보를 가져오기 위한 API 요청
@@ -53,9 +59,12 @@ const LoginMain = ({login}) => {
           login(true);
           sessionAddress = response.data.address1;
           sessionLocCode = response.data.addLoccode;
+          sessionAddress3 = response.data.address3;
           console.log('DB 주소: ', sessionAddress, 'DB locCode: ', sessionLocCode);
         }
+        setLoadKey(sessionAddress3)
         setSessionData(response.data);
+        fetchData()
       })
       .catch(error => {
         console.error('세션 정보 가져오기 실패:', error);
@@ -64,10 +73,10 @@ const LoginMain = ({login}) => {
   
   var sessionLocCode = '1080012200'; // 기본 locCode (세션 조회하며 DB addLoccode로 바뀜)
   var sessionAddress = '강동구'; // 기본 주소 (세션 조회하며 DB address1로 바뀜)
+  var sessionAddress3 = '천호사거리';
   var [weatherX, weatherY] = weather[sessionAddress];
   // console.log(`weatherX: ${weatherX}, weatherY: ${weatherY}`);
 
-  // !!!!!!!!!!
   const getDistrictKey = (districtKey, airQualityData) =>{
     console.log(districtKey, airQualityData)
     var result = null
@@ -85,35 +94,11 @@ const LoginMain = ({login}) => {
     console.log("차트", newAirQualityData)
   };
 
-  const getLoadKey = (districtKey, airQualityData) =>{
-    console.log('getLoadKey?', districtKey, airQualityData)
-    var getLoadKeyResult = null
-    Object.keys(airQualityData).forEach((key)=>{
-      if(airQualityData[key]['load']===districtKey){
-        getLoadKeyResult = airQualityData[key];
-      } 
-    })
-    return getLoadKeyResult
-  }
-  const loadClick = (loadKey, pyCharmData) => {
-    if(pyCharmData!=null) {
-      console.log("loadClick 함수", loadKey, pyCharmData) 
-      // const matchingObject = pyCharmData.find(obj => obj.load === loadKey);
-      const selectedData = getLoadKey(loadKey, pyCharmData);
-      setLoadData(selectedData);
-    } else {
-        console.log("pyCharmData Null")
-    }
-    // const selectedData = getLoadKey(loadKey, pyCharmData)
-    // setNewAirQualityData(selectedData);
-    // console.log("차트", newAirQualityData)
-  };
-
   const fetchData = async () => {
     try {
       // PTY: 강수형태, REH: 습도(%), RN1: 1시간 강수량(mm), T1H: 기온(℃),  
       // UUU: 동서바람성분(m/s): , VEC: 풍향(deg), VVV: 남북바람성분(m/s), WSD: 풍속(m/s),
-      // NO2: 이산화질소농도(ppm), O3: 오존농도(ppm), CO	일산화탄소농도(ppm), SO2: 아황산가스(ppm), PM10: 미세먼지(㎍/㎥), PM25: 초미세먼지(㎍/㎥)
+      // NO2: 이산화질소농도(ppm), O3: 오존농도(ppm), CO   일산화탄소농도(ppm), SO2: 아황산가스(ppm), PM10: 미세먼지(㎍/㎥), PM25: 초미세먼지(㎍/㎥)
       // spdValue: 교통 속도 , momentDateValue: localTime
 
       const currentDateTime = new Date(); // 현재 날짜를 사용
@@ -140,9 +125,10 @@ const LoginMain = ({login}) => {
           newWeatherData[item.category] = item.obsrValue;
         });
       }
-      // console.log('기상 정보:', newWeatherData);
-
-
+      console.log('기상 정보:', newWeatherData);
+      setTemperature(newWeatherData.T1H);
+      setHumidity(newWeatherData.REH);
+      
       // 서울시 시간 평균 대기오염도 정보(구별 미세먼지, 초미세먼지, 오존, 무슨 공기 등)
       const airQualityResponse = await axios.get(
         `http://openAPI.seoul.go.kr:8088/7262614b76776c64363379726a594b/json/TimeAverageAirQuality/1/25/${formattedCurrentDate}/`
@@ -179,47 +165,42 @@ const LoginMain = ({login}) => {
       
       setDataPost({ ...newWeatherData, ...newAirQualityData, spdValue, momentDateValue });
       console.log('Server로 보낼 데이터: ', { ...newWeatherData, ...newAirQualityData, spdValue, momentDateValue });
-
-      const fetchData2 = async () => {
-        console.log('여기가 호출되는가?')
-        try {
-          const response2 = await fetch('http://localhost:5000/api/data', {
-            method: 'post',
-            //mode: 'cors',  // Cross-Origin 문제 해결을 위한 설정
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataPost),
-          });
-          if (!response2.ok) {
-            throw new Error(`HTTP error! Status: ${response2.status}`);
-          }
-
-          // if (!response2.ok) {
-          //   throw new Error(`HTTP error! Status: ${response2.status}`);
-          // }
-          const result = await response2.json();
-          console.log('pycharm에서 온 데이터:', result);
-          setPyCharmData(result);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",dataPost);
-      fetchData2();
-
     } catch (error) {
       console.error(error);
     }
   };
+  
+  const fetchData2 = async () => {
+    console.log('여기가 호출되는가?')
+    try {
+      const response2 = await fetch('http://localhost:5000/api/data', {
+        method: 'post',
+        //mode: 'cors',  // Cross-Origin 문제 해결을 위한 설정
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataPost),
+      });
+      if (!response2.ok) {
+        throw new Error(`HTTP error! Status: ${response2.status}`);
+      }
+
+      // if (!response2.ok) {
+      //   throw new Error(`HTTP error! Status: ${response2.status}`);
+      // }
+      const result = await response2.json();
+      console.log('pycharm에서 온 데이터:', result);
+      setPyCharmData(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",dataPost);
+
 
   useEffect(() => {
-    fetchData();
-  }, [selectedDistrict, districtKey]);
-
-  // const onDistrictChange = (event) => {
-  //   setSelectedDistrict(event.target.value);
-  // };
+    fetchData2();
+  }, [loadKey]);
 
   const checkWorkPlace = (workPlaceYN) => {
     return workPlaceYN === 1 ? '예' : '아니오';
@@ -227,16 +208,11 @@ const LoginMain = ({login}) => {
   
   useEffect(() => {
     console.log('loginMain에서 districtKey 변동 확인:', districtKey);
+    sessionAddress = districtKey;
+    fetchData();
     districtClick(districtKey, AllAirQualityData);
     setVal1(districtKey);
   }, [districtKey]);
-
-  useEffect(() => {
-    // hangjungdong.da.forEach((i)=> {
-    //   if(i.da == loadKey) sessionLocCode = i.locCode;
-    // });
-    loadClick(loadKey, pyCharmData);
-  }, [loadKey]);
 
   var first = gu.map((el,idx) => (
     <option key={idx} value={el.gu}>
@@ -299,6 +275,7 @@ const LoginMain = ({login}) => {
         </div>
 
         <div id='gridItem2' style={{ border: '5px solid rgba(167, 212, 131, 0.7)',  borderRadius: '15px' , fontSize: '48px', textAlign:'center'}}><p style={{fontSize: '48px', textAlign:'center',color:'black'}}>나의 동네 대기 정보</p>
+        {/* <input type="text" value={newWeatherData}/> */}
           {sessionData ? (
             <div> 
               <p style={{fontSize:'24px'}}> 🖐️ {sessionData.username}님</p>
@@ -307,15 +284,12 @@ const LoginMain = ({login}) => {
           ) : (
             <p>로딩 중...</p>
           )}
-          <Chart airQualityData2={newAirQualityData} districtKey={districtKey} setDistrictKey={setDistrictKey} loadData={loadData} />
-        <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}>
-          <p style={{fontSize:'18px'}}>여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 
-          <br></br> 여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 
-          <br></br>  여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다</p>
+          <Chart airQualityData2={newAirQualityData} pyCharmData={pyCharmData} />
+          <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}> 기온: {temperature}℃ / 습도: {humidity}% </p></div>
+            <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}> 사용자에 따라 달라지는 안내 </p></div>
+          </div>
         </div>
-        </div>
-      </div>
-    </>
+      </>
   );
 }
 

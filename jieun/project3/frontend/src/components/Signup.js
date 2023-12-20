@@ -181,6 +181,7 @@ const Signup = () => {
                   </select>
                   <span className="focus-input100" data-symbol="&#xf206;"></span>
                 </div>
+
                 <div>
                   <span className="label-input100"></span>
                   <select className="input100" type="text" name="address2" onChange={(e) => setVal2(e.target.value)}>
