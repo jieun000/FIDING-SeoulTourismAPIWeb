@@ -264,6 +264,7 @@ iframe {
   transition: all 0.4s;
 }
 
+
 .input100:focus + .focus-input100::before {
   width: 100%;
 }
@@ -273,11 +274,11 @@ iframe {
 }
 
 .input100:focus + .focus-input100::after {
-  color: #a64bf4;
+  color: #ffaaaa;
 }
 
 .has-val.input100 + .focus-input100::after {
-  color: #a64bf4;
+  color: #ffaaaa;
 }
 
 
@@ -382,35 +383,6 @@ iframe {
   transition: opacity 0.4s;
 }
 
-.alert-validate::before {
-  content: attr(data-validate);
-  position: absolute;
-  max-width: 70%;
-  background-color: #fff;
-  border: 1px solid #c80000;
-  border-radius: 2px;
-  padding: 4px 25px 4px 10px;
-  bottom: calc((100% - 20px) / 2);
-  -webkit-transform: translateY(50%);
-  -moz-transform: translateY(50%);
-  -ms-transform: translateY(50%);
-  -o-transform: translateY(50%);
-  transform: translateY(50%);
-  right: 2px;
-  pointer-events: none;
-  font-family: NanumSquareRoundOTFB;
-  color: #c80000;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
-  visibility: hidden;
-  opacity: 0;
-  -webkit-transition: opacity 0.4s;
-  -o-transition: opacity 0.4s;
-  -moz-transition: opacity 0.4s;
-  transition: opacity 0.4s;
-}
-
 .alert-validate::after {
   content: "\f06a";
   font-family: FontAwesome;
@@ -433,7 +405,7 @@ iframe {
 }
 
 @media (max-width: 992px) {
-  .alert-validate2::before {
+  .alert-validate::before {
     visibility: visible;
     opacity: 1;
   }
@@ -485,3 +457,15 @@ iframe {
  .flex-c-m ul {
    margin-bottom: 10px;
  }
+ /* 프로필 이미지 가운데로 조정 */
+ .profile-image-preview-container {
+  text-align: center;
+}
+ 
+ /* 프로필 이미지 가운데로 조정 */
+ .profile-image-preview img {
+  max-width: 100%; /* 이미지가 부모 너비를 넘지 않도록 최대 너비 설정 */
+  max-height: 300px; /* 이미지가 너무 크게 나오지 않도록 최대 높이 설정 (원하는 크기로 조절) */
+  margin-top: 10px; /* 이미지와 상단 간격 설정 */
+  
+}

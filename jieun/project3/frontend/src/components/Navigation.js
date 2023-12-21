@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { NavItemLogin, NavItemLogout } from './NavItem';
 
-function Navigation({isLoggedIn}) {
+function Navigation({isLoggedIn, setIsLoggedIn}) {
   console.log('Navigation:',isLoggedIn)
   const [menuToggle, setMenuToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  //const [loginToggle, setLoginToggle] = useState(isLoggedIn)
  
 
   const navigate = useNavigate();
@@ -41,9 +42,9 @@ function Navigation({isLoggedIn}) {
           menuToggle ? setMenuToggle(false) : setMenuToggle(true)
         }
       >
-        <div className="burger_line1"></div>
+        <div className="burger_line1" ></div>
         <div className="burger_line2"></div>
-        <div className="burger_line3"></div>
+        <div className="burger_line3" ></div>
       </div>
 
       <div
@@ -53,10 +54,10 @@ function Navigation({isLoggedIn}) {
         ].join(" ")}
       >
       <div className="menu__list">
-        {isLoggedIn ? <NavItemLogout isLoggedIn={false} />
-          : (
-            <NavItemLogin isLoggedIn={true}  />
-          )
+      {isLoggedIn ? <NavItemLogout setIsLoggedIn={setIsLoggedIn} />
+            : (
+              <NavItemLogin setIsLoggedIn={setIsLoggedIn}  />
+            )
         }
       </div>
       </div>

@@ -10,7 +10,7 @@ module.exports = function(app) {
     })
   );
   app.use(
-    '/api/data',
+    '/another-api',
     createProxyMiddleware({
       target: 'http://localhost:5000',  // 다른 API 서버 주소로 변경
       changeOrigin: true,

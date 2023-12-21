@@ -2,20 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'; 
 import './login.css'
 import Chart from './Chart';
+import Map from './Map';
 import SeoulMap from './SeoulMap';
 import { weather } from './Weather';
-
-const getFormattedDate = () => {
-  const nowTime = Date.now();
-  const date = new Date(nowTime);
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
-  return formattedDate;
-};
 
 const Main = ({ logout }) => {
   const [data, setData] = useState(null);
@@ -27,9 +16,18 @@ const Main = ({ logout }) => {
 
   const [AllAirQualityData, setAllAirQualityData] = useState({});
   const [weatherResponse, setWeatherResponse] = useState({});
-  const [temperature, setTemperature] = useState(null);
-  const [humidity, setHumidity] = useState(null);
   
+const getFormattedDate = () => {
+  const nowTime = Date.now();
+  const date = new Date(nowTime);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}`;
+  return formattedDate;
+};
 
   useEffect(() => {
     const loginData = async () => {
@@ -64,7 +62,7 @@ const Main = ({ logout }) => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-  
+
   var sessionLocCode = '1080012200'; // 기본 locCode (세션 조회하며 DB addLoccode로 바뀜)
   var sessionAddress = '강동구'; // 기본 주소 (세션 조회하며 DB address1로 바뀜)
   var [weatherX, weatherY] = weather[sessionAddress];
@@ -99,11 +97,9 @@ const Main = ({ logout }) => {
           newWeatherData[item.category] = item.obsrValue;
         });
       }
+      setWeatherResponse(...weatherData,newWeatherData);
 
-      console.log('기상 정보:', newWeatherData);
-
-      setTemperature(newWeatherData.T1H);
-      setHumidity(newWeatherData.REH);
+      console.log('날씨 정보:', weatherResponse);
 
       // 서울시 시간 평균 대기오염도 정보(구별 미세먼지, 초미세먼지, 오존, 무슨 공기 등)
      const airQualityResponse = await axios.get(
@@ -142,6 +138,12 @@ const Main = ({ logout }) => {
       console.log('대기 오염도:', newAirQualityData);
       console.log('교통 속도:', spdValue);
       console.log('local time:', momentDateValue);
+  
+} catch (error) {
+  console.error(error);
+}
+  }//fetchData
+  fetchData()
       const fetchData2 = async () => {
         try {
           const response2 = await fetch('http://localhost:5000/api/data', {
@@ -163,15 +165,9 @@ const Main = ({ logout }) => {
         }
       };
       fetchData2();
+ 
 
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [selectedDistrict]);
 
   // 실제로 렌더링될 컴포넌트 내용 및 가져온 데이터를 렌더링
   return (
@@ -185,7 +181,7 @@ const Main = ({ logout }) => {
         </div>
         <div id='gridItem2' style={{ border: '5px solid rgba(167, 212, 131, 0.7)',  borderRadius: '15px' , fontSize: '48px', textAlign:'center'}}><p style={{fontSize: '48px', textAlign:'center',color:'black'}}>동네 대기 정보</p>
           <Chart f={(i)=>setRed(i)} />
-          <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}> 기온: {temperature}℃ / 습도: {humidity}% </p></div>
+          <div><p>날씨: {weatherResponse.REH} / 기온: {weatherResponse.T1H}℃ / 습도: {weatherResponse.REH}%</p></div>
         </div>
         
       </div>
