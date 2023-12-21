@@ -29,7 +29,6 @@ const Main = ({ logout }) => {
   const [weatherResponse, setWeatherResponse] = useState({});
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
-  
 
   useEffect(() => {
     const loginData = async () => {
@@ -51,7 +50,6 @@ const Main = ({ logout }) => {
       }
     };
 
-
     loginData();
   }, [logout]); // logout이 바뀔 때마다 useEffect를 다시 실행
 
@@ -68,7 +66,8 @@ const Main = ({ logout }) => {
   var sessionLocCode = '1080012200'; // 기본 locCode (세션 조회하며 DB addLoccode로 바뀜)
   var sessionAddress = '강동구'; // 기본 주소 (세션 조회하며 DB address1로 바뀜)
   var [weatherX, weatherY] = weather[sessionAddress];
-  console.log(`weatherX: ${weatherX}, weatherY: ${weatherY}`);
+  console.log(`세션 주소의 weatherX: ${weatherX}, weatherY: ${weatherY}`);
+  
   const fetchData = async () => {
     try {
       // PTY: 강수형태, REH: 습도(%), RN1: 1시간 강수량(mm), T1H: 기온(℃),  
@@ -99,7 +98,6 @@ const Main = ({ logout }) => {
           newWeatherData[item.category] = item.obsrValue;
         });
       }
-
       console.log('기상 정보:', newWeatherData);
 
       setTemperature(newWeatherData.T1H);
@@ -119,7 +117,7 @@ const Main = ({ logout }) => {
         }
       }
       setAllAirQualityData({...AllAirQualityData});
-      console.log('서울시 전체 대기 오염도:', AllAirQualityData);
+      // console.log('서울시 전체 대기 오염도:', AllAirQualityData);
 
 
       // 서울시 실시간 도로 소통 정보(교통 속도)
@@ -131,38 +129,36 @@ const Main = ({ logout }) => {
       const xmlString = trafficData;
       const match = xmlString.match(/<prcs_spd>([\d.]+)<\/prcs_spd>/);
       const spdValue = match ? match[1] : null;
+      console.log('교통 속도:', spdValue);
 
       // getFormattedDate 함수로 local time 가져오기
       const momentDateValue = getFormattedDate();
+      console.log('local time:', momentDateValue);
 
       setDataPost({ ...newWeatherData, spdValue, momentDateValue });
       console.log('Server로 보낼 데이터: ', { ...newWeatherData, ...newAirQualityData, spdValue, momentDateValue });
 
-      console.log('기상 정보:', newWeatherData);
-      console.log('대기 오염도:', newAirQualityData);
-      console.log('교통 속도:', spdValue);
-      console.log('local time:', momentDateValue);
-      const fetchData2 = async () => {
-        try {
-          const response2 = await fetch('http://localhost:5000/api/data', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ...newWeatherData, spdValue, momentDateValue }),
-          });
+      // const fetchData2 = async () => {
+      //   try {
+      //     const response2 = await fetch('http://localhost:5000/api/data', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //       body: JSON.stringify({ ...newWeatherData, spdValue, momentDateValue }),
+      //     });
       
-          if (!response2.ok) {
-            throw new Error(`HTTP error! Status: ${response2.status}`);
-          }
+      //     if (!response2.ok) {
+      //       throw new Error(`HTTP error! Status: ${response2.status}`);
+      //     }
       
-          const result = await response2.json();
-          console.log(result);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchData2();
+      //     const result = await response2.json();
+      //     console.log(result);
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // };
+      // fetchData2();
 
     } catch (error) {
       console.error(error);

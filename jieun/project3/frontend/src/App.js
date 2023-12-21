@@ -11,11 +11,10 @@ import LoginMain from './components/LoginMain'
 import Mypage from './components/Mypage';
 import WebcamStream from './components/WebcamStream';
 
-
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const login=(i)=> {
-    console.log('여기기 왜 안바뀌는거야?', i)
+    // console.log('여기기 왜 안바뀌는거야?', i)
    setIsLoggedIn(i)
   }
   return (
