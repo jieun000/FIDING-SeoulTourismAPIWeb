@@ -13,7 +13,10 @@ const MyChart = ({ airQualityData2, pyCharmData }) => {
       var pm10Value = airQualityData2.PM10;
       var pm25Value = airQualityData2.PM25;
       var o3Value = airQualityData2.O3;
-      console.log(`Chart.js ${districtName}의 미세: ${pm10Value}, 초미세: ${pm25Value}, 오존: ${o3Value}`);
+      var no2Value = airQualityData2.NO2;
+      var coValue = airQualityData2.CO;
+      
+      console.log(`Chart.js ${districtName}의 오존: ${o3Value}, 이산화질소: ${no2Value}, 일산화탄소: ${coValue}`);
     } else {
       console.log("district Null")
     }
@@ -21,7 +24,9 @@ const MyChart = ({ airQualityData2, pyCharmData }) => {
       var pm10LoadValue = pyCharmData.PM10;
       var pm25LoadValue = pyCharmData.PM25;
       var o3LoadValue = pyCharmData.O3;
-      console.log(`Chart.js 도로의 미세: ${pm10LoadValue}, 초미세: ${pm25LoadValue}, 오존: ${o3LoadValue}`);
+      var no2LoadValue = pyCharmData.NO2;
+      var coLoadValue = pyCharmData.CO;
+      console.log(`Chart.js 도로의 오존: ${o3LoadValue}, 이산화질소: ${no2LoadValue}, 일산화탄소: ${coLoadValue}`);
     } else {
       console.log("load Null")
     }
@@ -29,11 +34,11 @@ const MyChart = ({ airQualityData2, pyCharmData }) => {
     const myChart = new Chart(context, {
       type: 'bar',
       data: {
-        labels: ['미세먼지', '초미세먼지', '오존'],
+        labels: ['오존', '이산화질소', '일산화탄소'],
         datasets: [
           {
             label: '구',
-            data: [pm10Value, pm25Value, o3Value],
+            data: [o3Value, no2Value, coValue],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 99, 132, 0.2)',
@@ -54,7 +59,7 @@ const MyChart = ({ airQualityData2, pyCharmData }) => {
           },
           {
             label: '도로',
-            data: [pm10LoadValue, pm25LoadValue, o3LoadValue],
+            data: [o3LoadValue, no2LoadValue, coLoadValue],
             backgroundColor: [
               'rgba(54, 162, 235, 0.2)',
               'rgba(54, 162, 235, 0.2)',

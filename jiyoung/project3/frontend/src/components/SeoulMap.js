@@ -6,18 +6,19 @@ const getFillColor = (pm10Value) => {
    if (pm10Value <= 15) {
      return 'rgba(100, 149, 237, 0.7)';
    } else if (pm10Value <= 18) {
-      return 'rgba(167, 212, 131, 0.7)'; 
+      return 'rgba(55,171,55)'; 
    } else if (pm10Value <= 25) {
-     return 'rgba(75, 148, 125, 0.7)';
+     return 'rgba(255,219,88)';
    } else {
-      return 'rgba(255, 99, 71, 0.7)';
+      return 'rgba(255, 0, 0, 0.7)';
    }
 };
-   
-const SeoulMap = ({ airQualityData1, districtKey, setDistrictKey }) => {
+
+const SeoulMap = ({ airQualityData1, setDistrictKey }) => {
    const data = {};
    if (airQualityData1 && typeof airQualityData1 === 'object') {
       Object.keys(airQualityData1).forEach((districtKey) => {
+         if(districtKey ==null) return 
         const { MSRSTE_NM, PM10 } = airQualityData1[districtKey];
         data[MSRSTE_NM] = getFillColor(PM10);
       });

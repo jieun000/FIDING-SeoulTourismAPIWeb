@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { NavItemLogin, NavItemLogout } from './NavItem';
 
 function Navigation({isLoggedIn, setIsLoggedIn}) {
-  console.log('Navigation:',isLoggedIn)
+  // console.log('Navigation:',isLoggedIn)
   const [menuToggle, setMenuToggle] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   //const [loginToggle, setLoginToggle] = useState(isLoggedIn)

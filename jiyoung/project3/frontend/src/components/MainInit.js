@@ -5,7 +5,6 @@ import Chart from './Chart';
 import SeoulMap from './SeoulMap';
 import { hangjungdong } from './hangjungdong';
 import ApiFetch from './ApiFetch';
-import AiFetch from './AiFetch';
 const { gu, ro, da } = hangjungdong;
 
 const LoginMain = ({ login }) => {
@@ -16,26 +15,19 @@ const LoginMain = ({ login }) => {
   // 오류를 추적하는 상태
   const [error, setError] = useState(null);
   const [sessionData, setSessionData] = useState();
-  const [sessionAddress, setSessionAddress] = useState("강동구");
-  const [sessionAddress3, setSessionAddress3] = useState("1080012200");
-  const [sessionLocCode, setSessionLocCode] = useState("1080012200");
   const [newWeatherData, setNewWeatherData] = useState();
-
   // apiFetch를 위해 설정
   const apiFetchRef = useRef(null);
-  const aiFetchRef = useRef(null);
 
   const [pyCharmData, setPyCharmData] = useState(null);
   
-  const [loadKey, setLoadKey] = useState("");
+  const [loadKey, setLoadKey] = useState({});
 
   const [districtKey, setDistrictKey] = useState("강동구");
   const [AllAirQualityData, setAllAirQualityData] = useState({});
   const [newAirQualityData, setNewAirQualityData] = useState({});
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
-  const [finedust, setFinedust] = useState(null);
-  const [ultrafinedust, setUltrafinedust] = useState(null);
 
   const [dataPost, setDataPost] = useState({});
   const [val1, setVal1] = useState("");
@@ -43,9 +35,9 @@ const LoginMain = ({ login }) => {
   const [val3, setVal3] = useState("");
 
   var obj = { 
-    sessionAddress, 
-    sessionAddress3, 
-    sessionLocCode, 
+    sessionAddress : '강동구', 
+    sessionAddress3 : '천호사거리',  
+    sessionLocCode :'1080012200', 
     districtKey,
     setDistrictKey, 
     AllAirQualityData,
@@ -54,17 +46,10 @@ const LoginMain = ({ login }) => {
     setNewAirQualityData,
     setTemperature,
     setHumidity,
-    setFinedust,
-    setUltrafinedust,
     setDataPost,
-    setVal1,
-    loadKey
-  }
-  var aiObj = {
-    dataPost,
-    setPyCharmData, 
-    loadKey
-  }
+    setVal1
+  } 
+
   useEffect(() => {
     // 세션 정보를 가져오기 위한 API 요청
     axios.get('/LoginMain')
@@ -73,19 +58,20 @@ const LoginMain = ({ login }) => {
         // console.log("서버로 온 데이터 ", response.data);
         if (response.data != null) {
           login(true);
-          setSessionAddress(response.data.address1);
-          setSessionLocCode(response.data.addLoccode);
-          setSessionAddress3(response.data.address3);
-          setLoadKey(obj.sessionLocCode);
+          obj.sessionAddress = response.data.address1;
+          obj.sessionLocCode = response.data.addLoccode;
+          obj.sessionAddress3 = response.data.address3;
           console.log('DB 주소: ', obj.sessionAddress, 'DB locCode: ', obj.sessionLocCode);
         }
+
+        setLoadKey(obj.sessionAddress3)
         setSessionData(response.data);
         // console.log(apiFetchRef, "는 무엇")
         // 자식 컴포넌트인 ApiFetch의 ref를 설정합니다.
         if (apiFetchRef.current) {
+          console.log("실행되는가?")
           apiFetchRef.current.fetchData();
         }
-        console.log("loadKey다!!!!!!!!!!!!!!!!!!!", loadKey)
         // fetchData()
       })
       .catch(error => {
@@ -98,6 +84,11 @@ const LoginMain = ({ login }) => {
     return workPlaceYN === 1 ? '예' : '아니오';
   };
 
+  var first = gu.map((el,idx) => (
+    <option key={idx} value={el.gu}>
+      {el.gu}
+    </option>
+  ))
   var addList = []
   var second = ro
   .filter((el) => el.gu === val1)
@@ -119,7 +110,6 @@ const LoginMain = ({ login }) => {
   return (
     <>
     <ApiFetch obj={obj} ref={apiFetchRef} />
-    <AiFetch obj={aiObj} ref={aiFetchRef} />
       <div className='gridContainer' style={{ margin: '30px 50px' }}>
         <div id='gridItem1' style={{ border: '5px solid rgba(100, 149, 237, 0.7)',  borderRadius: '15px', textAlign:'center'}}>
           <p style={{fontSize: '48px', textAlign:'center',color:'black'}}>서울시 전체 미세먼지 현황</p>
@@ -153,7 +143,7 @@ const LoginMain = ({ login }) => {
           ) : (
             <p>로딩 중...</p>
           )}
-          <SeoulMap airQualityData1={AllAirQualityData} setDistrictKey={(i)=> setDistrictKey(i)} />
+          <SeoulMap airQualityData1={apiFetchRef.AllAirQualityData} setDistrictKey={(i)=> apiFetchRef.setDistrictKey(i)} />
         </div>
         <div id='gridItem2' style={{ border: '5px solid rgba(167, 212, 131, 0.7)',  borderRadius: '15px' , fontSize: '48px', textAlign:'center'}}><p style={{fontSize: '48px', textAlign:'center',color:'black'}}>나의 동네 대기 정보</p>
           {sessionData ? (
@@ -164,12 +154,9 @@ const LoginMain = ({ login }) => {
           ) : (
             <p>로딩 중...</p>
           )}
-          <div style={{ border: '#DCEDC8', borderRadius: '15px', margin:'30px 50px', background:'#fff9c4'}}><p style={{fontSize:'18px'}}>기온 {temperature}℃ / 습도 {humidity}% </p></div>
-          <div style={{ border: '#DCEDC8', borderRadius: '15px', margin:'30px 50px', background:'#fff9c4'}}><p style={{fontSize:'18px'}}> 
-          <img src="./finedust.png" width="175"></img> <img src="./ultrafinedust.png" width="160"></img><br></br>
-          {finedust}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ultrafinedust} </p></div>
-          <Chart airQualityData2={newAirQualityData} pyCharmData={pyCharmData} />
-            <div style={{ border: '#DCEDC8', borderRadius: '15px', margin:'30px 50px', background:'#DCEDC8'}}><p style={{fontSize:'18px'}}> 여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br> 여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br>  여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 </p></div>
+          <Chart airQualityData2={apiFetchRef.newAirQualityData} pyCharmData={pyCharmData} />
+          <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}> 기온: {apiFetchRef.temperature}℃ / 습도: {apiFetchRef.humidity}% </p></div>
+            <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}> 사용자에 따라 달라지는 안내 </p></div>
           </div>
         </div>
       </>
