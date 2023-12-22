@@ -133,30 +133,23 @@ const Mypage = ({login}) => {
         type: file.type
       });
   
-      // Assume you have an API endpoint for image upload
       const apiUrl = 'http://localhost:8080/api/upload';
   
-      // Create a FormData object and append the file to it
       const formData = new FormData();
       formData.append('file', file);
       formData.append('id' , Id);
   
-      // Make a fetch request to the API endpoint
       fetch(apiUrl, {
         method: 'POST',
         body: formData,
         headers: {
-          // You may need to set additional headers depending on your server requirements
-          // 'Authorization': 'Bearer ' + YOUR_ACCESS_TOKEN,
         },
       })
-      .then(response => response.json())
+      .then(response => response.text())
       .then(data => {
-        // Handle the response from the server
         console.log('서버 응답:', data);
       })
       .catch(error => {
-        // Handle any errors that occurred during the fetch
         console.error('오류 발생:', error);
       });
     }
