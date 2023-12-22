@@ -23,6 +23,6 @@ create table tbl_member (
    workLoccode varchar(50), -- 출근지 로케이션 코드
    spotNum varchar(50) -- 교통량 관련
 );
-insert into tbl_member values('a', '1', '파이딩', '파이딩', '010-1234-5678','abc@gmail.com','기저질환자','성동구','성동구','성동구','강남구','강북구','강남구',1, 0, 0, 0);
+insert into tbl_member values('a', '1', '파이딩', '파이딩', '010-1234-5678','abc@gmail.com','기저질환자','동작구','장승배기로','장승배기','양천구','신목로','목동청학스포츠타운',1, 1190002100, 1140017400, 0);
 insert into tbl_member values('b', '2', '파이딩', '파이딩', '010-1234-5678','abc@gmail.com','기저질환자','성동구','성동구','성동구','강남구','강북구','강남구',1, 0, 0, 0);
 select * from tbl_member;

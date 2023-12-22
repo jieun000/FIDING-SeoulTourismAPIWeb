@@ -5,15 +5,15 @@ import { Doughnut } from 'react-chartjs-2';
 
 const MyChart = ({ airQualityData2, pyCharmData }) => {
   const chartRef = useRef(null);
-  console.log("Chart에서 받는 airQualityData2 데이터:", airQualityData2);
-  console.log("Chart에서 받는 loadData 데이터:", pyCharmData);
+  // console.log("Chart에서 받는 airQualityData2 데이터:", airQualityData2);
+  // console.log("Chart에서 받는 loadData 데이터:", pyCharmData);
   useEffect(() => {
     if(airQualityData2!=null){
       var districtName = airQualityData2.MSRSTE_NM;
       var pm10Value = airQualityData2.PM10;
       var pm25Value = airQualityData2.PM25;
       var o3Value = airQualityData2.O3;
-      console.log(`Chart.js ${districtName}의 미세: ${pm10Value}, 초미세: ${pm25Value}, 오존: ${o3Value}`);
+      // console.log(`Chart.js ${districtName}의 미세: ${pm10Value}, 초미세: ${pm25Value}, 오존: ${o3Value}`);
     } else {
       console.log("district Null")
     }
@@ -21,7 +21,7 @@ const MyChart = ({ airQualityData2, pyCharmData }) => {
       var pm10LoadValue = pyCharmData.PM10;
       var pm25LoadValue = pyCharmData.PM25;
       var o3LoadValue = pyCharmData.O3;
-      console.log(`Chart.js 도로의 미세: ${pm10LoadValue}, 초미세: ${pm25LoadValue}, 오존: ${o3LoadValue}`);
+      // console.log(`Chart.js 도로의 미세: ${pm10LoadValue}, 초미세: ${pm25LoadValue}, 오존: ${o3LoadValue}`);
     } else {
       console.log("load Null")
     }
