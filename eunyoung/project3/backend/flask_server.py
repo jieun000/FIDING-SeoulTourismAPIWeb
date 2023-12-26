@@ -126,17 +126,13 @@ def get_data():
             else:
                 shape = 4
             model = create_model(shape)
-            model_path = f'C:/jieun/project3/backend/{m}_model_weights.h5'
+            model_path = f'C:/Users/jey92/project/eunyoung/project3/backend/{m}_model_weights.h5'
             model.load_weights(model_path)
             if m in ['아황산가스', '일산화탄소', '오존', '이산화질소']:
-                result[code] = float(model.predict([[api_data['trafficData'], api_data['spdValue'], api_data['T1H'],
-                                                     api_data['WSD'], api_data['RN1'], api_data['REH'],
-                                                     float(api_data[code])]])[0][0])  # 이부분 data로
-            else:
-                result[code] = float(model.predict(
-                    [[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], float(api_data[code])]])[0][
-                                         0])  # 이부분 data로
-            return jsonify(result)
+                result[code] = float(model.predict([[1, api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'], api_data['REH'],float(api_data[code])]])[0][0]) # 이부분 data로
+            else:result[code] = float(model.predict([[1, api_data['spdValue'],api_data['T1H'], float(api_data[code])]])[0][0])  # 이부분 data로
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!", result)
+        return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)})
 

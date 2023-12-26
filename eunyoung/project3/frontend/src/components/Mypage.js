@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { hangjungdong } from './hangjungdong';
+import { hangjungdong } from './Hangjungdong';
 import './signup.css';
 
 const Mypage = ({login}) => {
@@ -158,7 +158,7 @@ const Mypage = ({login}) => {
           // 이미지 업로드가 성공하면 Flask 서버로 학습을 위한 요청을 보냅니다.
           fetch(trainApiUrl, {
             method: 'POST',
-            body: JSON.stringify({ id: Id, image: file.name }), // 필요에 따라 페이로드를 조정하세요
+            body: JSON.stringify({ id: Id, image: file.name }),
             headers: {
               'Content-Type': 'application/json',
               // 필요한 경우 서버 요구사항에 따라 추가 헤더를 설정할 수 있습니다
@@ -178,7 +178,6 @@ const Mypage = ({login}) => {
         });
     }
   };
-  
   
 
   return (
@@ -233,11 +232,12 @@ const Mypage = ({login}) => {
                 <input className="input100" type="password" name="pw" 
                 autoComplete="current-password" value={sessionData?.pw || ''} readOnly/>
                 <span className="focus-input100" data-symbol="&#xf190;"></span>
+            
               </div>
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">이름</span>
-                <input className="input100" type="text" name="username" value={sessionData?.username || ''} readOnly
+                <input className="input100" type="text" name="username" value={sessionData?.username || ''} readOnly 
                 onChange={(e) => setUsername(e.target.value)} />
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -274,7 +274,7 @@ const Mypage = ({login}) => {
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                   <div>
                     <span className="label-input100">거주지</span>
-                    <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
+                    <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)} >
                       <option value="">선택</option>
                       {gu.map((el) => (
                       <option key={el.codeNm} value={el.gu}>

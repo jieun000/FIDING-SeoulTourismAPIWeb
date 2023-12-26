@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import axios from "axios";
-import { hangjungdong } from './hangjungdong';
+import { hangjungdong } from './Hangjungdong';
 // import './signup.css'
 
 const Signup = () => {

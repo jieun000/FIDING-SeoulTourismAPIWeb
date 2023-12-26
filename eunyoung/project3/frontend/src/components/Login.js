@@ -132,7 +132,6 @@ function Login() {
                 😀 얼굴인식 로그인
               </a>
             </div>
-
             
             <div className="flex-col-c p-t-50">
               <a href="signup" className="txt2" style={{textDecoration: "none", fontWeight: "bold"}}>
