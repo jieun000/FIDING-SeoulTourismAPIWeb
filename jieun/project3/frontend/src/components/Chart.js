@@ -3,26 +3,25 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { Doughnut } from 'react-chartjs-2';
 
-const MyChart = ({ airQualityData2, loadData }) => {
+const MyChart = ({ airQualityData2, pyCharmData }) => {
   const chartRef = useRef(null);
-  console.log("Chart에서 받는 airQualityData2 데이터:", airQualityData2);
-  console.log("Chart에서 받는 loadData 데이터:", loadData);
+  // console.log("Chart에서 받는 airQualityData2 데이터:", airQualityData2);
+  // console.log("Chart에서 받는 loadData 데이터:", pyCharmData);
   useEffect(() => {
     if(airQualityData2!=null){
       var districtName = airQualityData2.MSRSTE_NM;
       var pm10Value = airQualityData2.PM10;
       var pm25Value = airQualityData2.PM25;
       var o3Value = airQualityData2.O3;
-      console.log(`Chart.js ${districtName}의 미세: ${pm10Value}, 초미세: ${pm25Value}, 오존: ${o3Value}`);
+      // console.log(`Chart.js ${districtName}의 미세: ${pm10Value}, 초미세: ${pm25Value}, 오존: ${o3Value}`);
     } else {
       console.log("district Null")
     }
-    if(loadData!=null){
-      // var loadName = loadData.load;
-      var pm10LoadValue = loadData.PM10;
-      var pm25LoadValue = loadData.PM25;
-      var o3LoadValue = loadData.O3;
-      console.log(`Chart.js 도로의 미세: ${pm10LoadValue}, 초미세: ${pm25LoadValue}, 오존: ${o3LoadValue}`);
+    if(pyCharmData!=null){
+      var pm10LoadValue = pyCharmData.PM10;
+      var pm25LoadValue = pyCharmData.PM25;
+      var o3LoadValue = pyCharmData.O3;
+      // console.log(`Chart.js 도로의 미세: ${pm10LoadValue}, 초미세: ${pm25LoadValue}, 오존: ${o3LoadValue}`);
     } else {
       console.log("load Null")
     }
@@ -38,12 +37,18 @@ const MyChart = ({ airQualityData2, loadData }) => {
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 99, 132, 0.2)'
+              'rgba(255, 99, 132, 0.2)',
+              // 'rgba(75, 192, 192, 0.2)',
+              // 'rgba(153, 102, 255, 0.2)',
+              // 'rgba(255, 159, 64, 0.2)',
             ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(255, 99, 132, 1)',
-              'rgba(255, 99, 132, 1)'
+              'rgba(255, 99, 132, 1)',
+              // 'rgba(75, 192, 192, 1)',
+              // 'rgba(153, 102, 255, 1)',
+              // 'rgba(255, 159, 64, 1)',
             ],
             borderWidth: 1,
           },
@@ -53,12 +58,18 @@ const MyChart = ({ airQualityData2, loadData }) => {
             backgroundColor: [
               'rgba(54, 162, 235, 0.2)',
               'rgba(54, 162, 235, 0.2)',
-              'rgba(54, 162, 235, 0.2)'
+              'rgba(54, 162, 235, 0.2)',
+              // 'rgba(75, 192, 192, 0.2)',
+              // 'rgba(153, 102, 255, 0.2)',
+              // 'rgba(255, 159, 64, 0.2)',
             ],
             borderColor: [
               'rgba(54, 162, 235, 1)',
               'rgba(54, 162, 235, 1)',
-              'rgba(54, 162, 235, 1)'
+              'rgba(54, 162, 235, 1)',
+              // 'rgba(75, 192, 192, 1)',
+              // 'rgba(153, 102, 255, 1)',
+              // 'rgba(255, 159, 64, 1)',
             ],
             borderWidth: 1,
           },
@@ -82,7 +93,7 @@ const MyChart = ({ airQualityData2, loadData }) => {
     return () => {
       myChart.destroy();
     };
-  }, [airQualityData2, loadData]);
+  }, [airQualityData2, pyCharmData]);
 
   return (
     <div>

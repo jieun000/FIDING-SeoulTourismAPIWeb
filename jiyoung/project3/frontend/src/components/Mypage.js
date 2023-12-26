@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { hangjungdong } from './hangjungdong';
+import { hangjungdong } from './Hangjungdong';
 import './signup.css';
 
 const Mypage = ({login}) => {
@@ -30,6 +30,8 @@ const Mypage = ({login}) => {
   const [val5, setVal5] = useState("");
   const [val6, setVal6] = useState("");
   const { gu, ro, da } = hangjungdong;
+
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     // 세션 정보를 가져오기 위한 API 요청
@@ -99,6 +101,7 @@ const Mypage = ({login}) => {
   const handleUpdate = async () => {
     try {
       const response = await axios.put('/mypage', {
+        id,
         pw,
         username,
         nickname,
@@ -111,13 +114,47 @@ const Mypage = ({login}) => {
         workPlace1,
         workPlace2,
         workPlace3,
-        workPlaceYN
+        workPlaceYN,
       });
       console.log('Update successful:', response.data);
     } catch (error) {
       console.error('Update failed:', error);
     }
   };
+
+  const handleImageChange = (e) => {
+    const Id = sessionData?.id || '';
+    const file = e.target.files[0];
+    if (file) {
+      setProfileImage(URL.createObjectURL(file));
+      console.log('업로드된 이미지 정보:', {
+        name: file.name,
+        size: file.size,
+        type: file.type
+      });
+  
+      const apiUrl = 'http://localhost:8080/api/upload';
+  
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('id' , Id);
+  
+      fetch(apiUrl, {
+        method: 'POST',
+        body: formData,
+        headers: {
+        },
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log('서버 응답:', data);
+      })
+      .catch(error => {
+        console.error('오류 발생:', error);
+      });
+    }
+  };
+  
 
   return (
     <>
@@ -128,6 +165,30 @@ const Mypage = ({login}) => {
               <span className="login100-form-title p-b-49">
                 <img src="./logo.png" width="170"></img>
               </span>
+          
+              {/* 선택한 이미지의 미리보기를 표시 */}
+              {profileImage && (
+              <div className="profile-image-preview-container">
+                <div className="profile-image-preview">
+                  <img src={profileImage} alt="Profile Preview" />
+                </div>
+              </div>
+            )}
+
+              {/* 프로필 사진을 위한 파일 입력 추가 */}
+              <div className="wrap-input100 validate-input m-b-23" style={{ textAlign: 'center' }}>
+                <span className="label-input100">프로필 사진</span>
+                <div className="custom-file-upload" style={{ margin: '10px', marginLeft: '55px'}}>
+                  
+                  {/* 파일 선택 창 스타일링 */}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    id="profileImageInput"
+                  />
+                </div>
+              </div>
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">아이디</span>
@@ -137,7 +198,7 @@ const Mypage = ({login}) => {
                   name="id"
                   autoComplete="current-id"
                   value={sessionData?.id || ''}
-                  readOnly={true}
+                  readOnly
                 />
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -145,13 +206,14 @@ const Mypage = ({login}) => {
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">비밀번호</span>
                 <input className="input100" type="password" name="pw" 
-                autoComplete="current-password" value={sessionData?.pw || ''}/>
+                autoComplete="current-password" value={sessionData?.pw || ''} readOnly/>
                 <span className="focus-input100" data-symbol="&#xf190;"></span>
+            
               </div>
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">이름</span>
-                <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
+                <input className="input100" type="text" name="username" value={sessionData?.username || ''} readOnly 
                 onChange={(e) => setUsername(e.target.value)} />
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -171,7 +233,7 @@ const Mypage = ({login}) => {
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">휴대폰 번호</span>
-                <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} 
+                <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} readOnly
                 onChange={(e) => setPhone(e.target.value)} onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -188,7 +250,7 @@ const Mypage = ({login}) => {
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                   <div>
                     <span className="label-input100">거주지</span>
-                    <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)}>
+                    <select className="input100" type="text" name="address1" onChange={(e) => setVal1(e.target.value)} >
                       <option value="">선택</option>
                       {gu.map((el) => (
                       <option key={el.codeNm} value={el.gu}>
@@ -310,20 +372,19 @@ const Mypage = ({login}) => {
               <input className="input100" type="hidden" id ="workLoccode" name="workLoccode" />
 
               <div className="container-login100-form-btn">
-                    <div className="wrap-login100-form-btn">
-                      <div className="login100-form-bgbtn"></div>
-                      <button type="submit" className="login100-form-btn">
-                        회원정보 수정하기
-                      </button>
-                    </div>
+                <div className="wrap-login100-form-btn">
+                  <div className="login100-form-bgbtn"></div>
+                  <button type="submit" className="login100-form-btn">
+                    회원정보 수정하기
+                  </button>
+                </div>
               </div>
-
             </form>
           </div>
         </div>
       </div>
-      </>
-      );
-    };
+    </>
+  );
+};
 
 export default Mypage;

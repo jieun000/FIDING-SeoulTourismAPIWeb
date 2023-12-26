@@ -5,11 +5,11 @@ import Navigation from './Navigation';
 //import { NavItemLogin, NavItemLogout } from './NavItem';
 
 /// Header 컴포넌트
-const Header = ({ isLoggedIn }) => {
+const Header = ({ isLoggedIn ,setIsLoggedIn }) => {
   return (
     <div>
       <header>
-        <Navigation isLoggedIn={isLoggedIn} />
+        <Navigation setIsLoggedIn={(i)=>setIsLoggedIn(i)} isLoggedIn={isLoggedIn} />
       </header>
     </div>
   );
