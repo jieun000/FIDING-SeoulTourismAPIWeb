@@ -29,6 +29,7 @@ function Login() {
       if (isConfirmed2) {
         // 사용자가 확인을 눌렀을 때의 동작
         console.log('사용자가 확인을 선택했습니다.');
+        navigate('/CamStream');
          // 페이지 이동
       } else {
         console.log('사용자가 취소를 선택했습니다.');
@@ -131,7 +132,6 @@ function Login() {
                 😀 얼굴인식 로그인
               </a>
             </div>
-
             
             <div className="flex-col-c p-t-50">
               <a href="signup" className="txt2" style={{textDecoration: "none", fontWeight: "bold"}}>
