@@ -8,7 +8,7 @@ with open("trained_knn_model.clf", 'rb') as f:
     knn_clf = pickle.load(f)
 
 # ESP32 URL
-URL = "http://192.168.0.96"
+URL = "http://192.168.0.121"
 
 # Face recognition and OpenCV setup
 cap = cv2.VideoCapture(URL + ":81/stream")

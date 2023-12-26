@@ -125,27 +125,27 @@ const LoginMain = ({login}) => {
       console.log('대기 오염도:', newAirQualityData);
       console.log('교통 속도:', spdValue);
       console.log('local time:', momentDateValue);
-      const fetchData2 = async () => {
-        try {
-          const response2 = await fetch('http://localhost:5000/api/data', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ...newWeatherData, spdValue, momentDateValue }),
-          });
+      // const fetchData2 = async () => {
+      //   try {
+      //     const response2 = await fetch('http://localhost:5000/api/data', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //       },
+      //       body: JSON.stringify({ ...newWeatherData, spdValue, momentDateValue }),
+      //     });
       
-          if (!response2.ok) {
-            throw new Error(`HTTP error! Status: ${response2.status}`);
-          }
+      //     if (!response2.ok) {
+      //       throw new Error(`HTTP error! Status: ${response2.status}`);
+      //     }
       
-          const result = await response2.json();
-          console.log(result);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      fetchData2();
+      //     const result = await response2.json();
+      //     console.log(result);
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // };
+      // fetchData2();
 
     } catch (error) {
       console.error(error);

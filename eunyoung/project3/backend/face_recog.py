@@ -15,12 +15,13 @@ lock = threading.Lock()
 @app.route('/video')
 @cross_origin()
 def stream():
+    print('camemraadfads')
     return Response(webcam(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 def webcam():
     camera = cv2.VideoCapture(0)
-
+    print('camera',camera)
     while True:
         success, frame = camera.read()
         if success:

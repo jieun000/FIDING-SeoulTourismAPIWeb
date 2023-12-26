@@ -133,34 +133,52 @@ const Mypage = ({login}) => {
         type: file.type
       });
   
-      // Assume you have an API endpoint for image upload
-      const apiUrl = 'http://localhost:8080/api/upload';
+      // 이미지 업로드를 위한 API 엔드포인트
+      const uploadApiUrl = 'http://localhost:8080/api/upload';
+      const trainApiUrl = 'http://localhost:5000/api/data3'; // 수정된 부분
   
-      // Create a FormData object and append the file to it
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('id' , Id);
+      formData.append('id', Id);
   
-      // Make a fetch request to the API endpoint
-      fetch(apiUrl, {
+      // 이미지 업로드를 위한 API 엔드포인트로 fetch 요청
+      fetch(uploadApiUrl, {
         method: 'POST',
         body: formData,
         headers: {
-          // You may need to set additional headers depending on your server requirements
+          // 필요한 경우 서버 요구사항에 따라 추가 헤더를 설정할 수 있습니다
           // 'Authorization': 'Bearer ' + YOUR_ACCESS_TOKEN,
         },
       })
-      .then(response => response.json())
-      .then(data => {
-        // Handle the response from the server
-        console.log('서버 응답:', data);
-      })
-      .catch(error => {
-        // Handle any errors that occurred during the fetch
-        console.error('오류 발생:', error);
-      });
+        .then(response => response.text())
+        .then(data => {
+          // 서버 응답을 처리합니다.
+          console.log('서버 응답:', data);
+  
+          // 이미지 업로드가 성공하면 Flask 서버로 학습을 위한 요청을 보냅니다.
+          fetch(trainApiUrl, {
+            method: 'POST',
+            body: JSON.stringify({ id: Id, image: file.name }), // 필요에 따라 페이로드를 조정하세요
+            headers: {
+              'Content-Type': 'application/json',
+              // 필요한 경우 서버 요구사항에 따라 추가 헤더를 설정할 수 있습니다
+            },
+          })
+            .then(response => response.json())
+            .then(trainingData => {
+              // 학습 서버 응답을 처리합니다.
+              console.log('학습 서버 응답:', trainingData);
+            })
+            .catch(error => {
+              console.error('학습 서버 오류:', error);
+            });
+        })
+        .catch(error => {
+          console.error('오류 발생:', error);
+        });
     }
   };
+  
   
 
   return (
@@ -205,7 +223,7 @@ const Mypage = ({login}) => {
                   name="id"
                   autoComplete="current-id"
                   value={sessionData?.id || ''}
-                  readOnly={true}
+                  readOnly
                 />
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -213,13 +231,13 @@ const Mypage = ({login}) => {
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">비밀번호</span>
                 <input className="input100" type="password" name="pw" 
-                autoComplete="current-password" value={sessionData?.pw || ''}/>
+                autoComplete="current-password" value={sessionData?.pw || ''} readOnly/>
                 <span className="focus-input100" data-symbol="&#xf190;"></span>
               </div>
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">이름</span>
-                <input className="input100" type="text" name="username" value={sessionData?.username || ''} 
+                <input className="input100" type="text" name="username" value={sessionData?.username || ''} readOnly
                 onChange={(e) => setUsername(e.target.value)} />
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
@@ -239,7 +257,7 @@ const Mypage = ({login}) => {
 
               <div className="wrap-input100 validate-input m-b-23" >
                 <span className="label-input100">휴대폰 번호</span>
-                <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} 
+                <input className="input100" type="text" name="phone" value={sessionData?.phone || ''} readOnly
                 onChange={(e) => setPhone(e.target.value)} onInput={(e) => e.target.value = formatPhoneNumber(e.target.value)}/>
                 <span className="focus-input100" data-symbol="&#xf206;"></span>
               </div>
