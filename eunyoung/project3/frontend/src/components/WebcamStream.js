@@ -1,70 +1,87 @@
-import React, { useEffect, useRef } from 'react';
-import Webcam from 'react-webcam';
+import React, { useEffect, useRef, useState } from 'react';
+import './loading.css';  // 위에서 작성한 CSS 파일 import
 
 const WebcamStream = () => {
-  const webcamRef = useRef(null);
-  const videoRef = useRef(null);
+  const [showImage, setShowImage] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [id, setId] = useState('');
 
-  // useEffect(() => {
-  //   const fetchWebcamStream = async () => {
-  //     try {
-  //       const response = await fetch('http://localhost:5000/api/webcam-stream');
-  //       const stream = await response.blob();
+  const recognition = async () => {
+    try {
+      setLoading(true);
 
-  //       if (videoRef.current) {
-  //         const videoElement = videoRef.current;
-  //         videoElement.srcObject = stream;
-  //         videoElement.play();
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching webcam stream:', error);
-  //     }
-  //   };
+      // 웹캠 스트림을 가져옵니다.
+      const response = await fetch('http://localhost:5000/api/video_feed2');
+      console.log("리스폰 확인", response);
 
-  //   fetchWebcamStream();
-  // }, []);
+      // 응답에서 id를 추출합니다.
+      const result = await response.text();
+      const nameMatch = result.match(/data: (.+)\r\n\r\n/);
 
-  const capture = async () => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
-      const formData = new FormData();
-      formData.append('file', dataURItoBlob(imageSrc), 'captured-image.jpeg');
-      const response = await fetch('http://localhost:5000/api/upload-image', {
-        method: 'POST',
-        body: formData,
-      });
-      const result = await response.json();
-      console.log("사진저장 성공",result);
+      if (nameMatch) {
+        const recognizedId = nameMatch[1];
+        console.log("인증된 id:", recognizedId);
 
-      if (videoRef.current) {
-        videoRef.current.src = imageSrc;
+        // 이미지 표시
+        setShowImage(true);
+        setId(recognizedId);
+        // 0.1초의 지연 도입
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        console.log('0.1초후 실행 ', recognizedId);
+        // 컨트롤러에서 인식된 id로 데이터를 가져옵니다.
+        window.location.href = 'http://localhost:8080/loginWebcam?id=' + recognizedId;
       }
+    } catch (error) {
+      console.error('웹캠 불러오기 에러', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const dataURItoBlob = (dataURI) => {
-    const byteString = atob(dataURI.split(',')[1]);
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    const blob = new Blob([ab], { type: mimeString });
-    return blob;
+  const handleButtonClick = async () => {
+    await recognition();
   };
 
   return (
-    <div>
-      <Webcam
-        audio={false}
-        height={720}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        width={1280}
-      />
-      <button onClick={capture} style={{color:'white', border:'2px solid pink', background:'pink'}}>사진 저장</button>
-      {/* <video ref={videoRef} width="640" height="480" autoPlay playsInline muted /> */}
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '50vh',
+      marginBottom: '280px',
+    }}>
+    {loading && !showImage && (
+      <>
+      <div >
+        <div className="spinner" style={{ marginBottom: '10px' }} />
+      </div>
+      <p style={{ marginBottom: '20px' }}>얼굴 인식중...</p>
+      </>
+    )}
+
+
+      {showImage && (
+        <div style={{ marginTop: '270px' }}>
+          <img
+            src="http://localhost:5000/api/video_feed2"
+            alt="Video"
+            onLoad={() => setLoading(false)}  // 이미지가 로드되면 로딩 상태를 false로 설정
+            style={{ width: '100%', maxWidth: '500px' }}  // 이미지 크기 조절 스타일
+          />
+          <p style={{ alignItems: 'center' }}>인증 된 아이디 : {id}</p>
+        </div>
+      )}
+
+      <button onClick={handleButtonClick} style={{
+        fontSize: '40px',
+        padding: '5px 5px',
+        border: '4px solid pink',
+        background: 'white',
+        marginBottom: '20px',
+      }}>📸</button>
+
+      <p>웹캠으로 얼굴 인증을 원하시면 카메라를 클릭 해주세요!</p>
     </div>
   );
 };
