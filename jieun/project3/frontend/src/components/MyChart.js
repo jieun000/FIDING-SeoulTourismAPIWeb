@@ -1,33 +1,49 @@
 /* eslint-disable */ 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
-import {Doughnut} from 'react-chartjs-2'
+import { Doughnut } from 'react-chartjs-2';
 
-const MyChart = ({ airQualityData,  pyCharmData, loadName }) => {
-
+const MyChart = ({ airQualityData, pyCharmData, loadName }) => {
   const chartRef = useRef(null);
+  const [myChart, setMyChart] = useState(null);
 
   useEffect(() => {
-    if(airQualityData!=null){
-        console.log("Chart에서 받는 airQualityData 데이터:", airQualityData, "\nChart에서 받는 loadData 데이터:", pyCharmData, "\n도로명:",loadName);
-        var districtName = airQualityData.MSRSTE_NM;
-        var O3Value = airQualityData.O3;
-        var NO2Value = airQualityData.NO2;
-        var COValue = airQualityData.CO;
-        // console.log(`Chart.js ${districtName}의 오존: ${O3Value}, 이산화질소: ${NO2Value}, 일산화탄소: ${COValue}`);
-      } else {
-        // console.log("district Null")
+    if (airQualityData != null) {
+      // console.log("Chart에서 받는 airQualityData 데이터:", airQualityData, "\nChart에서 받는 loadData 데이터:", pyCharmData, "\n도로명:",loadName);
+      var districtName = airQualityData.MSRSTE_NM;
+      var O3Value = airQualityData.O3;
+      var NO2Value = airQualityData.NO2;
+      var COValue = airQualityData.CO;
+      // console.log(`Chart.js ${districtName}의 \n오존: ${O3Value}, \n이산화질소: ${NO2Value}, \n일산화탄소: ${COValue}`);
+    } else {
+      return
+      console.log("district Null");
+      return;
+    }
+    if (pyCharmData != null) {
+      var O3LoadValue = pyCharmData.O3;
+      var NO2LoadValue = pyCharmData.NO2;
+      var COLoadValue = pyCharmData.CO;
+      // console.log(`Chart.js 도로의 \n오존: ${O3LoadValue}, \n이산화질소: ${NO2LoadValue}, \n일산화탄소: ${COLoadValue}`);
+    } else {
+      console.log("load Null");
+      return;
+    }
+
+    if (myChart) {
+      myChart.data.datasets[0].label = districtName;
+      myChart.data.datasets[0].data = [O3Value, NO2Value, COValue];
+      myChart.data.datasets[1].label = loadName;
+      myChart.data.datasets[1].data = [O3LoadValue, NO2LoadValue, COLoadValue];
+      if(myChart!=null){
+        myChart.update();
+      } else{
+        console.log("라스트 팡")
       }
-      if(pyCharmData!=null) {
-        var O3LoadValue = pyCharmData.O3;
-        var NO2LoadValue = pyCharmData.NO2;
-        var COLoadValue = pyCharmData.CO;
-        // console.log(`Chart.js 도로의 오존: ${O3LoadValue}, 이산화질소: ${NO2LoadValue}, 일산화탄소: ${COLoadValue}`);
-      } else {
-        // console.log("load Null")
-      }
-    const context = chartRef.current.getContext('2d');
-    const myChart = new Chart(context, {
+      
+    } else {
+      const context = chartRef.current.getContext('2d');
+      const newChart = new Chart(context, {
         type: 'bar',
         data: {
           labels: ['오존', '이산화질소', '일산화탄소'],
@@ -35,52 +51,47 @@ const MyChart = ({ airQualityData,  pyCharmData, loadName }) => {
             {
               label: districtName,
               data: [O3Value, NO2Value, COValue],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)'
-              ],
+              backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+              borderColor: ['rgba(255, 99, 132, 1)'],
               borderWidth: 1,
             },
             {
               label: loadName,
               data: [O3LoadValue, NO2LoadValue, COLoadValue],
-              backgroundColor: [
-                'rgba(54, 162, 235, 0.2)'
-              ],
-              borderColor: [
-                'rgba(54, 162, 235, 1)'
-              ],
+              backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+              borderColor: ['rgba(54, 162, 235, 1)'],
               borderWidth: 1,
             },
           ],
-        },options: {
+        },
+        options: {
           scales: {
             x: {
-              display: true
+              display: true,
             },
             y: {
               display: true,
-              type: "logarithmic"
+              type: "logarithmic",
             },
           },
           responsive: false,
-          maintainAspectRatio: false, 
+          maintainAspectRatio: false,
         },
       });
 
-    return () => {
-      myChart.destroy(); // 컴포넌트가 언마운트될 때 차트 정리
-    };
-  }, [pyCharmData]); // 빈 종속성 배열은 useEffect가 초기 렌더링 후 한 번 실행되도록합니다.
+      setMyChart(newChart);
+    }
+  }, [pyCharmData]);
 
   return (
     <div>
-      <canvas id='myChart' ref={chartRef} 
-        style={{ padding: '15px 20px 15px', width: '80vh', display: 'block' }}>
-      </canvas>
+      <canvas
+        id='myChart'
+        ref={chartRef}
+        style={{ padding: '15px 20px 15px', width: '80vh', display: 'block' }}
+      ></canvas>
     </div>
   );
 };
+
 export default MyChart;

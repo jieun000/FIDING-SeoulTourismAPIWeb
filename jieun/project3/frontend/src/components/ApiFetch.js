@@ -20,27 +20,29 @@ const ApiFetch = React.memo(({ obj }) => {
       });
       const data = response.data;
       // console.log(data);
-      const newWeatherData = data.newWeatherData; 
-      const newAirQualityData = data.newAirQualityData; 
-      const AllAirQualityData = data.AllAirQualityData; 
-      const trafficData = data.trafficData; 
-      const spdValue = data.spdValue; 
-      const momentDateValue = data.momentDateValue; 
-      // console.log("기상청:", newWeatherData);
-      // console.log("대기오염도:", newAirQualityData);
-      // console.log("서울시 대기오염도:", AllAirQualityData);
-      // console.log('교통량:', trafficData);
-      // console.log("교통 속도:", spdValue);
-      // console.log("현재 시간:", momentDateValue);
+      if (data && !data.error) {
+        const newWeatherData = data.newWeatherData; 
+        const newAirQualityData = data.newAirQualityData; 
+        const AllAirQualityData = data.AllAirQualityData; 
+        const trafficData = data.trafficData; 
+        const spdValue = data.spdValue; 
+        const momentDateValue = data.momentDateValue; 
+        // console.log("기상청:", newWeatherData);
+        // console.log("대기오염도:", newAirQualityData);
+        // console.log("서울시 대기오염도:", AllAirQualityData);
+        // console.log('교통량:', trafficData);
+        // console.log("교통 속도:", spdValue);
+        // console.log("현재 시간:", momentDateValue);
 
-      setTemperature(newWeatherData.T1H);
-      setHumidity(newWeatherData.REH);
-      setAllAirQualityData(AllAirQualityData);
-      setNewAirQualityData(newAirQualityData);
-      setFinedust(newAirQualityData.PM10);
-      setUltrafinedust(newAirQualityData.PM25);
-      setDataPost({ ...newWeatherData, ...newAirQualityData, trafficData, spdValue, momentDateValue });
-      // console.log("포장:", { ...newWeatherData, ...newAirQualityData, trafficData, spdValue, momentDateValue });
+        setTemperature(newWeatherData.T1H);
+        setHumidity(newWeatherData.REH);
+        setAllAirQualityData(AllAirQualityData);
+        setNewAirQualityData(newAirQualityData);
+        setFinedust(newAirQualityData.PM10);
+        setUltrafinedust(newAirQualityData.PM25);
+        setDataPost({ ...newWeatherData, ...newAirQualityData, trafficData, spdValue, momentDateValue });
+        // console.log("포장:", { ...newWeatherData, ...newAirQualityData, trafficData, spdValue, momentDateValue });
+      }
     } catch (error) {
       console.error(error);
     }

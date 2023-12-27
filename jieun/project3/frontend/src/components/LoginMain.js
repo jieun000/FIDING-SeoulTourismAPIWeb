@@ -187,7 +187,7 @@ const LoginMain = ({ login }) => {
           {sessionData ? (
             <div> 
               <p style={{fontSize:'20px'}}> 🖐️ {sessionData.username}님</p>
-              <p style={{fontSize:'14px'}}>거주지 : {sessionData.address1} {sessionData.address2} / 출근지 : {sessionData.workPlace1} {sessionData.workPlace2} <br></br> 취약계층 : {sessionData.vgroups} / 취약환경여부 : {checkWorkPlace(sessionData.workPlaceYN)}</p> 
+              <p style={{fontSize:'14px'}}>거주지 : {sessionData.address1} {sessionData.address3} / 출근지 : {sessionData.workPlace1} {sessionData.workPlace3} <br></br> 취약계층 : {sessionData.vgroups} / 취약환경여부 : {checkWorkPlace(sessionData.workPlaceYN)}</p> 
             </div>
           ) : (
             <p>로딩 중...</p>
