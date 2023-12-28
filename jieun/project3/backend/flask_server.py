@@ -8,6 +8,9 @@ import face_recognition
 import pickle
 import requests
 import face_recognition_knn
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+
 from camera import VideoCamera
 
 # PTY: 강수형태, REH: 습도( %), RN1: 1시간 강수량(mm), T1H: 기온(℃), UUU: 동서바람성분(m / s):, VEC: 풍향(deg), VVV: 남북바람성분(m / s), WSD: 풍속(m / s),
@@ -112,7 +115,6 @@ def get_data():
     api_data = request.get_json()
     print("받아온 데이터:",api_data)
 
-
     result = {}
     m_list = ['아황산가스', '일산화탄소', '오존', '이산화질소', 'PM10', 'PM2.5']
     m_code_list = ["SO2", "CO", 'O3', 'NO2', 'PM10', 'PM25']  # 바꿔도 됨 react에서 요청하는 자료 형태로
@@ -121,6 +123,10 @@ def get_data():
         api_data = request.get_json()
         print("받은 데이터:", api_data['spdValue'])
         for m, code in zip(m_list, m_code_list):
+            mean, std = np.load(f'scaler_mean_std{m}.npy')
+            scaler = StandardScaler()
+            scaler.mean_ = mean
+            scaler.scale_ = std
             if m in ['아황산가스', '일산화탄소', '오존', '이산화질소']:
                 shape = 7
             else:
@@ -128,10 +134,16 @@ def get_data():
             model = create_model(shape)
             model_path = f'C:/jieun/project3/backend/{m}_model_weights.h5'
             model.load_weights(model_path)
+            print([[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'], api_data['REH'],float(api_data[code])]],api_data)
             if m in ['아황산가스', '일산화탄소', '오존', '이산화질소']:
-                result[code] = float(model.predict([[1, api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'], api_data['REH'],float(api_data[code])]])[0][0]) # 이부분 data로
-            else:result[code] = float(model.predict([[1, api_data['spdValue'],api_data['T1H'], float(api_data[code])]])[0][0])  # 이부분 data로
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!", result)
+                X=[[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'],api_data['REH'], float(api_data[code])]]
+                X=scaler.transform(X)
+                result[code] = float(model.predict(X)[0][0]) # 이부분 data로
+            else:
+                X=[[api_data['trafficData'], api_data['spdValue'],api_data['T1H'], float(api_data[code])]]
+                X = scaler.transform(X)
+                result[code] = float(model.predict(X)[0][0])  # 이부분 data로
+        print("클라이언트로 보낼 데이터: ", result)
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)})
@@ -288,9 +300,8 @@ def get_data3(): #얼굴인식 학습코드
     # data = {'url': '...', 'id': '...'} 가 있어야 합니다.
 
     # 프로젝트 경로에 맞게 사용자의 얼굴 사진을 저장할 폴더 경로를 설정합니다.
-    project_path = 'C:\\Users\\jey92\\project\\eunyoung\\project3\\backend\\templates\\knn_examples'
+    project_path = 'C:/jieun/project3/backend/templates/knn_examples'
     user_photos_path = os.path.join(project_path, 'train')
-
     # 유저의 사진 URL이 있다면 받아와서 다운로드 후 user_photos_path에 저장합니다.
     # 여기에서 구현 필요
 
@@ -307,4 +318,4 @@ def get_data3(): #얼굴인식 학습코드
     return jsonify({'message': 'User data received and trained successfully!'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

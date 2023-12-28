@@ -12,11 +12,18 @@ module.exports = function(app) {
   app.use(
     '/another-api',
     createProxyMiddleware({
-      target: 'http://localhost:5000',
+      target: 'http://localhost:5001',
       changeOrigin: true,
     })
   );
 
+  app.use(
+    '/iframe',
+    createProxyMiddleware({
+      target: 'http://localhost:5000',
+      changeOrigin: true,
+    })
+  );
   // 추가
   console.log('Proxy setup successfully!');
 };

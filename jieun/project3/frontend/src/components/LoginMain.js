@@ -5,7 +5,10 @@ import AiFetch from './AiFetch';
 import SeoulMap from './SeoulMap';
 import { hangjungdong } from './Hangjungdong';
 import MyChart from './MyChart';
+import Modal from 'react-modal';
+import CustomModal from './CustomModal ';
 const { gu, ro, da } = hangjungdong;
+Modal.setAppElement('#root');
 
 const LoginMain = ({ login }) => {
     // 데이터를 저장하는 상태
@@ -15,9 +18,11 @@ const LoginMain = ({ login }) => {
     // 오류를 추적하는 상태
     const [error, setError] = useState(null);
     const [sessionData, setSessionData] = useState();
+    const [sessionName, setSessionName] = useState();
     const [sessionAddress, setSessionAddress] = useState(null);
     const [sessionLocCode, setSessionLocCode] = useState(null);
     const [sessionAddress3, setSessionAddress3] = useState(null);
+    const [sessionVGroups, setSessionVGroups] = useState(null);
 
     const [temperature, setTemperature] = useState(null);
     const [humidity, setHumidity] = useState(null);
@@ -59,6 +64,8 @@ const LoginMain = ({ login }) => {
             // 'LoadKey: ', obj.loadKey);
           }
           setSessionData(response.data);
+          setSessionVGroups(response.data.vgroups);
+          setSessionName(response.data.username);
           // 오전 12시 이전이면 workAddress1과 workLoccode, 그 이후이면 address1과 addLoccode를 사용
           const isMorning = new Date().getHours() < 12;
           setSessionLocCode(isMorning ? response.data.workLoccode : response.data.addLoccode);
@@ -136,10 +143,20 @@ const LoginMain = ({ login }) => {
       // console.log('addlist: ', result);
       setSessionLocCode(result);
     };
+
+    const [isModalOpen, setIsModalOpen] = useState(true);
+
+    const closeModal = () => {
+      setIsModalOpen(false);
+    };
+
   return (
     <>
     <ApiFetch obj={apiObj} />
     <AiFetch obj={aiObj} />
+    <div>
+      <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} sessionVGroups={sessionVGroups} airQualityDatas={newAirQualityData} sessionName={sessionName}/>
+    </div>
     <div className='gridContainer' style={{ margin: '30px 50px' }}>
       <div id='gridItem1' style={{ border: '5px solid rgba(100, 149, 237, 0.7)',  borderRadius: '15px', textAlign:'center'}}>
           <p style={{fontSize: '48px', textAlign:'center',color:'black'}}>서울시 전체 미세먼지 현황</p>

@@ -18,13 +18,12 @@ const MyChart = ({ airQualityData, pyCharmData, loadName }) => {
     } else {
       return
       console.log("district Null");
-      return;
     }
     if (pyCharmData != null) {
-      var O3LoadValue = pyCharmData.O3;
+      var S02LoadValue = pyCharmData.SO2;
       var NO2LoadValue = pyCharmData.NO2;
       var COLoadValue = pyCharmData.CO;
-      // console.log(`Chart.js 도로의 \n오존: ${O3LoadValue}, \n이산화질소: ${NO2LoadValue}, \n일산화탄소: ${COLoadValue}`);
+      // console.log(`Chart.js 도로의 \n아황산가스: ${S02LoadValue}, \n이산화질소: ${NO2LoadValue}, \n일산화탄소: ${COLoadValue}`);
     } else {
       console.log("load Null");
       return;
@@ -34,7 +33,7 @@ const MyChart = ({ airQualityData, pyCharmData, loadName }) => {
       myChart.data.datasets[0].label = districtName;
       myChart.data.datasets[0].data = [O3Value, NO2Value, COValue];
       myChart.data.datasets[1].label = loadName;
-      myChart.data.datasets[1].data = [O3LoadValue, NO2LoadValue, COLoadValue];
+      myChart.data.datasets[1].data = [S02LoadValue, NO2LoadValue, COLoadValue];
       if(myChart!=null){
         myChart.update();
       } else{
@@ -46,7 +45,7 @@ const MyChart = ({ airQualityData, pyCharmData, loadName }) => {
       const newChart = new Chart(context, {
         type: 'bar',
         data: {
-          labels: ['오존', '이산화질소', '일산화탄소'],
+          labels: ['아황산가스', '이산화질소', '일산화탄소'],
           datasets: [
             {
               label: districtName,
@@ -57,7 +56,7 @@ const MyChart = ({ airQualityData, pyCharmData, loadName }) => {
             },
             {
               label: loadName,
-              data: [O3LoadValue, NO2LoadValue, COLoadValue],
+              data: [S02LoadValue, NO2LoadValue, COLoadValue],
               backgroundColor: ['rgba(54, 162, 235, 0.2)'],
               borderColor: ['rgba(54, 162, 235, 1)'],
               borderWidth: 1,

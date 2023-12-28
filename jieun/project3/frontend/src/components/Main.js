@@ -122,6 +122,7 @@ const Main = ({ logout }) => {
       // console.log('addlist: ', result);
       setSessionLocCode(result);
     };
+
     return (
         <>
         <ApiFetch obj={apiObj} />

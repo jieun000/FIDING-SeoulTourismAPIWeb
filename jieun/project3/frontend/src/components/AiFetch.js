@@ -9,7 +9,7 @@ const AiFetch = React.memo(({ obj }) => {
     try {
       console.log("AiFetch fetchData 실행, 파이참 서버로 보내는 데이터:", dataPost)
 
-      const response2 = await fetch('http://localhost:5000/api/data', {
+      const response2 = await fetch('http://localhost:5001/api/data', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
