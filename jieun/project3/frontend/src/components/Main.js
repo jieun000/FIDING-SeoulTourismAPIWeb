@@ -35,6 +35,7 @@ const Main = ({ logout }) => {
     const [sessionAddress, setSessionAddress] = useState("강동구");
     const [sessionAddress3, setSessionAddress3] = useState("천호사거리");
     const [sessionLocCode, setSessionLocCode] = useState("1240011200");
+    const [newWeatherData, setNewWeatherData] = useState(null);
     const [temperature, setTemperature] = useState(null);
     const [humidity, setHumidity] = useState(null);
     const [finedust, setFinedust] = useState(null);
@@ -52,7 +53,7 @@ const Main = ({ logout }) => {
 
     // apiFetch에 보내는 객체
     var apiObj = { 
-        sessionAddress, sessionLocCode, 
+        sessionAddress, sessionLocCode, setNewWeatherData,
         setTemperature, setHumidity, setFinedust,setUltrafinedust,
         setAllAirQualityData, setNewAirQualityData,
         setDataPost

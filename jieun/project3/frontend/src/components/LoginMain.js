@@ -24,6 +24,7 @@ const LoginMain = ({ login }) => {
     const [sessionAddress3, setSessionAddress3] = useState(null);
     const [sessionVGroups, setSessionVGroups] = useState(null);
 
+    const [newWeatherData, setNewWeatherData] = useState(null);
     const [temperature, setTemperature] = useState(null);
     const [humidity, setHumidity] = useState(null);
     const [finedust, setFinedust] = useState(null);
@@ -41,7 +42,7 @@ const LoginMain = ({ login }) => {
     
     // apiFetch에 보내는 객체
     var apiObj = { 
-      sessionAddress, sessionLocCode, 
+      sessionAddress, sessionLocCode, setNewWeatherData, 
       setTemperature, setHumidity, setFinedust,setUltrafinedust,
       setAllAirQualityData, setNewAirQualityData,
       setDataPost
@@ -155,7 +156,7 @@ const LoginMain = ({ login }) => {
     <ApiFetch obj={apiObj} />
     <AiFetch obj={aiObj} />
     <div>
-      <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} sessionVGroups={sessionVGroups} airQualityDatas={newAirQualityData} sessionName={sessionName}/>
+      <CustomModal isOpen={isModalOpen} onRequestClose={closeModal} sessionVGroups={sessionVGroups} newWeatherDatas={newWeatherData} airQualityDatas={newAirQualityData} sessionName={sessionName}/>
     </div>
     <div className='gridContainer' style={{ margin: '30px 50px' }}>
       <div id='gridItem1' style={{ border: '5px solid rgba(100, 149, 237, 0.7)',  borderRadius: '15px', textAlign:'center'}}>
@@ -217,7 +218,6 @@ const LoginMain = ({ login }) => {
             <br></br>
             {temperature}℃ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{humidity}%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{finedust}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ultrafinedust}&nbsp;</p></div>
             <MyChart airQualityData={newAirQualityData} pyCharmData={pyCharmData} loadName={sessionAddress3}/>
-            <div style={{ border: '#DCEDC8',borderRadius: '15px', margin:'30px 50px' ,background:'#DCEDC8'}}><p style={{fontSize:'18px'}}>여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br> 여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다 <br></br>  여기는 사용자의 정보에 따라서 안내문구가 달라질 예정입니다</p></div>
           </div>
         </div>
     </>

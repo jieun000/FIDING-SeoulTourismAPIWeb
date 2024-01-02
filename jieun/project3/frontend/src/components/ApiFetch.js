@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ApiFetch = React.memo(({ obj }) => {
   console.log("ApiFetch 실행")
-  var { sessionAddress, sessionLocCode, 
+  var { sessionAddress, sessionLocCode, setNewWeatherData, 
     setTemperature, setHumidity, setFinedust,setUltrafinedust,
     setAllAirQualityData, setNewAirQualityData,
     setDataPost
@@ -27,13 +27,8 @@ const ApiFetch = React.memo(({ obj }) => {
         const trafficData = data.trafficData; 
         const spdValue = data.spdValue; 
         const momentDateValue = data.momentDateValue; 
-        // console.log("기상청:", newWeatherData);
-        // console.log("대기오염도:", newAirQualityData);
-        // console.log("서울시 대기오염도:", AllAirQualityData);
-        // console.log('교통량:', trafficData);
-        // console.log("교통 속도:", spdValue);
-        // console.log("현재 시간:", momentDateValue);
 
+        setNewWeatherData(newWeatherData);
         setTemperature(newWeatherData.T1H);
         setHumidity(newWeatherData.REH);
         setAllAirQualityData(AllAirQualityData);

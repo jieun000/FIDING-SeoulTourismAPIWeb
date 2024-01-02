@@ -3,8 +3,35 @@ import positionFrag from './shaders/position.frag.wgsl?raw'
 import positionCompute from './shaders/compute.position.wgsl?raw'
 import * as box from './util/box'
 import { getModelViewMatrix, getProjectionMatrix } from './util/math'
+const urlParams = new URLSearchParams(window.location.search);
+const wsdData: number = parseFloat(urlParams.get('wsd')!) ;
+var wsd: GLfloat;
+if (wsdData < 4) {
+    wsd = 4;
+} else if (wsdData >= 4 && wsdData < 9) {
+    wsd = 5;
+} else if (wsdData >= 9 && wsdData < 14) {
+    wsd = 6;
+} else {
+    wsd = 7;
+}
+const vecData: number = parseInt(urlParams.get('vec')!) ;
+const angleRanges = ["N-NE", "NE-E", "E-SE", "SE-S", "S-SW", "SW-W", "W-NW", "NW-N"];
+const angleIndex = Math.floor(((vecData % 360) + 360) % 360 / 45);
+const vec: string = angleRanges[angleIndex];
 
-// initialize webgpu device & config canvas context
+const pm10Data: number = parseInt(urlParams.get('pm10')!) ;
+var NUM = 0, MAX = 50000
+if (pm10Data <= 30) {
+    NUM = 20000;
+} else if (pm10Data <= 80) {
+    NUM = 30000;
+} else if (pm10Data <= 150) {
+    NUM = 40000;
+} else {
+    NUM = 50000;
+}
+console.log("NUM:", NUM);
 async function initWebGPU(canvas: HTMLCanvasElement) {
     if(!navigator.gpu)
         throw new Error('Not Support WebGPU')
@@ -26,13 +53,11 @@ async function initWebGPU(canvas: HTMLCanvasElement) {
     const size = {width: canvas.width, height: canvas.height}
     context.configure({
         device, format,
-        // prevent chrome warning after v102
         alphaMode: 'opaque'
     })
     return {device, context, format, size}
 }
 
-// create pipiline & buffers
 async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{width:number, height:number}) {
     const renderPipeline = await device.createRenderPipelineAsync({
         label: 'Basic Pipline',
@@ -79,24 +104,19 @@ async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{w
         },
         primitive: {
             topology: 'triangle-list',
-            // Culling backfaces pointing away from the camera
             cullMode: 'back'
         },
-        // Enable depth testing since we have z-level positions
-        // Fragment closest to the camera is rendered in front
         depthStencil: {
             depthWriteEnabled: true,
             depthCompare: 'less',
             format: 'depth24plus',
         }
     } as GPURenderPipelineDescriptor)
-    // create depthTexture for renderPass
     const depthTexture = device.createTexture({
         size, format: 'depth24plus',
         usage: GPUTextureUsage.RENDER_ATTACHMENT,
     })
     const depthView = depthTexture.createView()
-    // create a compute pipeline
     const computePipeline = await device.createComputePipelineAsync({
         layout: 'auto',
         compute: {
@@ -107,7 +127,6 @@ async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{w
         }
     })
 
-    // create vertex buffer
     const vertexBuffer = device.createBuffer({
         label: 'GPUBuffer store vertex',
         size: box.vertex.byteLength,
@@ -148,7 +167,6 @@ async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{w
     })
 
 
-    // create a bindGroup for renderPass
     const renderGroup = device.createBindGroup({
         label: 'Group for renderPass',
         layout: renderPipeline.getBindGroupLayout(0),
@@ -161,7 +179,6 @@ async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{w
             }
         ]
     })
-    // create bindGroup for computePass
     const computeGroup = device.createBindGroup({
         label: 'Group for computePass',
         layout: computePipeline.getBindGroupLayout(0),
@@ -198,7 +215,6 @@ async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{w
             }
         ]
     })
-    // return all vars
     return {
         renderPipeline, computePipeline,
         vertexBuffer, indexBuffer, 
@@ -208,7 +224,6 @@ async function initPipeline(device: GPUDevice, format: GPUTextureFormat, size:{w
     }
 }
 
-// create & submit device commands
 function draw(
     device: GPUDevice, 
     context: GPUCanvasContext,
@@ -254,8 +269,6 @@ function draw(
     device.queue.submit([commandEncoder.finish()])
 }
 
-// total objects
-let NUM = 20000, MAX = 50000
 async function run(){
     const canvas = document.querySelector('canvas')
     if (!canvas)
@@ -263,55 +276,49 @@ async function run(){
     
     const {device, context, format, size} = await initWebGPU(canvas)
     const pipelineObj = await initPipeline(device, format, size)
-    // create data
+    
     const inputArray = new Float32Array([NUM, -500, 500, -200, 200, -500, 500]) // count, xmin/max, ymin/max, zmin/max
     const modelArray = new Float32Array(MAX * 4 * 4)
     const velocityArray = new Float32Array(MAX * 4)
+
     for (let i = 0; i < MAX; i++) {
-    // 각도를 무작위로 선택
-    const theta = Math.random() * Math.PI * 2; // [0, 2π]
-    const phi = Math.random() * Math.PI; // [0, π]
-    const radius = Math.random() * 400; // 원 또는 구의 반지름 범위에 따라 설정
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        const radius = Math.random() * 1000;
+        
+        const x = 500;
+        const y = radius * Math.sin(theta) * Math.sin(phi);
+        const z = radius * Math.cos(theta);
+        
+        const modelMatrix = getModelViewMatrix({ x, y, z }, { x: 0, y: 0, z: 0 }, { x: 2, y: 2, z: 2 });
+        modelArray.set(modelMatrix, i * 4 * 4);
     
-    // sin과 cos 함수를 사용하여 입자의 초기 위치 계산
-    const x = radius * Math.sin(theta) * Math.cos(phi);
-    const y = radius * Math.sin(theta) * Math.sin(phi);
-    const z = radius * Math.cos(theta);
+        const speed = Math.random() * (wsd*2) - wsd;
+        const velocity = {
+            "N-NE": { vx: 0, vy: speed, vz: speed },
+            "NE-E": { vx: speed, vy: 0, vz: speed },
+            "E-SE": { vx: speed, vy: -speed, vz: 0 },
+            "SE-S": { vx: 0, vy: -speed, vz: -speed },
+            "S-SW": { vx: -speed, vy: 0, vz: -speed },
+            "SW-W": { vx: -speed, vy: speed, vz: 0 },
+            "W-NW": { vx: -speed, vy: speed, vz: 0 },
+            "NW-N": { vx: 0, vy: speed, vz: 0 },
+        }[vec] || { vx: 0, vy: 0, vz: 0 };
     
-    // 모델 매트릭스 계산
-    const modelMatrix = getModelViewMatrix({ x, y, z }, { x: 0, y: 0, z: 0 }, { x: 2, y: 2, z: 2 });
-    modelArray.set(modelMatrix, i * 4 * 4);
-
-    // x, y, z 방향의 무작위 속도 생성
-    const vx = Math.random() - 0.2; // x 방향의 속도
-    const vy = Math.random() - 0.2; // y 방향의 속도 
-    const vz = Math.random() - 0.1; // z 방향의 속도 
-
-    // 각 입자의 초기 속도(w 값) 계산
-    const speed = Math.sqrt(vx * vx + vy * vy + vz * vz);
+        velocityArray[i * 4 + 0] = velocity.vx;
+        velocityArray[i * 4 + 1] = velocity.vy;
+        velocityArray[i * 4 + 2] = velocity.vz;
     
-    // 입자의 초기 속도를 계산하고 배열에 저장
-    velocityArray[i * 2 + 0] = vx;
-    velocityArray[i * 1 + 1] = vy;
-    velocityArray[i * 3 + 2] = vz;
-    
-    // w 값을 sin 함수와 cos 함수를 사용하여 처리
-    velocityArray[i * 4 + 3] = Math.sin(theta) * Math.cos(phi) * speed;
-
-
+        velocityArray[i * 4 + 3] = Math.sin(theta) * Math.cos(phi) * speed;
     }
+    
     device.queue.writeBuffer(pipelineObj.velocityBuffer, 0, velocityArray)
     device.queue.writeBuffer(pipelineObj.modelBuffer, 0, modelArray)
     device.queue.writeBuffer(pipelineObj.inputBuffer, 0, inputArray)
     
-    // auto rotated camera
     const camera = {x:0, y: 50, z: 1000}
     let aspect = size.width / size.height
-    // start loop
     function frame(){
-        const time = performance.now() / 5000
-        camera.x = 1000 * Math.sin(time)
-        camera.z = 1000 * Math.cos(time)
         const projectionMatrix = getProjectionMatrix(aspect, 60 / 180 * Math.PI, 0.1, 3000, camera)
         device.queue.writeBuffer(pipelineObj.projectionBuffer, 0, projectionMatrix)
         draw(device, context, pipelineObj)
@@ -319,19 +326,15 @@ async function run(){
     }
     frame()
 
-    // re-configure context on resize
     window.addEventListener('resize', ()=>{
         size.width = canvas.width = canvas.clientWidth * devicePixelRatio
         size.height = canvas.height = canvas.clientHeight * devicePixelRatio
-        // don't need to recall context.configure() after v104
-        // re-create depth texture
         pipelineObj.depthTexture.destroy()
         pipelineObj.depthTexture = device.createTexture({
             size, format: 'depth24plus',
             usage: GPUTextureUsage.RENDER_ATTACHMENT,
         })
         pipelineObj.depthView = pipelineObj.depthTexture.createView()
-        // update aspect
         aspect = size.width/ size.height
     })
 
@@ -345,7 +348,6 @@ async function run(){
             span.innerHTML = NUM.toString()
             inputArray[0] = NUM
             device.queue.writeBuffer(pipelineObj.inputBuffer, 0, inputArray)
-            // 해당 변경 사항을 바로 반영하도록 draw 함수를 호출합니다.
             draw(device, context, pipelineObj);
         })
     }

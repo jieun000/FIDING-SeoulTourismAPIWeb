@@ -3,15 +3,15 @@ import { useState } from 'react';
 import './seoulMap.css'
 
 const getFillColor = (pm10Value) => {
-   if (pm10Value <= 15) {
-     return 'rgba(100, 149, 237, 0.7)';
-   } else if (pm10Value <= 18) {
-      return 'rgba(55,171,55)'; 
-   } else if (pm10Value <= 25) {
-     return 'rgba(255,219,88)';
-   } else {
-      return 'rgba(255, 0, 0, 0.7)';
-   }
+	if (pm10Value <= 30) {
+	  return 'rgba(100, 149, 237, 0.7)';
+	} else if (pm10Value <= 80) {
+	   return 'rgba(167, 212, 131, 0.7)'; 
+	} else if (pm10Value <= 150) {
+	  return 'rgb(255,219,88)';
+	} else {
+	   return 'rgba(255, 99, 71, 0.7)';
+	}
 };
 
 const SeoulMap = ({ airQualityData1, setDistrictKey }) => {

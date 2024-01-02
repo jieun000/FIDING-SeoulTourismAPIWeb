@@ -113,15 +113,12 @@ def create_model(shape):
 @cross_origin()
 def get_data():
     api_data = request.get_json()
-    print("받아온 데이터:",api_data)
-
     result = {}
     m_list = ['아황산가스', '일산화탄소', '오존', '이산화질소', 'PM10', 'PM2.5']
-    m_code_list = ["SO2", "CO", 'O3', 'NO2', 'PM10', 'PM25']  # 바꿔도 됨 react에서 요청하는 자료 형태로
+    m_code_list = ["SO2", "CO", 'O3', 'NO2', 'PM10', 'PM25']
 
     try:
         api_data = request.get_json()
-        print("받은 데이터:", api_data['spdValue'])
         for m, code in zip(m_list, m_code_list):
             mean, std = np.load(f'scaler_mean_std{m}.npy')
             scaler = StandardScaler()
@@ -132,18 +129,17 @@ def get_data():
             else:
                 shape = 4
             model = create_model(shape)
-            model_path = f'C:/jieun/project3/backend/{m}_model_weights.h5'
+            model_path = f'C:\\Users\\mondi\\Desktop\\fiding\\COVID19\\jieun\\project3\\backend\\{m}_model_weights.h5'
             model.load_weights(model_path)
-            print([[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'], api_data['REH'],float(api_data[code])]],api_data)
+            print([[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'], api_data['REH'], float(api_data[code])]],api_data)
             if m in ['아황산가스', '일산화탄소', '오존', '이산화질소']:
                 X=[[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], api_data['WSD'], api_data['RN1'],api_data['REH'], float(api_data[code])]]
                 X=scaler.transform(X)
-                result[code] = float(model.predict(X)[0][0]) # 이부분 data로
+                result[code] = float(model.predict(X)[0][0])
             else:
-                X=[[api_data['trafficData'], api_data['spdValue'],api_data['T1H'], float(api_data[code])]]
+                X=[[api_data['trafficData'], api_data['spdValue'], api_data['T1H'], float(api_data[code])]]
                 X = scaler.transform(X)
-                result[code] = float(model.predict(X)[0][0])  # 이부분 data로
-        print("클라이언트로 보낼 데이터: ", result)
+                result[code] = float(model.predict(X)[0][0])
         return jsonify(result)
     except Exception as e:
         return jsonify({'error': str(e)})
@@ -300,7 +296,7 @@ def get_data3(): #얼굴인식 학습코드
     # data = {'url': '...', 'id': '...'} 가 있어야 합니다.
 
     # 프로젝트 경로에 맞게 사용자의 얼굴 사진을 저장할 폴더 경로를 설정합니다.
-    project_path = 'C:/jieun/project3/backend/templates/knn_examples'
+    project_path = 'C:/Users/mondi/Desktop/새 폴더/COVID19/jieun/project3/backend/templates/knn_examples'
     user_photos_path = os.path.join(project_path, 'train')
     # 유저의 사진 URL이 있다면 받아와서 다운로드 후 user_photos_path에 저장합니다.
     # 여기에서 구현 필요
@@ -318,4 +314,4 @@ def get_data3(): #얼굴인식 학습코드
     return jsonify({'message': 'User data received and trained successfully!'})
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True)

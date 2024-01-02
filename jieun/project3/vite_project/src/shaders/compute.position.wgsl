@@ -22,32 +22,23 @@ fn main(
     var pos = modelView[index][3];
     var vel = velocity[index];
     // change x
-    pos.x += vel.x;
-    if(pos.x < xMin){
-        pos.x = xMin;
-        vel.x = -vel.x;
-    }else if(pos.x > xMax){
-        pos.x = xMax;
-        vel.x = -vel.x;
-    }
-    // change y
-    pos.y += vel.y;
-    if(pos.y < yMin){
-        pos.y = yMin;
-        vel.y = -vel.y;
-    }else if(pos.y > yMax){
-        pos.y = yMax;
-        vel.y = -vel.y;
-    }
-    // change z
-    pos.z += vel.z;
-    if(pos.z < zMin){
-        pos.z = zMin;
-        vel.z = -vel.z;
-    }else if(pos.z > zMax){
-        pos.z = zMax;
-        vel.z = -vel.z;
-    }
+pos.x += vel.x;
+if(pos.x < xMin || pos.x > xMax){
+    // vel.x = -vel.x;
+}
+
+// change y
+pos.y += vel.y;
+if(pos.y < yMin || pos.y > yMax){
+    // vel.y = -vel.y;
+}
+
+// change z
+pos.z += vel.z;
+if(pos.z < zMin || pos.z > zMax){
+    // vel.z = -vel.z;
+}
+
     // update velocity
     velocity[index] = vel;
     // update position in modelView matrix
